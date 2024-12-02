@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+export const dynamic = "force-dynamic";
+
 export default function VerifyPage() {
   const searchParams = useSearchParams();
   const router = useRouter(); // Use next/navigation's useRouter for navigation
