@@ -1,6 +1,7 @@
 import User from "@/models/User";
+import { NextRequest } from "next/server";
 
-export async function GET(req) {
+export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
 
