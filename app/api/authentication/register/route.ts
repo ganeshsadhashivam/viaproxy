@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import bcrypt from "bcrypt";
-import User from "@/models/User";
+import User from "@/models/admin/User";
 import sendEmail from "@/utils/sendEmail";
 import { NextRequest } from "next/server";
 import connect from "@/utils/dbConnect";
@@ -8,14 +8,14 @@ import connect from "@/utils/dbConnect";
 export async function POST(req: NextRequest) {
   await connect();
   try {
-    const { username, email, password } = await req.json();
-    console.log(username, email, password);
+    const { name, email, password } = await req.json();
+    console.log(name, email, password);
     const hashedPassword = await bcrypt.hash(password, 10);
     const verificationToken = uuidv4();
     console.log(verificationToken);
 
     const newUser = new User({
-      username,
+      name,
       email,
       password: hashedPassword,
       verificationToken,

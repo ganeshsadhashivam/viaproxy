@@ -1,4 +1,4 @@
-import User from "@/models/User";
+import User from "@/models/admin/User";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {

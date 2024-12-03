@@ -9,7 +9,7 @@ export default function Home() {
       <main className="">
         <Image
           src="/landingpagedesign.jpg"
-          width={1280}
+          width={1920}
           height={1000}
           alt="landingpagedesign"
         />

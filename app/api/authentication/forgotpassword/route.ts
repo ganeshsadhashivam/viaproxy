@@ -1,4 +1,4 @@
-import User from "@/models/User";
+import User from "@/models/admin/User";
 import { v4 as uuidv4 } from "uuid";
 import sendEmail from "@/utils/sendEmail";
 import connect from "@/utils/dbConnect";

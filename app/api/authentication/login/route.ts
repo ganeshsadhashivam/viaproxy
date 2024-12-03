@@ -1,7 +1,7 @@
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
-import User from "@/models/User";
+import User from "@/models/admin/User";
 import connect from "@/utils/dbConnect";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -35,7 +35,12 @@ export async function POST(req: Request) {
 
     // Generate JWT token
     const token = jwt.sign(
-      { id: user._id, username: user.username, email: user.email },
+      {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
       process.env.JWT_SECRET!,
       { expiresIn: "1h" } // Token expires in 1 hour
     );
