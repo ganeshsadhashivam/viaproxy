@@ -16,9 +16,12 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  SharedSelection,
 } from "@nextui-org/react";
 import { SearchIcon } from "./SearchIcon";
 import { VerticalDotsIcon } from "./VerticalDotsIcon";
+import { ChevronDownIcon } from "./ChevronDownIcon";
+import { PlusIcon } from "./PlusIcon";
 
 interface User {
   id: string;
@@ -35,14 +38,22 @@ const statusColorMap: Record<string, string> = {
   pending: "danger",
 };
 
+const statusOptions = [
+  { name: "Active", uid: "active" },
+  { name: "Paused", uid: "paused" },
+  { name: "Pending", uid: "pending" },
+];
+
 export default function UserTable() {
   const [users, setUsers] = useState<User[]>([]); // State for fetched users
   const [filterValue, setFilterValue] = useState("");
-  const [page, setPage] = useState(1);
+  //   const [statusFilter, setStatusFilter] = useState(new Set<string>("all"));
+
+  const [statusFilter, setStatusFilter] = useState<SharedSelection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
-  // Fetch user data from API
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -50,9 +61,10 @@ export default function UserTable() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/admin/users"); //API endpoint
+      const response = await fetch("/api/admin/users");
       const data = await response.json();
-      setUsers(data); //Update the users state with API response
+      console.log("Fetched Users:", data);
+      setUsers(data);
     } catch (error) {
       console.error("Failed to fetch users:", error);
     } finally {
@@ -60,7 +72,8 @@ export default function UserTable() {
     }
   };
 
-  //    Handle status change (Activate/Deactivate)
+  console.log("Current Users State:", users);
+
   const handleStatusChange = async (userId: string, newStatus: string) => {
     try {
       const response = await fetch(`/api/admin/users/${userId}`, {
@@ -68,19 +81,15 @@ export default function UserTable() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-
       if (!response.ok) {
         throw new Error("Failed to update user status");
       }
-
-      //    Fetch the updated user data after status change
       await fetchUsers();
     } catch (error) {
       console.error("Failed to update status:", error);
     }
   };
 
-  // Handle role change
   const handleRoleChange = async (userId: string, newRole: string) => {
     try {
       const response = await fetch(`/api/admin/users/${userId}`, {
@@ -88,35 +97,58 @@ export default function UserTable() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: newRole }),
       });
-
       if (!response.ok) {
         throw new Error("Failed to update user role");
       }
-
-      // Fetch the updated user data after role change
       await fetchUsers();
     } catch (error) {
       console.error("Failed to update role:", error);
     }
   };
 
-  // Apply search filter
-  const filteredUsers = users.filter((user) => {
-    if (!filterValue) return true;
-    return (
-      user.name.toLowerCase().includes(filterValue.toLowerCase()) ||
-      user.email.toLowerCase().includes(filterValue.toLowerCase())
-    );
-  });
+  const filteredUsers = React.useMemo(() => {
+    console.log("Original Users Array:", users);
 
-  // Pagination logic
+    // Filter out invalid users
+    const validUsers = users.filter((user) => user && user.status);
+    console.log("Valid Users:", validUsers);
+
+    let filteredUsers = [...validUsers];
+
+    // Apply search filter
+    if (filterValue) {
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.name?.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.email?.toLowerCase().includes(filterValue.toLowerCase())
+      );
+      console.log("After Search Filter:", filteredUsers);
+    }
+
+    // Apply status filter
+    if (statusFilter !== "all" && Array.from(statusFilter).size > 0) {
+      filteredUsers = filteredUsers.filter((user) => {
+        const matches = Array.from(statusFilter)
+          .map((s) => s.toLowerCase())
+          .includes(user.status.toLowerCase());
+        console.log(
+          `User: ${user.name}, Status: ${user.status}, Matches: ${matches}`
+        );
+        return matches;
+      });
+      console.log("After Status Filter:", filteredUsers);
+    }
+
+    console.log("Final Filtered Users:", filteredUsers);
+    return filteredUsers;
+  }, [users, filterValue, statusFilter]);
+
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
   const paginatedUsers = filteredUsers.slice(
     (page - 1) * rowsPerPage,
     page * rowsPerPage
   );
 
-  // Render table cells
   const renderCell = (user: User, columnKey: React.Key) => {
     switch (columnKey) {
       case "name":
@@ -140,7 +172,6 @@ export default function UserTable() {
               <Button isIconOnly size="sm" variant="light">
                 <VerticalDotsIcon className="text-default-300" />
               </Button>
-              {/* <button className="px-2 py-1 bg-gray-200 rounded">Actions</button> */}
             </DropdownTrigger>
             <DropdownMenu>
               {["student", "citizen", "merchant", "trader"].map((role) => (
@@ -182,21 +213,68 @@ export default function UserTable() {
     }
   };
 
-  if (loading) return <p>Loading...</p>;
-
-  return (
-    <div>
-      {/* Top Content with Search */}
-      <div className="flex justify-between items-center mb-4">
+  const topContent = (
+    <div className="flex flex-col gap-4 mb-4">
+      <div className="flex justify-between gap-3 items-end">
         <Input
           isClearable
-          placeholder="Search by name or email..."
+          className="w-full sm:max-w-[44%]"
+          placeholder="Search by name..."
           startContent={<SearchIcon />}
           value={filterValue}
           onClear={() => setFilterValue("")}
           onValueChange={(value) => setFilterValue(value)}
         />
-        <div>
+        <div className="flex gap-3">
+          <Dropdown>
+            <DropdownTrigger className="hidden sm:flex">
+              <Button
+                endContent={<ChevronDownIcon className="text-small" />}
+                variant="flat"
+              >
+                Status
+              </Button>
+            </DropdownTrigger>
+            {/* <DropdownMenu
+
+              disallowEmptySelection
+              closeOnSelect={false}
+              selectedKeys={statusFilter}
+              selectionMode="multiple"
+              onSelectionChange={setStatusFilter}
+            >
+              {statusOptions.map((status) => (
+                <DropdownItem key={status.uid} className="capitalize">
+                  {status.name}
+                </DropdownItem>
+              ))}
+            </DropdownMenu> */}
+            <DropdownMenu
+              disallowEmptySelection
+              closeOnSelect={false}
+              selectedKeys={statusFilter}
+              selectionMode="multiple"
+              onSelectionChange={(keys) =>
+                setStatusFilter(keys as SharedSelection)
+              }
+            >
+              {statusOptions.map((status) => (
+                <DropdownItem key={status.uid} className="capitalize">
+                  {status.name}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
+          <Button color="primary" endContent={<PlusIcon />}>
+            Add New
+          </Button>
+        </div>
+      </div>
+      <div className="flex justify-between items-center">
+        <span className="text-default-400 text-small">
+          Total {filteredUsers.length} users
+        </span>
+        <label className="flex items-center text-default-400 text-small">
           Rows per page:
           <select
             className="ml-2"
@@ -207,10 +285,35 @@ export default function UserTable() {
             <option value={10}>10</option>
             <option value={15}>15</option>
           </select>
-        </div>
+        </label>
       </div>
+    </div>
+  );
 
-      {/* User Table */}
+  const bottomContent = (
+    <div className="py-2 px-2 flex justify-between items-center">
+      <span className="w-[30%] text-small text-default-400">
+        {paginatedUsers.length > 0
+          ? `${paginatedUsers.length} users displayed`
+          : "No users to display"}
+      </span>
+      <Pagination
+        isCompact
+        showControls
+        showShadow
+        color="primary"
+        page={page}
+        total={totalPages}
+        onChange={(newPage) => setPage(newPage)}
+      />
+    </div>
+  );
+
+  if (loading) return <p>Loading...</p>;
+
+  return (
+    <div>
+      {topContent}
       <Table
         aria-label="User Management Table"
         pagination
@@ -235,17 +338,387 @@ export default function UserTable() {
           )}
         </TableBody>
       </Table>
-
-      {/* Pagination Controls */}
-      <Pagination
-        total={totalPages}
-        page={page}
-        onChange={(newPage) => setPage(newPage)}
-        className="mt-4"
-      />
+      {/* <Pagination
+         total={totalPages}
+         page={page}
+         onChange={(newPage) => setPage(newPage)}
+         className="mt-4"
+       /> */}
+      {bottomContent}
     </div>
   );
 }
+
+// "use client";
+
+// import React, { useEffect, useState } from "react";
+// import {
+//   Table,
+//   TableHeader,
+//   TableColumn,
+//   TableBody,
+//   TableRow,
+//   TableCell,
+//   Input,
+//   Pagination,
+//   Chip,
+//   Dropdown,
+//   DropdownTrigger,
+//   DropdownMenu,
+//   DropdownItem,
+//   Button,
+// } from "@nextui-org/react";
+// import { SearchIcon } from "./SearchIcon";
+// import { VerticalDotsIcon } from "./VerticalDotsIcon";
+// import { ChevronDownIcon } from "./ChevronDownIcon";
+// import { PlusIcon } from "./PlusIcon";
+
+// interface User {
+//   id: string;
+//   name: string;
+//   email: string;
+//   role: string;
+//   status: string;
+//   createdAt: string;
+// }
+
+// const statusColorMap: Record<string, string> = {
+//   active: "success",
+//   paused: "warning",
+//   pending: "danger",
+// };
+
+// const statusOptions = [
+//   { name: "Active", uid: "active" },
+//   { name: "Paused", uid: "paused" },
+//   { name: "Pending", uid: "pending" },
+// ];
+
+// export default function UserTable() {
+
+//   const [users, setUsers] = useState<User[]>([]); // State for fetched users
+//   const [filterValue, setFilterValue] = useState("");
+//   const [statusFilter, setStatusFilter] = useState(new Set<string>("all"));
+//   const [rowsPerPage, setRowsPerPage] = useState(5);
+//   const [page, setPage] = useState(1);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     fetchUsers();
+//   }, []);
+
+//   const fetchUsers = async () => {
+//     try {
+//       setLoading(true);
+//       const response = await fetch("/api/admin/users");
+//       const data = await response.json();
+//       console.log("Fetched Users:", data);
+//       setUsers(data);
+//     } catch (error) {
+//       console.error("Failed to fetch users:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   console.log("Current Users State:", users);
+
+//   const handleStatusChange = async (userId: string, newStatus: string) => {
+//     try {
+//       const response = await fetch(`/api/admin/users/${userId}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ status: newStatus }),
+//       });
+//       if (!response.ok) {
+//         throw new Error("Failed to update user status");
+//       }
+//       await fetchUsers();
+//     } catch (error) {
+//       console.error("Failed to update status:", error);
+//     }
+//   };
+
+//   const handleRoleChange = async (userId: string, newRole: string) => {
+//     try {
+//       const response = await fetch(`/api/admin/users/${userId}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ role: newRole }),
+//       });
+//       if (!response.ok) {
+//         throw new Error("Failed to update user role");
+//       }
+//       await fetchUsers();
+//     } catch (error) {
+//       console.error("Failed to update role:", error);
+//     }
+//   };
+
+//   const filteredUsers = React.useMemo(() => {
+//     console.log("Original Users Array:", users);
+
+//     // Filter out invalid users
+//     const validUsers = users.filter((user) => user && user.status);
+//     console.log("Valid Users:", validUsers);
+
+//     let filteredUsers = [...validUsers];
+
+//     // Apply search filter
+//     if (filterValue) {
+//       filteredUsers = filteredUsers.filter(
+//         (user) =>
+//           user.name?.toLowerCase().includes(filterValue.toLowerCase()) ||
+//           user.email?.toLowerCase().includes(filterValue.toLowerCase())
+//       );
+//       console.log("After Search Filter:", filteredUsers);
+//     }
+
+//     // Apply status filter
+//     if (statusFilter !== "all" && Array.from(statusFilter).size > 0) {
+//       filteredUsers = filteredUsers.filter((user) => {
+//         const matches = Array.from(statusFilter)
+//           .map((s) => s.toLowerCase())
+//           .includes(user.status.toLowerCase());
+//         console.log(
+//           `User: ${user.name}, Status: ${user.status}, Matches: ${matches}`
+//         );
+//         return matches;
+//       });
+//       console.log("After Status Filter:", filteredUsers);
+//     }
+
+//     console.log("Final Filtered Users:", filteredUsers);
+//     return filteredUsers;
+//   }, [users, filterValue, statusFilter]);
+
+//   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
+//   const paginatedUsers = filteredUsers.slice(
+//     (page - 1) * rowsPerPage,
+//     page * rowsPerPage
+//   );
+
+//   const renderCell = (user: User, columnKey: React.Key) => {
+//     switch (columnKey) {
+//       case "name":
+//         return <p className="font-bold">{user.name}</p>;
+//       case "email":
+//         return <p className="text-sm text-gray-500">{user.email}</p>;
+//       case "role":
+//         return user.role;
+//       case "status":
+//         return (
+//           <Chip color={statusColorMap[user.status] || "default"} size="sm">
+//             {user.status}
+//           </Chip>
+//         );
+//       case "createdAt":
+//         return new Date(user.createdAt).toLocaleDateString();
+//       case "assignrole":
+//         return (
+//           <Dropdown>
+//             <DropdownTrigger>
+//               <Button isIconOnly size="sm" variant="light">
+//                 <VerticalDotsIcon className="text-default-300" />
+//               </Button>
+//             </DropdownTrigger>
+//             <DropdownMenu>
+//               {["student", "citizen", "merchant", "trader"].map((role) => (
+//                 <DropdownItem
+//                   key={role}
+//                   onClick={() => handleRoleChange(user.id, role)}
+//                 >
+//                   Assign as {role}
+//                 </DropdownItem>
+//               ))}
+//             </DropdownMenu>
+//           </Dropdown>
+//         );
+//       case "actions":
+//         return (
+//           <div className="flex gap-2">
+//             {user.status !== "active" && (
+//               <Button
+//                 size="sm"
+//                 color="success"
+//                 onClick={() => handleStatusChange(user.id, "active")}
+//               >
+//                 Activate
+//               </Button>
+//             )}
+//             {user.status === "active" && (
+//               <Button
+//                 size="sm"
+//                 color="warning"
+//                 onClick={() => handleStatusChange(user.id, "inactive")}
+//               >
+//                 Deactivate
+//               </Button>
+//             )}
+//           </div>
+//         );
+//       default:
+//         return null;
+//     }
+//   };
+
+//   const topContent = (
+//     <div className="flex flex-col gap-4 mb-4">
+//       <div className="flex justify-between gap-3 items-end">
+//         <Input
+//           isClearable
+//           className="w-full sm:max-w-[44%]"
+//           placeholder="Search by name..."
+//           startContent={<SearchIcon />}
+//           value={filterValue}
+//           onClear={() => setFilterValue("")}
+//           onValueChange={(value) => setFilterValue(value)}
+//         />
+//         <div className="flex gap-3">
+//           <Dropdown>
+//             <DropdownTrigger className="hidden sm:flex">
+//               <Button
+//                 endContent={<ChevronDownIcon className="text-small" />}
+//                 variant="flat"
+//               >
+//                 Status
+//               </Button>
+//             </DropdownTrigger>
+//             <DropdownMenu
+//               disallowEmptySelection
+//               closeOnSelect={false}
+//               selectedKeys={statusFilter}
+//               selectionMode="multiple"
+//               onSelectionChange={setStatusFilter}
+//             >
+//               {statusOptions.map((status) => (
+//                 <DropdownItem key={status.uid} className="capitalize">
+//                   {status.name}
+//                 </DropdownItem>
+//               ))}
+//             </DropdownMenu>
+//           </Dropdown>
+//           <Button color="primary" endContent={<PlusIcon />}>
+//             Add New
+//           </Button>
+//         </div>
+//       </div>
+//       <div className="flex justify-between items-center">
+//         <span className="text-default-400 text-small">
+//           Total {filteredUsers.length} users
+//         </span>
+//         <label className="flex items-center text-default-400 text-small">
+//           Rows per page:
+//           <select
+//             className="ml-2"
+//             value={rowsPerPage}
+//             onChange={(e) => setRowsPerPage(Number(e.target.value))}
+//           >
+//             <option value={5}>5</option>
+//             <option value={10}>10</option>
+//             <option value={15}>15</option>
+//           </select>
+//         </label>
+//       </div>
+//     </div>
+//   );
+
+//   //    const bottomContent = React.useMemo(() => {
+//   //      return (
+//   //        <div className="py-2 px-2 flex justify-between items-center">
+//   //          <span className="w-[30%] text-small text-default-400">
+//   //            {filteredUsers.length} users
+//   //          </span>
+//   //          <Pagination
+//   //            isCompact
+//   //            showControls
+//   //            showShadow
+//   //            color="primary"
+//   //            page={page}
+//   //            total={totalPages}
+//   //            onChange={setPage}
+//   //          />
+//   //        </div>
+//   //      );
+//   //    }, [page, totalPages, filteredUsers.length]);
+// //   const bottomContent = React.useMemo(() => {
+// //     return (
+// //       <div className="py-2 px-2 flex justify-between items-center">
+// //         <span className="w-[30%] text-small text-default-400">
+// //           {selectedKeys === "all"
+// //             ? "All items selected"
+// //             : `${selectedKeys.size} of ${filteredItems.length} selected`}
+// //         </span>
+// //         <Pagination
+// //           isCompact
+// //           showControls
+// //           showShadow
+// //           color="primary"
+// //           page={page}
+// //           total={pages}
+// //           onChange={setPage}
+// //         />
+// //         <div className="hidden sm:flex w-[30%] justify-end gap-2">
+// //           <Button
+// //             isDisabled={pages === 1}
+// //             size="sm"
+// //             variant="flat"
+// //             onPress={onPreviousPage}
+// //           >
+// //             Previous
+// //           </Button>
+// //           <Button
+// //             isDisabled={pages === 1}
+// //             size="sm"
+// //             variant="flat"
+// //             onPress={onNextPage}
+// //           >
+// //             Next
+// //           </Button>
+// //         </div>
+// //       </div>
+// //     );
+// //   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+
+//   if (loading) return <p>Loading...</p>;
+
+//   return (
+//     <div>
+//       {topContent}
+//       <Table
+//         aria-label="User Management Table"
+//         pagination
+//         css={{ minWidth: "100%" }}
+//       >
+//         <TableHeader>
+//           <TableColumn key="name">Name</TableColumn>
+//           <TableColumn key="email">Email</TableColumn>
+//           <TableColumn key="role">Role</TableColumn>
+//           <TableColumn key="status">Status</TableColumn>
+//           <TableColumn key="createdAt">Created At</TableColumn>
+//           <TableColumn key="assignrole">Assign Role</TableColumn>
+//           <TableColumn key="actions">Actions</TableColumn>
+//         </TableHeader>
+//         <TableBody items={paginatedUsers}>
+//           {(user) => (
+//             <TableRow key={user.id}>
+//               {(columnKey) => (
+//                 <TableCell>{renderCell(user, columnKey)}</TableCell>
+//               )}
+//             </TableRow>
+//           )}
+//         </TableBody>
+//       </Table>
+//       {/* <Pagination
+//         total={totalPages}
+//         page={page}
+//         onChange={(newPage) => setPage(newPage)}
+//         className="mt-4"
+//       /> */}
+//       {bottomContent}
+//     </div>
+//   );
+// }
 
 //og table from NExtUI
 // import React from "react";

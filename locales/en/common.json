@@ -1,0 +1,40 @@
+{
+  "login": {
+    "welcomeBack": "Welcome Back",
+    "logInToContinue": "Please log in to your account to continue.",
+    "email": "Email Address",
+    "password": "Password",
+    "emailRequired": "Email is required",
+    "invalidEmailFormat": "Invalid email format",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "loginButton": "Login",
+    "forgotPassword": "Forgot Password?",
+    "registerPrompt": "New User? Register Here",
+    "unexpectedError": "An unexpected error occurred."
+  },
+  "register": {
+    "createAccount": "Create an Account",
+    "name": "Name",
+    "nameRequired": "Name is required.",
+    "email": "Email Address",
+    "emailRequired": "Email is required.",
+    "invalidEmailFormat": "Invalid email format.",
+    "password": "Password",
+    "passwordRequired": "Password is required.",
+    "passwordMinLength": "Password must be at least 6 characters.",
+    "role": "Role",
+    "selectRole": "Select a role",
+    "student": "Student",
+    "citizen": "Citizen",
+    "trader": "Trader",
+    "marketingConsent": "I want to receive emails about events, product updates, and company announcements.",
+    "termsAndConditions": "By creating an account, you agree to our terms and conditions and privacy policy.",
+    "registerButton": "Register",
+    "alreadyHaveAccount": "Already have an account?",
+    "login": "Log in",
+    "registrationSuccess": "Registration successful!",
+    "registrationFailed": "Registration failed. Please try again.",
+    "unexpectedError": "An unexpected error occurred."
+  }
+}

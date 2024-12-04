@@ -46,7 +46,16 @@ export async function POST(req: Request) {
     );
 
     // Set the JWT token in an HTTP-only cookie
-    const response = NextResponse.json({ message: "Login successful!" });
+    const response = NextResponse.json({
+      message: "Login successful!",
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
+    });
+
     response.cookies.set("authToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -62,6 +71,71 @@ export async function POST(req: Request) {
     );
   }
 }
+
+// export const runtime = "nodejs";
+
+// import { NextResponse } from "next/server";
+// import User from "@/models/admin/User";
+// import connect from "@/utils/dbConnect";
+// import bcrypt from "bcrypt";
+// import jwt from "jsonwebtoken";
+
+// export async function POST(req: Request) {
+//   try {
+//     const { email, password } = await req.json();
+
+//     // Connect to the database
+//     await connect();
+
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return NextResponse.json({ error: "User not found." }, { status: 404 });
+//     }
+
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
+//     if (!isPasswordValid) {
+//       return NextResponse.json(
+//         { error: "Invalid credentials." },
+//         { status: 401 }
+//       );
+//     }
+
+//     if (!user.isVerified) {
+//       return NextResponse.json(
+//         { error: "Account not verified." },
+//         { status: 403 }
+//       );
+//     }
+
+//     // Generate JWT token
+//     const token = jwt.sign(
+//       {
+//         id: user._id,
+//         username: user.username,
+//         email: user.email,
+//         role: user.role,
+//       },
+//       process.env.JWT_SECRET!,
+//       { expiresIn: "1h" } // Token expires in 1 hour
+//     );
+
+//     // Set the JWT token in an HTTP-only cookie
+//     const response = NextResponse.json({ message: "Login successful!" });
+//     response.cookies.set("authToken", token, {
+//       httpOnly: true,
+//       secure: process.env.NODE_ENV === "production",
+//       path: "/",
+//       maxAge: 3600, // Token expiry (1 hour)
+//     });
+
+//     return response;
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: "An unexpected error occurred." },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // export const runtime = "nodejs";
 

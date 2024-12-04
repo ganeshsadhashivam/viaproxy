@@ -1,0 +1,42 @@
+{
+  "login": {
+    "welcomeBack": "Bienvenue",
+    "logInToContinue": "Veuillez vous connecter à votre compte pour continuer.",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "emailRequired": "L'adresse e-mail est obligatoire",
+    "invalidEmailFormat": "Format d'e-mail invalide",
+    "passwordRequired": "Le mot de passe est obligatoire",
+    "passwordMinLength": "Le mot de passe doit comporter au moins 6 caractères",
+    "loginButton": "Connexion",
+    "forgotPassword": "Mot de passe oublié ?",
+    "registerPrompt": "Nouvel utilisateur ? Inscrivez-vous ici",
+    "unexpectedError": "Une erreur inattendue s'est produite."
+
+  },
+ "register": {
+  "createAccount": "Créer un compte",
+  "name": "Nom",
+  "nameRequired": "Le nom est requis.",
+  "email": "Adresse e-mail",
+  "emailRequired": "L'adresse e-mail est requise.",
+  "invalidEmailFormat": "Format d'adresse e-mail invalide.",
+  "password": "Mot de passe",
+  "passwordRequired": "Le mot de passe est requis.",
+  "passwordMinLength": "Le mot de passe doit contenir au moins 6 caractères.",
+  "role": "Rôle",
+  "selectRole": "Sélectionnez un rôle",
+  "student": "Étudiant",
+  "citizen": "Citoyen",
+  "trader": "Commerçant",
+  "marketingConsent": "Je souhaite recevoir des e-mails sur les événements, les mises à jour des produits et les annonces de l'entreprise.",
+  "termsAndConditions": "En créant un compte, vous acceptez nos conditions générales et notre politique de confidentialité.",
+  "registerButton": "S'inscrire",
+  "alreadyHaveAccount": "Vous avez déjà un compte ?",
+  "login": "Se connecter",
+  "registrationSuccess": "Inscription réussie !",
+  "registrationFailed": "Échec de l'inscription. Veuillez réessayer.",
+  "unexpectedError": "Une erreur inattendue s'est produite."
+}
+
+}
