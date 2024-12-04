@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectToDatabase from "@/lib/dbconfig/db";
-import { SocialMedia } from "@/models/adminmodels/Socialmedia";
+import connectToDatabase from "@/utils/dbConnect";
+import { SocialMedia } from "@/models/admin/Socialmedia";
 
 export async function GET() {
   await connectToDatabase();

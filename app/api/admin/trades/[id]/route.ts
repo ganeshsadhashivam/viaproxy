@@ -1,4 +1,4 @@
-import { Trade } from "@/models/adminmodels/Trade";
+import { Trade } from "@/models/admin/Trade";
 import { NextRequest, NextResponse } from "next/server";
 
 // PATCH: Approve/Reject trade

@@ -1,4 +1,4 @@
-import { Trade } from "@/models/adminmodels/Trade";
+import { Trade } from "@/models/admin/Trade";
 import { NextResponse } from "next/server";
 
 // GET: Fetch all trades

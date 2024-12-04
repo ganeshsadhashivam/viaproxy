@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import connectToDatabase from "@/lib/dbconfig/db";
-import { Setting } from "@/models/adminmodels/Settings";
+import connectToDatabase from "@/utils/dbConnect";
+import { Setting } from "@/models/admin/Settings";
 
 export async function GET() {
   await connectToDatabase();

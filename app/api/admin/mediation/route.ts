@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import connectToDatabase from "@/lib/dbconfig/db";
-import { Mediation } from "@/models/adminmodels/Mediation";
+import connectToDatabase from "@/utils/dbConnect";
+import { Mediation } from "@/models/admin/Mediation";
 
 export async function GET() {
   await connectToDatabase();
