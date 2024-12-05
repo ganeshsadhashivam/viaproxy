@@ -25,7 +25,7 @@ const SwapyCampusPage = () => {
           <p className="text-gray-600">
             Simply click on{" "}
             <span className="text-blue-500 font-semibold">Submit an offer</span>{" "}
-            and fill out the form in as much detail as possible. It's free!
+            and fill out the form in as much detail as possible. It&apos;s free!
           </p>
         </div>
 
