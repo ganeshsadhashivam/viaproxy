@@ -1,3 +1,7 @@
+export default function Page() {
+  return <div>exchange Lsit</div>;
+}
+
 //for deployemnt commented
 // "use client";
 // import React, { useState } from "react";
