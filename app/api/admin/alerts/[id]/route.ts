@@ -4,13 +4,15 @@ import { Alert } from "@/models/admin/Alert";
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Record<string, string> } // Corrected type
 ): Promise<NextResponse> {
+  const { params } = context; // Destructure the context object
+  const alertId = params?.id;
+
   try {
     // Ensure the database connection is established
     await connectToDatabase();
 
-    const alertId = params?.id;
     if (!alertId) {
       return NextResponse.json(
         { error: "Missing or invalid alert ID" },
