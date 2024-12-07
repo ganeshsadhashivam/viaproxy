@@ -10,7 +10,7 @@ const publicRoutes = [
   "/",
   "/authentication/login",
   "/authentication/register",
-  "/authentication/forgetpassword",
+  "/authentication/forgotpassword",
   "/authentication/resetpassword",
   "/authentication/verify",
 ];
