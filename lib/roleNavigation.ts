@@ -11,7 +11,8 @@ import {
   User,
 } from "lucide-react";
 
-export const roleNavigation = (role: string, t: (key: string) => string) => {
+type Role = "admin" | "student";
+export const roleNavigation = (role: Role, t: (key: string) => string) => {
   const roleNavigation = {
     admin: [
       { label: t("admin.dashboard"), path: "/dashboard/admin", icon: Home },
