@@ -4,21 +4,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import UserModel from "@/models/admin/User";
 
+export async function PUT() {}
 // PUT: Update user details
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const body = await request.json();
-    const updatedUser = await UserModel.findByIdAndUpdate(params.id, body, {
-      new: true,
-    });
-    return NextResponse.json(updatedUser, { status: 200 });
-  } catch (error) {
-    return NextResponse.json({ error: error }, { status: 400 });
-  }
-}
+// export async function PUT(
+//   request: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     const body = await request.json();
+//     const updatedUser = await UserModel.findByIdAndUpdate(params.id, body, {
+//       new: true,
+//     });
+//     return NextResponse.json(updatedUser, { status: 200 });
+//   } catch (error) {
+//     return NextResponse.json({ error: error }, { status: 400 });
+//   }
+// }
 
 // PATCH: Activate/Deactivate user
 // export async function PATCH(
