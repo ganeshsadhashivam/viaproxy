@@ -99,18 +99,19 @@ export async function PATCH(
   }
 }
 
+export async function DELETE() {}
 // DELETE: Remove a user
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    await UserModel.findByIdAndDelete(params.id);
-    return NextResponse.json(
-      { message: "User deleted successfully" },
-      { status: 204 }
-    );
-  } catch (error) {
-    return NextResponse.json({ error: error }, { status: 400 });
-  }
-}
+// export async function DELETE(
+//   request: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     await UserModel.findByIdAndDelete(params.id);
+//     return NextResponse.json(
+//       { message: "User deleted successfully" },
+//       { status: 204 }
+//     );
+//   } catch (error) {
+//     return NextResponse.json({ error: error }, { status: 400 });
+//   }
+// }
