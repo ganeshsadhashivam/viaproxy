@@ -1,5 +1,3 @@
-import { error } from "console";
-
 export default function Page() {
   return <div>proposal received</div>;
 }
