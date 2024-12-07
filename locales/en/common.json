@@ -11,7 +11,8 @@
     "loginButton": "Login",
     "forgotPassword": "Forgot Password?",
     "registerPrompt": "New User? Register Here",
-    "unexpectedError": "An unexpected error occurred."
+    "unexpectedError": "An unexpected error occurred.",
+    "successful": "Login successful!"
   },
   "register": {
     "createAccount": "Create an Account",
@@ -36,5 +37,89 @@
     "registrationSuccess": "Registration successful!",
     "registrationFailed": "Registration failed. Please try again.",
     "unexpectedError": "An unexpected error occurred."
+  },
+  
+      "admin": {
+        "dashboard": "Dashboard",
+        "userManagement": "User Management",
+        "tradeManagement": "Trade Management",
+        "donationManagement": "Donation Management",
+        "salesManagement": "Sales Management",
+        "alerts": "Alerts"
+      },
+      "student": {
+        "myCampusClub": "MyCampusClub",
+        "messaging": "Messaging",
+        "campusBlog": "Campus Blog",
+        "exchangeMarket": "Exchange Market",
+        "howItWorks": "How It Works",
+        "exchangeManagement": "Exchange Management",
+        "findExchangeOffer": "Find an Exchange Offer",
+        "submitExchangeOffer": "Submit an Exchange Offer",
+        "exchangeProductForProduct": "Exchange Product for a Product",
+        "exchangeProductForService": "Exchange Product for a Service",
+        "exchangeServiceForService": "Exchange Service for a Service",
+        "exchangeServiceForProduct": "Exchange Service for a Product",
+        "myExchangeOffers": "My Exchange Offers",
+        "myExchangeTransactions": "My Exchange Transactions",
+        "ongoingExchanges": "Ongoing Exchanges",
+        "exchangesCarriedOut": "Exchanges Carried Out",
+        "proposalsReceived": "Proposals Received",
+        "myDonations": "My Donations",
+        "mySales": "My Sales",
+        "helpSupport": "Help & Support",
+        "profile": "Profile"
+      },
+      "proposeExchangeOffer": {
+    "heading": "Propose an Exchange Offer",
+    "subheading": "Finance your projects and expenses with your unused goods and services!",
+    "infoSection": {
+      "paragraph1": "Take the initiative and value the surplus goods or services you have, by exchanging them with the student community of the partner campuses.",
+      "paragraph2": "Whether it's equipment, specific skills, or time, your contribution can be exchanged for what you need, whether it's another useful service or product.",
+      "paragraph3": "This supportive and circular exchange allows you to strengthen cohesion between students, while giving a second life to your unused resources, and contributing to a dynamic of sharing and collaboration within the community.",
+      "paragraph4": "Be part of this network of mutual aid, optimize your resources and create opportunities that benefit all campus stakeholders!"
+    },
+    "imageUpload": {
+      "label": "Click to upload an image",
+      "alt": "Upload Logo"
+    },
+    "additionalInfo": {
+      "paragraph1": "Our mission is to help citizens meet their needs by facilitating the exchange of services and goods, in a secure way, while improving their material conditions for success and promoting a circular and solidarity economy within cities and campuses.",
+      "paragraph2": "You can fill in one or more offers on the exchange. These offers are geolocated to be transmitted to students enrolled on partner campuses!",
+      "paragraph3": "Before you begin publishing your offer, you confirm that you have read and agree to ViaProxy's Terms and Conditions of Use and Sale.",
+      "paragraph4": "By offering a product or service on our platform, you certify that you are acting either as an owner or service provider or as an agent legally invested by the owner of the good or the provider of the services offered.",
+      "terms": {
+        "text": "I confirm that I have read and agree to the",
+        "link": "Terms of Use and Privacy Policy",
+        "confirmation": "By posting your offer, you confirm that you agree to our Terms of Use and Privacy Policy."
+      }
+      }
+    },
+    "form":{
+      "Submit An Exchange Offer": "Submit An Exchange Offer",
+  "Finance your projects or expenses with your unused services or": "Finance your projects or expenses with your unused services or goods!",
+  "Title of the Offer": "Title of the Offer",
+  "Enter Title": "Enter Title",
+  "what do you Offer": "What do you offer?",
+  "Good": "Good",
+  "Service": "Service",
+  "category": "Category",
+  "Electronics": "Electronics",
+  "Health": "Health",
+  "subcategory": "Subcategory",
+  "Accessories": "Accessories",
+  "FeaturedProductStatus": "Featured Product Status",
+  "featuredProductStatus": "Select Status",
+  "New": "New",
+  "GoodCondition": "Good Condition",
+  "Used": "Used",
+  "OfferStartDate": "Offer Start Date",
+  "OfferEndDate": "Offer End Date",
+  "FormOfExchange": "Form of Exchange",
+  "formOfExchange": "Select Form",
+  "Sale": "Sale",
+  "Gift": "Gift"
+    }
   }
-}
+    
+

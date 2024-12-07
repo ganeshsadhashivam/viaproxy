@@ -7,11 +7,11 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export async function POST(req: Request) {
+  // Connect to the database
+  await connect();
   try {
     const { email, password } = await req.json();
-
-    // Connect to the database
-    await connect();
+    console.log(email, password);
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       message: "Login successful!",
       user: {
         id: user._id,
-        username: user.username,
+        name: user.name,
         email: user.email,
         role: user.role,
       },

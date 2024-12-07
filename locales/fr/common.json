@@ -11,7 +11,8 @@
     "loginButton": "Connexion",
     "forgotPassword": "Mot de passe oublié ?",
     "registerPrompt": "Nouvel utilisateur ? Inscrivez-vous ici",
-    "unexpectedError": "Une erreur inattendue s'est produite."
+    "unexpectedError": "Une erreur inattendue s'est produite.",
+     "successful": "Connexion réussie !"
 
   },
  "register": {
@@ -37,6 +38,89 @@
   "registrationSuccess": "Inscription réussie !",
   "registrationFailed": "Échec de l'inscription. Veuillez réessayer.",
   "unexpectedError": "Une erreur inattendue s'est produite."
+},
+"admin": {
+      "dashboard": "Tableau de bord",
+      "userManagement": "Gestion des utilisateurs",
+      "tradeManagement": "Gestion des échanges",
+      "donationManagement": "Gestion des dons",
+      "salesManagement": "Gestion des ventes",
+      "alerts": "Alertes"
+    },
+    "student": {
+      "myCampusClub": "Mon CampusClub",
+      "messaging": "Messagerie",
+      "campusBlog": "Blog du campus",
+      "exchangeMarket": "Marché d'échange",
+      "howItWorks": "Comment ça marche",
+      "exchangeManagement": "Gestion des échanges",
+      "findExchangeOffer": "Trouver une offre d'échange",
+      "submitExchangeOffer": "Soumettre une offre d'échange",
+      "exchangeProductForProduct": "Échanger un produit contre un produit",
+      "exchangeProductForService": "Échanger un produit contre un service",
+      "exchangeServiceForService": "Échanger un service contre un service",
+      "exchangeServiceForProduct": "Échanger un service contre un produit",
+      "myExchangeOffers": "Mes offres d'échange",
+      "myExchangeTransactions": "Mes transactions d'échange",
+      "ongoingExchanges": "Échanges en cours",
+      "exchangesCarriedOut": "Échanges réalisés",
+      "proposalsReceived": "Propositions reçues",
+      "myDonations": "Mes dons",
+      "mySales": "Mes ventes",
+      "helpSupport": "Aide et support",
+      "profile": "Profil"
+    },
+    "proposeExchangeOffer": {
+    "heading": "Proposer une offre d'échange",
+    "subheading": "Financez vos projets et dépenses avec vos biens et services inutilisés !",
+    "infoSection": {
+      "paragraph1": "Prenez l'initiative et valorisez les biens ou services excédentaires que vous possédez, en les échangeant avec la communauté étudiante des campus partenaires.",
+      "paragraph2": "Qu'il s'agisse d'équipements, de compétences spécifiques ou de temps, votre contribution peut être échangée contre ce dont vous avez besoin, qu'il s'agisse d'un autre service ou produit utile.",
+      "paragraph3": "Cet échange solidaire et circulaire vous permet de renforcer la cohésion entre les étudiants, tout en donnant une seconde vie à vos ressources inutilisées, et en contribuant à une dynamique de partage et de collaboration au sein de la communauté.",
+      "paragraph4": "Faites partie de ce réseau d'entraide, optimisez vos ressources et créez des opportunités qui profitent à toutes les parties prenantes du campus !"
+    },
+    "imageUpload": {
+      "label": "Cliquez pour télécharger une image",
+      "alt": "Télécharger le logo"
+    },
+    "additionalInfo": {
+      "paragraph1": "Notre mission est d'aider les citoyens à répondre à leurs besoins en facilitant l'échange de services et de biens, de manière sécurisée, tout en améliorant leurs conditions matérielles pour réussir et en promouvant une économie circulaire et solidaire dans les villes et les campus.",
+      "paragraph2": "Vous pouvez remplir une ou plusieurs offres sur l'échange. Ces offres sont géolocalisées pour être transmises aux étudiants inscrits sur les campus partenaires !",
+      "paragraph3": "Avant de commencer à publier votre offre, vous confirmez que vous avez lu et accepté les conditions générales d'utilisation et de vente de ViaProxy.",
+      "paragraph4": "En proposant un produit ou un service sur notre plateforme, vous certifiez que vous agissez soit en tant que propriétaire ou prestataire de services, soit en tant qu'agent légalement investi par le propriétaire du bien ou le prestataire des services proposés.",
+      "terms": {
+        "text": "Je confirme avoir lu et accepté les",
+        "link": "Conditions d'utilisation et politique de confidentialité",
+     "confirmation": "En publiant votre offre, vous confirmez que vous acceptez nos Conditions d'utilisation et notre Politique de confidentialité."
+      }
+    },
+    "form": {
+  "Submit An Exchange Offer": "Soumettre une offre d'échange",
+  "Finance your projects or expenses with your unused services or": "Financez vos projets ou dépenses avec vos services ou biens inutilisés !",
+  "Title of the Offer": "Titre de l'offre",
+  "Enter Title": "Entrez le titre",
+  "what do you Offer": "Que proposez-vous ?",
+  "Good": "Bien",
+  "Service": "Service",
+  "category": "Catégorie",
+  "Electronics": "Électronique",
+  "Health": "Santé",
+  "subcategory": "Sous-catégorie",
+  "Accessories": "Accessoires",
+  "FeaturedProductStatus": "État du produit en vedette",
+  "featuredProductStatus": "Sélectionnez l'état",
+  "New": "Nouveau",
+  "GoodCondition": "Bonne condition",
+  "Used": "Utilisé",
+  "OfferStartDate": "Date de début de l'offre",
+  "OfferEndDate": "Date de fin de l'offre",
+  "FormOfExchange": "Forme d'échange",
+  "formOfExchange": "Sélectionnez la forme",
+  "Sale": "Vente",
+  "Gift": "Cadeau"
 }
+
+  }
+    
 
 }

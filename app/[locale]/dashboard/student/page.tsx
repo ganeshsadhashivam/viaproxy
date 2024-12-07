@@ -1,3 +1,5 @@
+import ClientWrapper from "../ClientWrapper";
+
 const StudentDashboard = () => {
   return (
     <div>

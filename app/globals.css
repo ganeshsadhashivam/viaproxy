@@ -1,3 +1,6 @@
+@import 'antd/dist/antd.css';
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -176,6 +179,11 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+.rounded-full {
+  border-radius: 50%;
+}
+
 
 /* @layer base {
   :root {
