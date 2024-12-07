@@ -12,7 +12,7 @@ import { AcmeLogo } from "@/app/AcmeLogo";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseCookies, destroyCookie } from "nookies";
-import jwtDecode from "jwt-decode"; // Correct import for jwt-decode
+import { jwtDecode } from "jwt-decode"; // Correct import for jwt-decode
 
 export default function Header() {
   const [user, setUser] = useState<{ name: string | null }>({ name: null });
