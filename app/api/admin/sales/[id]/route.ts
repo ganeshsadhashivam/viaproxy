@@ -1,4 +1,4 @@
-export default function PATCH() {}
+export async function PATCH() {}
 // import { NextRequest, NextResponse } from "next/server";
 // import connectToDatabase from "@/utils/dbConnect";
 // import { Sale } from "@/models/admin/Sale";
