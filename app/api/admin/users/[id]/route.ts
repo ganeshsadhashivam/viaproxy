@@ -38,66 +38,68 @@ export async function PUT() {}
 //     return NextResponse.json({ error: error }, { status: 400 });
 //   }
 // }
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const body = await request.json();
 
-    // Validate status
-    const allowedStatuses = ["active", "inactive"];
-    if (body.status && !allowedStatuses.includes(body.status)) {
-      return NextResponse.json(
-        {
-          error: `Invalid status. Allowed values are: ${allowedStatuses.join(
-            ", "
-          )}`,
-        },
-        { status: 400 }
-      );
-    }
+export async function PATCH() {}
+// export async function PATCH(
+//   request: NextRequest,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     const body = await request.json();
 
-    // Validate role
-    const allowedRoles = [
-      "admin",
-      "student",
-      "merchant",
-      "promoter",
-      "ecoCitizen",
-    ];
-    if (body.role && !allowedRoles.includes(body.role)) {
-      return NextResponse.json(
-        {
-          error: `Invalid role. Allowed roles are: ${allowedRoles.join(", ")}`,
-        },
-        { status: 400 }
-      );
-    }
+//     // Validate status
+//     const allowedStatuses = ["active", "inactive"];
+//     if (body.status && !allowedStatuses.includes(body.status)) {
+//       return NextResponse.json(
+//         {
+//           error: `Invalid status. Allowed values are: ${allowedStatuses.join(
+//             ", "
+//           )}`,
+//         },
+//         { status: 400 }
+//       );
+//     }
 
-    // Update the user with provided fields (status and/or role)
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      params.id,
-      {
-        ...(body.status && { status: body.status }),
-        ...(body.role && { role: body.role }),
-      },
-      { new: true } // Return the updated document
-    );
+//     // Validate role
+//     const allowedRoles = [
+//       "admin",
+//       "student",
+//       "merchant",
+//       "promoter",
+//       "ecoCitizen",
+//     ];
+//     if (body.role && !allowedRoles.includes(body.role)) {
+//       return NextResponse.json(
+//         {
+//           error: `Invalid role. Allowed roles are: ${allowedRoles.join(", ")}`,
+//         },
+//         { status: 400 }
+//       );
+//     }
 
-    if (!updatedUser) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
+//     // Update the user with provided fields (status and/or role)
+//     const updatedUser = await UserModel.findByIdAndUpdate(
+//       params.id,
+//       {
+//         ...(body.status && { status: body.status }),
+//         ...(body.role && { role: body.role }),
+//       },
+//       { new: true } // Return the updated document
+//     );
 
-    return NextResponse.json(updatedUser, { status: 200 });
-  } catch (error) {
-    console.error("Error updating user:", error);
-    return NextResponse.json(
-      { error: "Failed to update user" },
-      { status: 500 }
-    );
-  }
-}
+//     if (!updatedUser) {
+//       return NextResponse.json({ error: "User not found" }, { status: 404 });
+//     }
+
+//     return NextResponse.json(updatedUser, { status: 200 });
+//   } catch (error) {
+//     console.error("Error updating user:", error);
+//     return NextResponse.json(
+//       { error: "Failed to update user" },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 export async function DELETE() {}
 // DELETE: Remove a user
