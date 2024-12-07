@@ -4,19 +4,24 @@ import { Alert } from "@/models/admin/Alert";
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } }
+  context: { params: Record<string, string> } // Use Record to allow dynamic keys
 ) {
-  const { params } = context; // Extract params from context
+  const { id } = context.params; // Extract `id` directly from `context.params`
   await connectToDatabase();
+
   try {
-    await Alert.findByIdAndDelete(params.id);
+    const deletedAlert = await Alert.findByIdAndDelete(id);
+    if (!deletedAlert) {
+      return NextResponse.json({ error: "Alert not found" }, { status: 404 });
+    }
+
     return NextResponse.json(
       { message: "Alert dismissed successfully" },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { error: error || "An error occurred" },
+      { error: error instanceof Error ? error.message : "An error occurred" },
       { status: 500 }
     );
   }
