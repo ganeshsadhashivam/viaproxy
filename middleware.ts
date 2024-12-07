@@ -70,14 +70,14 @@ export async function middleware(req: NextRequest) {
   console.log("Locale extracted from header:", localeFromHeader || "None");
 
   // Determine the locale to use
-  const locale = supportedLocales.includes(localeFromPath)
+  const local = supportedLocales.includes(localeFromPath)
     ? localeFromPath
-    : supportedLocales.includes(localeFromCookie)
+    : supportedLocales.includes(localeFromCookie ? localeFromCookie : "")
     ? localeFromCookie
-    : supportedLocales.includes(localeFromHeader)
+    : supportedLocales.includes(localeFromHeader ? localeFromHeader : "")
     ? localeFromHeader
     : defaultLocale;
-
+  const locale = local ? local : "";
   console.log("Final locale determined:", locale);
 
   const nextUrl = req.nextUrl.clone();
@@ -97,18 +97,36 @@ export async function middleware(req: NextRequest) {
     );
     nextUrl.pathname = `/${locale}${pathname}`;
     const response = NextResponse.redirect(nextUrl);
-    response.cookies.set("NEXT_LOCALE", locale, {
+
+    // Ensure the locale value is always a string
+    response.cookies.set("NEXT_LOCALE", locale || defaultLocale, {
       httpOnly: false,
       secure: process.env.NODE_ENV === "production",
       path: "/",
     });
-    console.log("Locale cookie set to:", locale);
+    console.log("Locale cookie set to:", locale || defaultLocale);
     return response;
   }
 
+  // if (!supportedLocales.includes(localeFromPath)) {
+  //   console.log(
+  //     "Locale missing in path. Redirecting to:",
+  //     `/${locale}${pathname}`
+  //   );
+  //   nextUrl.pathname = `/${locale}${pathname}`;
+  //   const response = NextResponse.redirect(nextUrl);
+  //   response.cookies.set("NEXT_LOCALE", locale, {
+  //     httpOnly: false,
+  //     secure: process.env.NODE_ENV === "production",
+  //     path: "/",
+  //   });
+  //   console.log("Locale cookie set to:", locale);
+  //   return response;
+  // }
+
   // Add locale to headers for `next-intl`
   const response = NextResponse.next();
-  response.headers.set("X-NEXT-INTL-LOCALE", locale);
+  response.headers.set("X-NEXT-INTL-LOCALE", locale ? locale : "");
   console.log("Locale header added:", locale);
 
   // Check if the route is public
@@ -138,7 +156,7 @@ export async function middleware(req: NextRequest) {
     console.log("User role extracted from token:", userRole);
 
     // Skip middleware for valid dashboard routes
-    if (isDashboardRoute(pathname, userRole)) {
+    if (isDashboardRoute(pathname, userRole as string)) {
       console.log(
         "User navigating within their dashboard. Allowing access:",
         pathname
@@ -147,8 +165,8 @@ export async function middleware(req: NextRequest) {
     }
 
     // Restrict access to other dashboards based on role
-    if (roleRedirects[userRole]) {
-      const allowedPath = `${roleRedirects[userRole]}`;
+    if (roleRedirects[userRole as string]) {
+      const allowedPath = `${roleRedirects[userRole as string]}`;
       const rolePath = `/${locale}${allowedPath}`;
       if (!pathname.startsWith(rolePath)) {
         console.log(
