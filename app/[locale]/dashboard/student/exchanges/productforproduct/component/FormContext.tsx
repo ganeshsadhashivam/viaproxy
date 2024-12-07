@@ -23,7 +23,7 @@ interface FormContextType {
       formOfExchange: string;
     };
     materialConditions: {
-      decision: boolean;
+      decision: string;
       percentage: string;
       moneyBackGuarantee: boolean;
       satisfactionGuarantee: boolean;
@@ -31,12 +31,13 @@ interface FormContextType {
       desiredPaymentType: string;
     };
     deliveryConditions: {
-      pickup: boolean;
+      pickup: "yes" | "no" | ""; // Restrict to specific values
       pickupAddress: string;
       pickupCountry: string;
       pickupCity: string;
+      pickupDetails: string;
       pickupCampus: string;
-      delivery: boolean;
+      delivery: "yes" | "no" | ""; // Restrict to specific values
       deliveryCost: string;
       deliveryCountry: string;
       deliveryCity: string;

@@ -9,7 +9,7 @@ import { useFormContext } from "../component/FormContext";
 const ExchangeDetailsForm = () => {
   const { formData, setFormData, handleNext } = useFormContext();
 
-  const handleDecisionChange = (e) => {
+  const handleDecisionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const decision = e.target.value;
     setFormData((prev) => ({
       ...prev,
@@ -22,21 +22,37 @@ const ExchangeDetailsForm = () => {
     }));
   };
 
-  const handlePickupChange = (e) => {
-    const pickup = e.target.value;
+  const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const pickup = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
+
     setFormData((prev) => ({
       ...prev,
       deliveryConditions: {
         ...prev.deliveryConditions,
         pickup,
         pickupDetails:
-          pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
+          pickup === "no" ? "" : prev.deliveryConditions.pickupDetails || "",
       },
+      // Ensure expectedRequirements is included in the updated object
+      expectedRequirements: prev.expectedRequirements,
     }));
   };
 
-  const handleDeliveryChange = (e) => {
-    const delivery = e.target.value;
+  // const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const pickup = e.target.value;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliveryConditions: {
+  //       ...prev.deliveryConditions,
+  //       pickup,
+  //       pickupDetails:
+  //         pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
+  //     },
+  //   }));
+  // };
+
+  const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const delivery = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
     setFormData((prev) => ({
       ...prev,
       deliveryConditions: {
@@ -47,6 +63,58 @@ const ExchangeDetailsForm = () => {
       },
     }));
   };
+
+  // const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const delivery = e.target.value;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliveryConditions: {
+  //       ...prev.deliveryConditions,
+  //       delivery,
+  //       deliveryCost:
+  //         delivery === "no" ? "" : prev.deliveryConditions?.deliveryCost || "",
+  //     },
+  //   }));
+  // };
+
+  // const handleDecisionChange = (e) => {
+  //   const decision = e.target.value;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     materialConditions: {
+  //       ...prev.materialConditions,
+  //       decision,
+  //       percentage:
+  //         decision === "no" ? "" : prev.materialConditions?.percentage || "",
+  //     },
+  //   }));
+  // };
+
+  // const handlePickupChange = (e) => {
+  //   const pickup = e.target.value;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliveryConditions: {
+  //       ...prev.deliveryConditions,
+  //       pickup,
+  //       pickupDetails:
+  //         pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
+  //     },
+  //   }));
+  // };
+
+  // const handleDeliveryChange = (e) => {
+  //   const delivery = e.target.value;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliveryConditions: {
+  //       ...prev.deliveryConditions,
+  //       delivery,
+  //       deliveryCost:
+  //         delivery === "no" ? "" : prev.deliveryConditions?.deliveryCost || "",
+  //     },
+  //   }));
+  // };
 
   return (
     <Formik
