@@ -4,13 +4,22 @@ import { Alert } from "@/models/admin/Alert";
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Record<string, string> } // Use Record to allow dynamic keys
-) {
-  const { id } = context.params; // Extract `id` directly from `context.params`
-  await connectToDatabase();
-
+  { params }: { params: { id: string } }
+): Promise<NextResponse> {
   try {
-    const deletedAlert = await Alert.findByIdAndDelete(id);
+    // Ensure the database connection is established
+    await connectToDatabase();
+
+    const alertId = params?.id;
+    if (!alertId) {
+      return NextResponse.json(
+        { error: "Missing or invalid alert ID" },
+        { status: 400 }
+      );
+    }
+
+    const deletedAlert = await Alert.findByIdAndDelete(alertId);
+
     if (!deletedAlert) {
       return NextResponse.json({ error: "Alert not found" }, { status: 404 });
     }
@@ -20,8 +29,14 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error deleting alert:", error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : "An error occurred" },
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
+      },
       { status: 500 }
     );
   }
