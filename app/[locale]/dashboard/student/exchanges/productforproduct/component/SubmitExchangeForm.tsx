@@ -1,19 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { Formik, Form } from "formik";
-import { Input, Radio, Select, DatePicker, Button } from "formik-antd";
+import { Input, Radio, Select, DatePicker } from "formik-antd";
 import { useFormContext } from "../component/FormContext";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { RadioChangeEvent } from "antd";
 
 const SubmitExchangeForm = () => {
   const t = useTranslations("");
   const { formData, setFormData, handleNext, handleBack } = useFormContext();
   const router = useRouter();
 
-  const handleDecisionChange = (e) => {
+  const handleDecisionChange = (e: RadioChangeEvent) => {
     const decision = e.target.value;
     setFormData((prev) => ({
       ...prev,
@@ -26,7 +27,7 @@ const SubmitExchangeForm = () => {
     }));
   };
 
-  const handlePercentageChange = (e) => {
+  const handlePercentageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const percentage = e.target.value;
     setFormData((prev) => ({
       ...prev,
@@ -37,20 +38,35 @@ const SubmitExchangeForm = () => {
     }));
   };
 
-  const handlePickupChange = (e) => {
-    const pickup = e.target.value;
+  const handlePickupChange = (e: RadioChangeEvent) => {
+    const pickup = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
+
     setFormData((prev) => ({
       ...prev,
       deliveryConditions: {
         ...prev.deliveryConditions,
         pickup,
         pickupDetails:
-          pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
+          pickup === "no" ? "" : prev.deliveryConditions.pickupDetails || "",
       },
+      // Ensure expectedRequirements is included in the updated object
+      expectedRequirements: prev.expectedRequirements,
     }));
   };
+  // const handlePickupChange = (e:RadioChangeEvent) => {
+  //   const pickup = e.target.value;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliveryConditions: {
+  //       ...prev.deliveryConditions,
+  //       pickup,
+  //       pickupDetails:
+  //         pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
+  //     },
+  //   }));
+  // };
 
-  const handleDeliveryChange = (e) => {
+  const handleDeliveryChange = (e: RadioChangeEvent) => {
     const delivery = e.target.value;
     setFormData((prev) => ({
       ...prev,
@@ -69,6 +85,7 @@ const SubmitExchangeForm = () => {
         ...formData.proposedOffer,
         ...formData.materialConditions,
         ...formData.deliveryConditions,
+        ...formData.expectedRequirements,
       }}
       onSubmit={(values) => {
         const collectedData = {
@@ -82,6 +99,10 @@ const SubmitExchangeForm = () => {
           },
           deliveryConditions: {
             ...formData.deliveryConditions,
+            ...values,
+          },
+          expectedRequirements: {
+            ...formData.expectedRequirements,
             ...values,
           },
         };
@@ -251,6 +272,7 @@ const SubmitExchangeForm = () => {
                     {t("DepositPercentage")}
                   </label>
                   <Input
+                    name="percentage"
                     id="percentage"
                     type="number"
                     value={formData.materialConditions?.percentage || ""}
