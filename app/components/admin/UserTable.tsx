@@ -127,7 +127,7 @@ export default function UserTable() {
     if (statusFilter !== "all" && Array.from(statusFilter).length > 0) {
       filteredUsers = filteredUsers.filter((user) => {
         const matches = Array.from(statusFilter)
-          .map((s) => s.toLowerCase())
+          .map((s) => String(s).toLowerCase())
           .includes(user.status.toLowerCase());
         console.log(
           `User: ${user.name}, Status: ${user.status}, Matches: ${matches}`
@@ -298,11 +298,7 @@ export default function UserTable() {
   return (
     <div>
       {topContent}
-      <Table
-        aria-label="User Management Table"
-        pagination
-        css={{ minWidth: "100%" }}
-      >
+      <Table aria-label="User Management Table" css={{ minWidth: "100%" }}>
         <TableHeader>
           <TableColumn key="name">Name</TableColumn>
           <TableColumn key="email">Email</TableColumn>
