@@ -28,12 +28,32 @@ async function getMessages(locale: string) {
       .default;
     return messages;
   } catch (error) {
-    console.error(
-      `Error loading translations for locale "${locale}": ${error.message}`
-    );
+    // Check if the error is an instance of Error
+    if (error instanceof Error) {
+      console.error(
+        `Error loading translations for locale "${locale}": ${error.message}`
+      );
+    } else {
+      console.error(
+        `An unknown error occurred while loading translations for locale "${locale}".`
+      );
+    }
     return null;
   }
 }
+
+// async function getMessages(locale: string) {
+//   try {
+//     const messages = (await import(`../../locales/${locale}/common.json`))
+//       .default;
+//     return messages;
+//   } catch (error) {
+//     console.error(
+//       `Error loading translations for locale "${locale}": ${error.message}`
+//     );
+//     return null;
+//   }
+// }
 
 // Layout Component
 export default async function LocaleLayout({
