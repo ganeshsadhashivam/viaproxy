@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Formik, Form } from "formik";
+import { RadioChangeEvent } from "antd";
 import { Input, Radio, Select, DatePicker } from "formik-antd";
 import Image from "next/image";
 import { useFormContext } from "../component/FormContext";
@@ -9,7 +10,7 @@ import { useFormContext } from "../component/FormContext";
 const ExchangeDetailsForm = () => {
   const { formData, setFormData, handleNext } = useFormContext();
 
-  const handleDecisionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDecisionChange = (e: RadioChangeEvent) => {
     const decision = e.target.value;
     setFormData((prev) => ({
       ...prev,
@@ -22,7 +23,7 @@ const ExchangeDetailsForm = () => {
     }));
   };
 
-  const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePickupChange = (e: RadioChangeEvent) => {
     const pickup = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
 
     setFormData((prev) => ({
@@ -51,16 +52,19 @@ const ExchangeDetailsForm = () => {
   //   }));
   // };
 
-  const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const delivery = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
+  const handleDeliveryChange = (e: RadioChangeEvent) => {
+    const delivery = e.target.value as "" | "yes" | "no"; // Explicitly cast to the literal type
+
     setFormData((prev) => ({
       ...prev,
       deliveryConditions: {
         ...prev.deliveryConditions,
         delivery,
         deliveryCost:
-          delivery === "no" ? "" : prev.deliveryConditions?.deliveryCost || "",
+          delivery === "no" ? "" : prev.deliveryConditions.deliveryCost || "",
       },
+      // Preserve the existing expectedRequirements field
+      expectedRequirements: prev.expectedRequirements,
     }));
   };
 
@@ -134,6 +138,11 @@ const ExchangeDetailsForm = () => {
             ...values,
           },
           deliveryConditions: {
+            ...formData.deliveryConditions,
+            ...values,
+          },
+
+          expectedRequirements: {
             ...formData.deliveryConditions,
             ...values,
           },
@@ -408,8 +417,12 @@ const ExchangeDetailsForm = () => {
                 onChange={handleDecisionChange}
                 className="flex flex-wrap gap-4"
               >
-                <Radio value="yes">Yes</Radio>
-                <Radio value="no">No</Radio>
+                <Radio name="depositpaymentyes" value="yes">
+                  Yes
+                </Radio>
+                <Radio name="depositpaymentno" value="no">
+                  No
+                </Radio>
               </Radio.Group>
               {formData.materialConditions?.decision === "yes" && (
                 <div className="mt-4">
