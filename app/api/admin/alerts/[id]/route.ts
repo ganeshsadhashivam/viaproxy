@@ -1,48 +1,48 @@
-import { NextRequest, NextResponse } from "next/server";
-import connectToDatabase from "@/utils/dbConnect";
-import { Alert } from "@/models/admin/Alert";
+// import { NextRequest, NextResponse } from "next/server";
+// import connectToDatabase from "@/utils/dbConnect";
+// import { Alert } from "@/models/admin/Alert";
 
-export async function DELETE(
-  request: NextRequest,
-  context: { params: Record<string, string> } // Corrected type
-): Promise<NextResponse> {
-  const { params } = context; // Destructure the context object
-  const alertId = params?.id;
+// export async function DELETE(
+//   request: NextRequest,
+//   context: { params: Record<string, string> } // Corrected type
+// ): Promise<NextResponse> {
+//   const { params } = context; // Destructure the context object
+//   const alertId = params?.id;
 
-  try {
-    // Ensure the database connection is established
-    await connectToDatabase();
+//   try {
+//     // Ensure the database connection is established
+//     await connectToDatabase();
 
-    if (!alertId) {
-      return NextResponse.json(
-        { error: "Missing or invalid alert ID" },
-        { status: 400 }
-      );
-    }
+//     if (!alertId) {
+//       return NextResponse.json(
+//         { error: "Missing or invalid alert ID" },
+//         { status: 400 }
+//       );
+//     }
 
-    const deletedAlert = await Alert.findByIdAndDelete(alertId);
+//     const deletedAlert = await Alert.findByIdAndDelete(alertId);
 
-    if (!deletedAlert) {
-      return NextResponse.json({ error: "Alert not found" }, { status: 404 });
-    }
+//     if (!deletedAlert) {
+//       return NextResponse.json({ error: "Alert not found" }, { status: 404 });
+//     }
 
-    return NextResponse.json(
-      { message: "Alert dismissed successfully" },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error deleting alert:", error);
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred",
-      },
-      { status: 500 }
-    );
-  }
-}
+//     return NextResponse.json(
+//       { message: "Alert dismissed successfully" },
+//       { status: 200 }
+//     );
+//   } catch (error) {
+//     console.error("Error deleting alert:", error);
+//     return NextResponse.json(
+//       {
+//         error:
+//           error instanceof Error
+//             ? error.message
+//             : "An unexpected error occurred",
+//       },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // import { NextRequest, NextResponse } from "next/server";
 // import connectToDatabase from "@/utils/dbConnect";
