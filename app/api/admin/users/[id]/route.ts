@@ -1,8 +1,8 @@
 // url:api/admin/users/:id
 // For PUT (update), PATCH (status), and DELETE
 
-import { NextRequest, NextResponse } from "next/server";
-import UserModel from "@/models/admin/User";
+// import { NextRequest, NextResponse } from "next/server";
+// import UserModel from "@/models/admin/User";
 
 export async function PUT() {}
 // PUT: Update user details

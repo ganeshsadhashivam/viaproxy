@@ -70,7 +70,8 @@ export async function POST(req: NextRequest) {
 
     const errorMessage =
       error && typeof error === "object" && "message" in error
-        ? (error as any).message
+        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (error as any).message
         : "An unknown error occurred";
 
     // Return error response

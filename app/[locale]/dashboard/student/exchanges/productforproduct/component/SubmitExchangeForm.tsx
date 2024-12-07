@@ -4,15 +4,15 @@ import React, { ChangeEvent } from "react";
 import { Formik, Form } from "formik";
 import { Input, Radio, Select, DatePicker } from "formik-antd";
 import { useFormContext } from "../component/FormContext";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { RadioChangeEvent } from "antd";
 
 const SubmitExchangeForm = () => {
   const t = useTranslations("");
-  const { formData, setFormData, handleNext, handleBack } = useFormContext();
-  const router = useRouter();
+  const { formData, setFormData, handleNext } = useFormContext();
+  // const router = useRouter();
 
   const handleDecisionChange = (e: RadioChangeEvent) => {
     const decision = e.target.value;

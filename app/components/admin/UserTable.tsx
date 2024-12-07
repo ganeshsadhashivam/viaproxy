@@ -32,11 +32,11 @@ interface User {
   createdAt: string;
 }
 
-const statusColorMap: Record<string, string> = {
-  active: "success",
-  paused: "warning",
-  pending: "danger",
-};
+// const statusColorMap: Record<string, string> = {
+//   active: "success",
+//   paused: "warning",
+//   pending: "danger",
+// };
 
 const statusOptions = [
   { name: "Active", uid: "active" },
@@ -157,7 +157,10 @@ export default function UserTable() {
         return user.role;
       case "status":
         return (
-          <Chip color={statusColorMap[user.status] || "default"} size="sm">
+          // <Chip color={statusColorMap[user.status].toString() || "default"} size="sm">
+          //   {user.status}
+          // </Chip>
+          <Chip color="primary" size="sm">
             {user.status}
           </Chip>
         );
@@ -298,7 +301,7 @@ export default function UserTable() {
   return (
     <div>
       {topContent}
-      <Table aria-label="User Management Table" css={{ minWidth: "100%" }}>
+      <Table aria-label="User Management Table" width="100%">
         <TableHeader>
           <TableColumn key="name">Name</TableColumn>
           <TableColumn key="email">Email</TableColumn>
