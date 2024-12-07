@@ -119,7 +119,57 @@
   "formOfExchange": "Select Form",
   "Sale": "Sale",
   "Gift": "Gift"
+    },
+
+    "Home": {
+    "hero": {
+      "title": "Discover the Best Deals on Top Products!",
+      "subtitle": "Shop the latest products at unbeatable prices.",
+      "shopNow": "Shop Now",
+      "exploreCategories": "Explore Categories",
+      "searchPlaceholder": "Search products..."
+    },
+    "categories": {
+      "title": "Shop by Category",
+      "items": ["Electronics", "Fashion", "Home", "Beauty", "Sports", "Toys", "Fruits", "Designs"]
+    },
+    "featuredProducts": {
+      "title": "Featured Products",
+      "items": [
+        { "name": "Product Name", "image": "product1.jpg", "price": "$49.99" },
+        { "name": "Another Product", "image": "product2.jpg", "price": "$69.99" }
+      ],
+      "addToCart": "Add to Cart"
+    },
+    "limitedOffer": {
+      "title": "Limited Time Offer!",
+      "subtitle": "Hurry up! Offer ends in:",
+      "timer": "03:15:20",
+      "shopNow": "Shop Now"
+    },
+    "reviews": {
+      "title": "What Our Customers Say",
+      "items": [
+        { "name": "Alina", "text": "Amazing product! Totally worth the price.", "image": "alina.jpg" },
+        { "name": "Kum", "text": "Great quality and service.", "image": "kum.jpg" }
+      ]
+    },
+    "newsletter": {
+      "title": "Stay Updated with Exclusive Deals",
+      "placeholder": "Enter your email",
+      "subscribe": "Subscribe Now"
+    },
+    "footer": {
+      "sections": [
+        { "title": "Quick Links", "items": ["Home", "Shop", "Contact"] },
+        { "title": "Customer Support", "items": ["FAQs", "Returns"] },
+        { "title": "Follow Us", "items": ["Facebook", "Instagram"] }
+      ],
+      "rightsReserved": "© 2024 Your Brand. All Rights Reserved."
     }
+  }
+  
+    
   }
     
 

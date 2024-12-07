@@ -120,7 +120,58 @@
   "Gift": "Cadeau"
 }
 
+  },
+  
+  
+"Home": {
+    "hero": {
+      "title": "Découvrez les meilleures offres sur les produits phares !",
+      "subtitle": "Achetez les derniers produits à des prix imbattables.",
+      "shopNow": "Achetez maintenant",
+      "exploreCategories": "Explorer les catégories",
+      "searchPlaceholder": "Rechercher des produits..."
+    },
+    "categories": {
+      "title": "Achetez par catégorie",
+      "items": ["Électronique", "Mode", "Maison", "Beauté", "Sports", "Jouets", "Fruits", "Designs"]
+    },
+    "featuredProducts": {
+      "title": "Produits en vedette",
+      "items": [
+        { "name": "Nom du produit", "image": "product1.jpg", "price": "49,99 €" },
+        { "name": "Un autre produit", "image": "product2.jpg", "price": "69,99 €" }
+      ],
+      "addToCart": "Ajouter au panier"
+    },
+    "limitedOffer": {
+      "title": "Offre limitée !",
+      "subtitle": "Dépêchez-vous ! L'offre se termine dans :",
+      "timer": "03:15:20",
+      "shopNow": "Achetez maintenant"
+    },
+    "reviews": {
+      "title": "Ce que disent nos clients",
+      "items": [
+        { "name": "Alina", "text": "Produit incroyable ! Vaut totalement le prix.", "image": "alina.jpg" },
+        { "name": "Kum", "text": "Excellente qualité et service.", "image": "kum.jpg" }
+      ]
+    },
+    "newsletter": {
+      "title": "Restez informé des offres exclusives",
+      "placeholder": "Entrez votre e-mail",
+      "subscribe": "S'abonner maintenant"
+    },
+    "footer": {
+      "sections": [
+        { "title": "Liens rapides", "items": ["Accueil", "Boutique", "Contact"] },
+        { "title": "Support client", "items": ["FAQs", "Retours"] },
+        { "title": "Suivez-nous", "items": ["Facebook", "Instagram"] }
+      ],
+      "rightsReserved": "© 2024 Votre marque. Tous droits réservés."
+    }
   }
-    
+  
+  }
+  
 
-}
+

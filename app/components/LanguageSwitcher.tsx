@@ -36,7 +36,9 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div className="absolute top-4 right-4 z-50">
+    <div className="fixed top-16 right-4 z-50">
+      {" "}
+      {/* Changed absolute to fixed and adjusted position */}
       <div className="flex items-center space-x-2">
         <span className="text-sm font-medium text-gray-700">EN</span>
         <div
@@ -54,6 +56,63 @@ export default function LanguageSwitcher() {
     </div>
   );
 }
+
+// "use client";
+
+// import { usePathname, useRouter, useSearchParams } from "next/navigation";
+// import { useEffect, useState } from "react";
+// import { useFormContext } from "@/app/[locale]/dashboard/student/exchanges/productforproduct/component/FormContext";
+
+// export default function LanguageSwitcher() {
+//   const router = useRouter();
+//   const pathname = usePathname();
+//   const searchParams = useSearchParams();
+
+//   const { formData, currentStep } = useFormContext();
+
+//   const supportedLocales = ["en", "fr"];
+//   const currentLocale = supportedLocales.includes(pathname.split("/")[1])
+//     ? pathname.split("/")[1]
+//     : "en";
+
+//   const [selectedLocale, setSelectedLocale] = useState(currentLocale);
+
+//   useEffect(() => {
+//     setSelectedLocale(currentLocale);
+//   }, [currentLocale]);
+
+//   const switchLanguage = (locale) => {
+//     if (locale === currentLocale) return;
+
+//     // Save form data and step to localStorage
+//     localStorage.setItem("formData", JSON.stringify(formData));
+//     localStorage.setItem("currentStep", JSON.stringify(currentStep));
+
+//     // Update locale in the pathname without reloading
+//     const params = new URLSearchParams(searchParams.toString());
+//     const newPathname = `/${locale}${pathname.slice(3)}`;
+//     router.replace(`${newPathname}?${params.toString()}`);
+//   };
+
+//   return (
+//     <div className="absolute top-4 right-4 z-50">
+//       <div className="flex items-center space-x-2">
+//         <span className="text-sm font-medium text-gray-700">EN</span>
+//         <div
+//           className="relative w-10 h-6 bg-gray-200 rounded-full cursor-pointer"
+//           onClick={() => switchLanguage(selectedLocale === "en" ? "fr" : "en")}
+//         >
+//           <div
+//             className={`absolute top-0.5 left-0.5 h-5 w-5 bg-black rounded-full transition-transform ${
+//               selectedLocale === "fr" ? "translate-x-4" : "translate-x-0"
+//             }`}
+//           ></div>
+//         </div>
+//         <span className="text-sm font-medium text-gray-700">FR</span>
+//       </div>
+//     </div>
+//   );
+// }
 
 // "use client";
 
