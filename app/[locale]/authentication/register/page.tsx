@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 
 export default function RegisterPage() {
   const t = useTranslations("register"); // Load translations for the 'register' namespace
+  const [loading, setLoading] = useState(false); // State to toggle loader
   const {
     register,
     handleSubmit,
@@ -17,6 +18,7 @@ export default function RegisterPage() {
   } = useForm();
 
   const onSubmit = async (data: any) => {
+    setLoading(true); // Show loader
     try {
       console.log("Form Data:", data);
       const response = await fetch("/api/authentication/register", {
@@ -41,6 +43,11 @@ export default function RegisterPage() {
 
   return (
     <section className="bg-white">
+      {loading && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center">
+          <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      )}
       <div className="flex flex-col lg:flex-row lg:min-h-screen">
         {/* Left Section */}
         <section className="relative flex h-32 items-end bg-gray-900 lg:w-1/2 lg:h-full">
