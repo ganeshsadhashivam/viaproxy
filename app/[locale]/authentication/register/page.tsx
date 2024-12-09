@@ -12,6 +12,7 @@ export default function RegisterPage() {
   // production base url changed
   // update base url of production to https://viaproxy.vercel.app/
   // update base url of production to https://viaproxy.vercel.app
+  // updated base url of prod to https://viaproxy-587n9r6fo-ganeshsadhashivams-projects.vercel.app/en
   const t = useTranslations("register"); // Load translations for the 'register' namespace
   const [loading, setLoading] = useState(false); // State to toggle loader
   const {
