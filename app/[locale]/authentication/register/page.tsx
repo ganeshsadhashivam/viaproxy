@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 export default function RegisterPage() {
   // production base url changed
   // update base url of production to https://viaproxy.vercel.app/
+  // update base url of production to https://viaproxy.vercel.app
   const t = useTranslations("register"); // Load translations for the 'register' namespace
   const [loading, setLoading] = useState(false); // State to toggle loader
   const {
