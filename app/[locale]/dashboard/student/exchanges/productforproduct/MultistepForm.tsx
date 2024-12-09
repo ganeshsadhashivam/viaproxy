@@ -6,11 +6,23 @@ import { useFormContext } from "./component/FormContext";
 import SubmitExchangeForm from "./component/SubmitExchangeForm";
 import ExpectedRequirement from "./component/ExpectedRequirements";
 import Success from "./component/Success";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setCurrentStep } from "@/store/slices/productForProductFormSlice";
+import { useTranslations } from "next-intl";
 
 const { Step } = Steps;
 
 const MultiStepForm = () => {
-  const { currentStep, handleBack } = useFormContext();
+  const dispatch = useDispatch();
+  // const { currentStep, handleBack } = useFormContext();
+
+  const { currentStep } = useSelector(
+    (state: RootState) => state.productForProductExchangeForm
+  );
+
+  const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
+  const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
 
   //steps array
 

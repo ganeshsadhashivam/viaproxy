@@ -93,10 +93,13 @@
         "link": "Conditions d'utilisation et politique de confidentialité",
      "confirmation": "En publiant votre offre, vous confirmez que vous acceptez nos Conditions d'utilisation et notre Politique de confidentialité."
       }
-    },
-    "form": {
+    }
+    
+
+  },
+  "form": {
   "Submit An Exchange Offer": "Soumettre une offre d'échange",
-  "Finance your projects or expenses with your unused services or": "Financez vos projets ou dépenses avec vos services ou biens inutilisés !",
+  "Finance your projects or expenses with your unused services or goods!": "Financez vos projets ou vos dépenses avec vos services ou biens inutilisés !",
   "Title of the Offer": "Titre de l'offre",
   "Enter Title": "Entrez le titre",
   "what do you Offer": "Que proposez-vous ?",
@@ -109,6 +112,40 @@
   "Accessories": "Accessoires",
   "FeaturedProductStatus": "État du produit en vedette",
   "featuredProductStatus": "Sélectionnez l'état",
+  "Material conditions of the exchange": "Conditions matérielles de l'échange",
+  "Estimated value of the exchange": "Valeur estimée de l'échange",
+  "Deposit Payment for booking": "Paiement de dépôt pour la réservation",
+  "yes": "oui",
+  "no": "non",
+  "DepositPercentage": "Pourcentage de dépôt",
+  "MoneyBackGuarantee": "Garantie de remboursement",
+  "SatisfactionGuarantee": "Garantie de satisfaction",
+  "DesiredPaymentForm": "Forme de paiement souhaitée",
+  "Exchange + or - Additional Sum": "Échange + ou - Somme supplémentaire",
+  "Exchange + or - Benefit or Service": "Échange + ou - Avantage ou Service",
+  "DesiredPaymentType": "Type de paiement souhaité",
+  "handToHand": "Main à main",
+  "Exchange & Payment Before Delivery": "Échange et paiement avant livraison",
+  "Exchange & Payment After Delivery": "Échange et paiement après livraison",
+  "DeliveryConditions": "Conditions de livraison",
+  "Pickup": "Collecte",
+  "PickupAddress": "Adresse de collecte",
+  "Address": "Adresse",
+  "Country": "Pays",
+  "City": "Ville",
+  "campus": "Campus",
+  "Delivery": "Livraison",
+  "DeliveryCost": "Coût de livraison",
+  "Cost": "Coût",
+  "Geolocation": "Géolocalisation",
+  "Campus": "Campus",
+  "CampusLocation": "Localisation du campus",
+  "Other Special Conditions": "Autres conditions spéciales",
+  "Additional Description of the payment or Delivery Method": "Description supplémentaire du mode de paiement ou de livraison",
+  "Description": "Description",
+  "uploadFile": "Télécharger un fichier",
+  "uploadIconAlt": "Icône de téléchargement",
+  "chooseFile": "Choisissez un fichier",
   "New": "Nouveau",
   "GoodCondition": "Bonne condition",
   "Used": "Utilisé",
@@ -117,10 +154,10 @@
   "FormOfExchange": "Forme d'échange",
   "formOfExchange": "Sélectionnez la forme",
   "Sale": "Vente",
-  "Gift": "Cadeau"
-}
-
-  },
+  "Gift": "Cadeau",
+  "Next": "Suivant",
+  "Zone 1 Insertion Banner Advertising": "Publicité pour bannière d'insertion Zone 1"
+},
   
   
 "Home": {

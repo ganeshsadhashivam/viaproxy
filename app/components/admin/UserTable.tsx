@@ -32,6 +32,21 @@ interface User {
   createdAt: string;
 }
 
+type StatusColor =
+  | "default"
+  | "primary"
+  | "secondary"
+  | "success"
+  | "warning"
+  | "danger"
+  | undefined;
+
+const statusColorMap: Record<string, StatusColor> = {
+  active: "success",
+  paused: "warning",
+  pending: "danger",
+};
+
 // const statusColorMap: Record<string, string> = {
 //   active: "success",
 //   paused: "warning",
@@ -157,12 +172,47 @@ export default function UserTable() {
         return user.role;
       case "status":
         return (
-          // <Chip color={statusColorMap[user.status].toString() || "default"} size="sm">
+          // <Chip
+          //   color={statusColorMap[user.status].toString() || "default"}
+          //   size="sm"
+          // >
           //   {user.status}
           // </Chip>
-          <Chip color="primary" size="sm">
+          // <Chip
+          //   color={
+          //     statusColorMap[user.status as keyof typeof statusColorMap] ||
+          //     "default"
+          //   }
+          //   size="sm"
+          // >
+          //   {user.status}
+          // </Chip>
+
+          <Chip
+            color={
+              statusColorMap[user.status as keyof typeof statusColorMap] ||
+              "default"
+            }
+            size="sm"
+            className={`rounded-lg px-4 py-3 text-white ${
+              statusColorMap[user.status as keyof typeof statusColorMap] ===
+              "success"
+                ? "bg-green-500"
+                : statusColorMap[user.status as keyof typeof statusColorMap] ===
+                  "warning"
+                ? "bg-yellow-500"
+                : statusColorMap[user.status as keyof typeof statusColorMap] ===
+                  "danger"
+                ? "bg-red-500"
+                : "bg-gray-500"
+            }`}
+          >
             {user.status}
           </Chip>
+
+          // <Chip color="primary" size="sm">
+          //   {user.status}
+          // </Chip>
         );
       case "createdAt":
         return new Date(user.createdAt).toLocaleDateString();

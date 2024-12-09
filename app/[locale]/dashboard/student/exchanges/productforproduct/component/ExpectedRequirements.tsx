@@ -6,39 +6,81 @@ import { RadioChangeEvent } from "antd";
 import { Input, Radio, Select, DatePicker } from "formik-antd";
 import Image from "next/image";
 import { useFormContext } from "../component/FormContext";
+import {
+  setFormData,
+  setCurrentStep,
+} from "@/store/slices/productForProductFormSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const ExchangeDetailsForm = () => {
-  const { formData, setFormData, handleNext } = useFormContext();
+  const dispatch = useDispatch();
+  // const { formData, setFormData, handleNext } = useFormContext();
+
+  const { formData, currentStep } = useSelector(
+    (state: RootState) => state.productForProductExchangeForm
+  );
 
   const handleDecisionChange = (e: RadioChangeEvent) => {
     const decision = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      materialConditions: {
-        ...prev.materialConditions,
-        decision,
-        percentage:
-          decision === "no" ? "" : prev.materialConditions?.percentage || "",
-      },
-    }));
+    dispatch(
+      setFormData({
+        materialConditions: {
+          ...formData.materialConditions,
+          decision,
+          percentage:
+            decision === "no"
+              ? ""
+              : formData.materialConditions?.percentage || "",
+        },
+      })
+    );
   };
+
+  // const handleDecisionChange = (e: RadioChangeEvent) => {
+  //   const decision = e.target.value;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     materialConditions: {
+  //       ...prev.materialConditions,
+  //       decision,
+  //       percentage:
+  //         decision === "no" ? "" : prev.materialConditions?.percentage || "",
+  //     },
+  //   }));
+  // };
+
+  // const handlePickupChange = (e: RadioChangeEvent) => {
+  //   const pickup = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
+
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliveryConditions: {
+  //       ...prev.deliveryConditions,
+  //       pickup,
+  //       pickupDetails:
+  //         pickup === "no" ? "" : prev.deliveryConditions.pickupDetails || "",
+  //     },
+  //     // Ensure expectedRequirements is included in the updated object
+  //     expectedRequirements: prev.expectedRequirements,
+  //   }));
+  // };
 
   const handlePickupChange = (e: RadioChangeEvent) => {
-    const pickup = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
-
-    setFormData((prev) => ({
-      ...prev,
-      deliveryConditions: {
-        ...prev.deliveryConditions,
-        pickup,
-        pickupDetails:
-          pickup === "no" ? "" : prev.deliveryConditions.pickupDetails || "",
-      },
-      // Ensure expectedRequirements is included in the updated object
-      expectedRequirements: prev.expectedRequirements,
-    }));
+    const pickup = e.target.value as "" | "yes" | "no";
+    dispatch(
+      setFormData({
+        deliveryConditions: {
+          ...formData.deliveryConditions,
+          pickup,
+          pickupDetails:
+            pickup === "no"
+              ? ""
+              : formData.deliveryConditions.pickupDetails || "",
+        },
+      })
+    );
   };
-
   // const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const pickup = e.target.value;
   //   setFormData((prev) => ({
@@ -52,21 +94,40 @@ const ExchangeDetailsForm = () => {
   //   }));
   // };
 
-  const handleDeliveryChange = (e: RadioChangeEvent) => {
-    const delivery = e.target.value as "" | "yes" | "no"; // Explicitly cast to the literal type
+  // const handleDeliveryChange = (e: RadioChangeEvent) => {
+  //   const delivery = e.target.value as "" | "yes" | "no"; // Explicitly cast to the literal type
 
-    setFormData((prev) => ({
-      ...prev,
-      deliveryConditions: {
-        ...prev.deliveryConditions,
-        delivery,
-        deliveryCost:
-          delivery === "no" ? "" : prev.deliveryConditions.deliveryCost || "",
-      },
-      // Preserve the existing expectedRequirements field
-      expectedRequirements: prev.expectedRequirements,
-    }));
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     deliveryConditions: {
+  //       ...prev.deliveryConditions,
+  //       delivery,
+  //       deliveryCost:
+  //         delivery === "no" ? "" : prev.deliveryConditions.deliveryCost || "",
+  //     },
+  //     // Preserve the existing expectedRequirements field
+  //     expectedRequirements: prev.expectedRequirements,
+  //   }));
+  // };
+
+  const handleDeliveryChange = (e: RadioChangeEvent) => {
+    const delivery = e.target.value;
+    dispatch(
+      setFormData({
+        deliveryConditions: {
+          ...formData.deliveryConditions,
+          delivery,
+          deliveryCost:
+            delivery === "no"
+              ? ""
+              : formData.deliveryConditions?.deliveryCost || "",
+        },
+      })
+    );
   };
+
+  const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
+  const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
 
   // const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const delivery = e.target.value;
@@ -147,9 +208,12 @@ const ExchangeDetailsForm = () => {
             ...values,
           },
         };
+        // console.log("Collected Form Data:", collectedData);
+        // setFormData(collectedData);
+        // handleNext();
         console.log("Collected Form Data:", collectedData);
-        setFormData(collectedData);
-        handleNext();
+        dispatch(setFormData(collectedData));
+        dispatch(setCurrentStep(2)); // Move to the next step
       }}
     >
       {() => (
@@ -779,6 +843,7 @@ const ExchangeDetailsForm = () => {
               <button
                 type="submit"
                 className="bg-blue-600 text-white px-4 py-2 rounded-md"
+                onClick={handleNext}
               >
                 Next
               </button>

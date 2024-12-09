@@ -5,10 +5,20 @@ import { useFormContext, FormProvider } from "./component/FormContext";
 import MultiStepForm from "./MultistepForm";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setCurrentStep } from "@/store/slices/productForProductFormSlice";
 
 const PageContent = () => {
+  const dispatch = useDispatch();
   const t = useTranslations("proposeExchangeOffer");
-  const { currentStep, handleNext } = useFormContext();
+  // const { currentStep, handleNext } = useFormContext();
+  const { currentStep } = useSelector(
+    (state: RootState) => state.productForProductExchangeForm
+  );
+
+  const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
+  const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
 
   return (
     <div>

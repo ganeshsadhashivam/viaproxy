@@ -2,18 +2,20 @@ import { configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage"; // Default to localStorage for web
 import { persistReducer, persistStore } from "redux-persist";
 import authReducer from "./slices/authSlice";
+import productForProductExchangeForm from "./slices/productForProductFormSlice";
 import { combineReducers } from "redux";
 
 // Define the persist configuration
 const persistConfig = {
   key: "root", // Key for localStorage
   storage, // Use localStorage as default storage
-  whitelist: ["auth"], // Specify which reducers to persist
+  whitelist: ["auth", " productForProductExchangeForm"], // Specify which reducers to persist
 };
 
 // Combine reducers if you have multiple reducers
 const rootReducer = combineReducers({
   auth: authReducer,
+  productForProductExchangeForm: productForProductExchangeForm,
 });
 
 // Wrap the root reducer with persistReducer
