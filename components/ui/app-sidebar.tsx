@@ -225,7 +225,7 @@ export function AppSidebar() {
         <SidebarGroupLabel className="flex flex-row justify-evenly m-5">
           <span>
             <Image
-              src="/ViaproxyLogo.svg"
+              src="/ViaProxyLogo.svg"
               layout="responsive"
               height={20}
               width={20}
