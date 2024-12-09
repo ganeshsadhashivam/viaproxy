@@ -35,8 +35,11 @@
     "alreadyHaveAccount": "Already have an account?",
     "login": "Log in",
     "registrationSuccess": "Registration successful!",
+    "Registration Success Verification Email sent to your Registered Email": "Registration Success Verification Email sent to your Registered Email",
     "registrationFailed": "Registration failed. Please try again.",
-    "unexpectedError": "An unexpected error occurred."
+    "unexpectedError": "An unexpected error occurred.",
+    "registerImageAlt": "Alt text for the register image",
+    "roleRequired": "Role is required"
   },
   
       "admin": {

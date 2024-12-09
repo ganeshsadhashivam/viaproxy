@@ -36,8 +36,12 @@
   "alreadyHaveAccount": "Vous avez déjà un compte ?",
   "login": "Se connecter",
   "registrationSuccess": "Inscription réussie !",
+  "Registration Success Verification Email sent to your Registered Email": "Inscription réussie, e-mail de vérification envoyé à votre e-mail enregistré",
   "registrationFailed": "Échec de l'inscription. Veuillez réessayer.",
-  "unexpectedError": "Une erreur inattendue s'est produite."
+  "unexpectedError": "Une erreur inattendue s'est produite.",
+  "registerImageAlt": "Texte alternatif pour l'image d'inscription",
+  "roleRequired": "Le rôle est requis"
+
 },
 "admin": {
       "dashboard": "Tableau de bord",

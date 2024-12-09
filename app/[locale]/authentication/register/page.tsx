@@ -28,7 +28,11 @@ export default function RegisterPage() {
       });
 
       if (response.ok) {
-        toast.success(t("registrationSuccess")); // Use translation key
+        toast.success(
+          t(
+            "Registration Success Verification Email sent to your Registered Email"
+          )
+        ); // Use translation key
       } else {
         const errorData = await response.json();
         toast.error(
