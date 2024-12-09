@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useTranslations } from "next-intl";
 
 export default function RegisterPage() {
+  // production base url changed
   const t = useTranslations("register"); // Load translations for the 'register' namespace
   const [loading, setLoading] = useState(false); // State to toggle loader
   const {
