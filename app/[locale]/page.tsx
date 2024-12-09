@@ -96,7 +96,7 @@ export default function Home() {
                   className="min-w-[250px] bg-white p-4 rounded-lg shadow hover:shadow-xl"
                 >
                   <Image
-                    src={`/${product}.jpg`}
+                    src={`/${product.toLowerCase()}.jpg`}
                     alt={product}
                     width={100}
                     height={100}

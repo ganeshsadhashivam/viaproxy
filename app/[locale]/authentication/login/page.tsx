@@ -64,7 +64,7 @@ export default function LoginPage() {
         {/* Left Section */}
         <section className="relative flex h-32 items-end bg-gray-900 lg:w-1/2 lg:h-full">
           <Image
-            src="/login.jpg"
+            src="/Login.jpg"
             layout="responsive"
             width={100}
             height={100}
