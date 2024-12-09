@@ -38,6 +38,8 @@ export default function RegisterPage() {
     } catch (error: any) {
       const errorMessage = error?.message || t("unexpectedError"); // Use translation key
       toast.error(errorMessage);
+    } finally {
+      setLoading(false); // Hide loader
     }
   };
 
