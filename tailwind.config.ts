@@ -72,6 +72,7 @@ const config = {
   	}
   },
   darkMode: ["class", "class"],
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [nextui(), require("tailwindcss-animate")],
 };
 
