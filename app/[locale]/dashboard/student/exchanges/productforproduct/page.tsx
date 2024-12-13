@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useFormContext, FormProvider } from "./component/FormContext";
+// import { useFormContext, FormProvider } from "./component/FormContext";
 import MultiStepForm from "./MultistepForm";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
@@ -18,7 +18,7 @@ const PageContent = () => {
   );
 
   const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
-  const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
+  // const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
 
   return (
     <div>
@@ -104,9 +104,9 @@ const PageContent = () => {
 
 const Page = () => {
   return (
-    <FormProvider>
-      <PageContent />
-    </FormProvider>
+    // <FormProvider>
+    <PageContent />
+    // </FormProvider>
   );
 };
 

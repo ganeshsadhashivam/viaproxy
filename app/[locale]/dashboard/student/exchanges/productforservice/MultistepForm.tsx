@@ -1,27 +1,27 @@
 "use client";
 
 import React from "react";
-import { Steps } from "antd";
+import { ConfigProvider, Steps } from "antd";
 // import { useFormContext } from "./component/FormContext";
 import SubmitExchangeForm from "./component/SubmitExchangeForm";
 import ExpectedRequirement from "./component/ExpectedRequirements";
 import Success from "./component/Success";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { setCurrentStep } from "@/store/slices/productForProductFormSlice";
-// import { useTranslations } from "next-intl";
+import { setCurrentStep } from "@/store/slices/productForServiceFormSlice";
+import { useTranslations } from "next-intl";
 
-// const { Step } = Steps;
+const { Step } = Steps;
 
 const MultiStepForm = () => {
   const dispatch = useDispatch();
   // const { currentStep, handleBack } = useFormContext();
 
   const { currentStep } = useSelector(
-    (state: RootState) => state.productForProductExchangeForm
+    (state: RootState) => state.productForServiceExchangeForm
   );
 
-  // const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
+  const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
   const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
 
   //steps array

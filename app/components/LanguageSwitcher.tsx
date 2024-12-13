@@ -40,7 +40,7 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <div className="fixed top-16 right-4 z-50">
+    <div className="fixed top-10 right-4 z-50">
       <div className="flex items-center space-x-2">
         <span className="text-sm font-medium text-gray-700">EN</span>
         <div

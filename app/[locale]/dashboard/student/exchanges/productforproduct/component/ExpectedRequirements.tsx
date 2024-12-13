@@ -1,219 +1,318 @@
 "use client";
 
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { Formik, Form } from "formik";
 import { RadioChangeEvent } from "antd";
 import { Input, Radio, Select, DatePicker } from "formik-antd";
 import Image from "next/image";
-import { useFormContext } from "../component/FormContext";
+// import { useFormContext } from "../component/FormContext";
 import {
-  setFormData,
   setCurrentStep,
+  setExpectedRequirements,
 } from "@/store/slices/productForProductFormSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { useTranslations } from "next-intl";
 
 const ExchangeDetailsForm = () => {
   const dispatch = useDispatch();
+  const t = useTranslations("form");
   // const { formData, setFormData, handleNext } = useFormContext();
 
   const { formData, currentStep } = useSelector(
     (state: RootState) => state.productForProductExchangeForm
   );
 
+  //for Zone1 insertion banner
+  const handleZoneOneBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          dispatch(
+            setExpectedRequirements({
+              zoneOneBanner: reader.result.toString(), // Store base64 encoded string
+            })
+          );
+        }
+      };
+      reader.readAsDataURL(file); // Convert file to base64 string
+    }
+  };
+
+  //for selecting multiple images
+  const handleImageChange = (index: number, file: File | null) => {
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (reader.result) {
+        const updatedImages = [...formData.expectedRequirements.images];
+        updatedImages[index] = reader.result.toString(); // Add/replace the image at the given index
+
+        // Ensure only 3 images are stored
+        const limitedImages = updatedImages.filter((img) => img).slice(0, 3);
+
+        dispatch(setExpectedRequirements({ images: limitedImages }));
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  // for Material Conditions
   const handleDecisionChange = (e: RadioChangeEvent) => {
-    const decision = e.target.value;
+    const decision = e.target.value as "yes" | "no";
+
+    const updatedMaterialConditions =
+      decision === "yes"
+        ? {
+            decision,
+            depositPayment: {
+              required: true,
+              percentage:
+                formData.expectedRequirements.materialConditions?.depositPayment
+                  ?.percentage ?? 0, // Default value
+            },
+            // estimatedValue:
+            // formData.expectedRequirements.materialConditions?.estimatedValue,
+            otherContingentCoverageRequired:
+              formData.expectedRequirements.materialConditions
+                ?.otherContingentCoverageRequired,
+          }
+        : {
+            decision,
+            depositPayment: {
+              required: false,
+            },
+            estimatedValue:
+              formData.expectedRequirements.materialConditions?.estimatedValue,
+            otherContingentCoverageRequired:
+              formData.expectedRequirements.materialConditions
+                ?.otherContingentCoverageRequired,
+          };
+
     dispatch(
-      setFormData({
-        materialConditions: {
-          ...formData.materialConditions,
-          decision,
-          percentage:
-            decision === "no"
-              ? ""
-              : formData.materialConditions?.percentage || "",
+      setExpectedRequirements({ materialConditions: updatedMaterialConditions })
+    );
+  };
+
+  //handle File Change
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+
+      // Convert the file to a URL for preview
+      const fileUrl = URL.createObjectURL(file);
+
+      // Dispatch the file URL to Redux
+      dispatch(
+        setExpectedRequirements({
+          otherSpecialConditions: {
+            ...formData.expectedRequirements.otherSpecialConditions, // Preserve existing data
+            uploadedFiles: [
+              ...(formData.expectedRequirements.otherSpecialConditions
+                ?.uploadedFiles || []),
+              fileUrl, // Add the new file URL to the array
+            ],
+          },
+        })
+      );
+    }
+  };
+
+  const handleEstimatedValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value ? parseFloat(e.target.value) : undefined;
+
+    const updatedMaterialConditions = {
+      ...formData.expectedRequirements.materialConditions,
+      estimatedValue: value, // Update estimatedValue
+      decision:
+        formData.expectedRequirements.materialConditions?.decision ?? "no", // Ensure decision is always set
+      depositPayment: {
+        ...formData.expectedRequirements.materialConditions?.depositPayment,
+        required:
+          formData.expectedRequirements.materialConditions?.depositPayment
+            ?.required ?? false, // Ensure required is always set
+      },
+    };
+
+    dispatch(
+      setExpectedRequirements({
+        materialConditions: updatedMaterialConditions,
+      })
+    );
+  };
+
+  const handleContingentCoverageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    const updatedMaterialConditions = {
+      ...formData.expectedRequirements.materialConditions,
+      otherContingentCoverageRequired: value, // Update contingent coverage
+      decision:
+        formData.expectedRequirements.materialConditions?.decision ?? "no", // Ensure decision is always set
+      depositPayment: {
+        ...formData.expectedRequirements.materialConditions?.depositPayment,
+        required:
+          formData.expectedRequirements.materialConditions?.depositPayment
+            ?.required ?? false, // Ensure required is always set
+      },
+      estimatedValue:
+        formData.expectedRequirements.materialConditions?.estimatedValue, // Retain existing estimatedValue
+    };
+
+    dispatch(
+      setExpectedRequirements({
+        materialConditions: updatedMaterialConditions,
+      })
+    );
+  };
+
+  const handlePercentageChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const percentage = e.target.value ? parseFloat(e.target.value) : undefined;
+
+    const updatedMaterialConditions = {
+      ...formData.expectedRequirements.materialConditions,
+      decision:
+        formData.expectedRequirements.materialConditions?.decision ?? "yes", // Ensure decision is always present
+      depositPayment: {
+        required:
+          formData.expectedRequirements.materialConditions?.depositPayment
+            ?.required ?? true, // Always explicitly set required
+        percentage, // Update only the percentage
+      },
+      // estimatedValue:
+      //   formData.expectedRequirements.materialConditions?.estimatedValue ?? null, // Preserve or set default
+      otherContingentCoverageRequired:
+        formData.expectedRequirements.materialConditions
+          ?.otherContingentCoverageRequired ?? "", // Preserve or set default
+    };
+
+    dispatch(
+      setExpectedRequirements({ materialConditions: updatedMaterialConditions })
+    );
+  };
+
+  const handleMoneyBackGuaranteeChange = (e: RadioChangeEvent) => {
+    const value = e.target.value === "yes"; // Convert "yes"/"no" to boolean
+
+    dispatch(
+      setExpectedRequirements({
+        guarantees: {
+          ...formData.expectedRequirements.guarantees,
+          moneyBackGuarantee: value,
+          satisfactionGuarantee:
+            formData.expectedRequirements.guarantees?.satisfactionGuarantee ??
+            false, // Ensure satisfactionGuarantee is always set
         },
       })
     );
   };
 
-  // const handleDecisionChange = (e: RadioChangeEvent) => {
-  //   const decision = e.target.value;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     materialConditions: {
-  //       ...prev.materialConditions,
-  //       decision,
-  //       percentage:
-  //         decision === "no" ? "" : prev.materialConditions?.percentage || "",
-  //     },
-  //   }));
-  // };
-
-  // const handlePickupChange = (e: RadioChangeEvent) => {
-  //   const pickup = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
-
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     deliveryConditions: {
-  //       ...prev.deliveryConditions,
-  //       pickup,
-  //       pickupDetails:
-  //         pickup === "no" ? "" : prev.deliveryConditions.pickupDetails || "",
-  //     },
-  //     // Ensure expectedRequirements is included in the updated object
-  //     expectedRequirements: prev.expectedRequirements,
-  //   }));
-  // };
-
-  const handlePickupChange = (e: RadioChangeEvent) => {
-    const pickup = e.target.value as "" | "yes" | "no";
+  const handleSatisfactionGuaranteeChange = (e: RadioChangeEvent) => {
+    const value = e.target.value === "yes";
     dispatch(
-      setFormData({
-        deliveryConditions: {
-          ...formData.deliveryConditions,
-          pickup,
-          pickupDetails:
-            pickup === "no"
-              ? ""
-              : formData.deliveryConditions.pickupDetails || "",
+      setExpectedRequirements({
+        guarantees: {
+          ...formData.expectedRequirements.guarantees,
+          satisfactionGuarantee: value,
+          moneyBackGuarantee:
+            formData.expectedRequirements.guarantees?.moneyBackGuarantee ??
+            false, // Ensure moneyBackGuarantee is always defined
         },
       })
     );
   };
-  // const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const pickup = e.target.value;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     deliveryConditions: {
-  //       ...prev.deliveryConditions,
-  //       pickup,
-  //       pickupDetails:
-  //         pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
-  //     },
-  //   }));
-  // };
 
-  // const handleDeliveryChange = (e: RadioChangeEvent) => {
-  //   const delivery = e.target.value as "" | "yes" | "no"; // Explicitly cast to the literal type
-
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     deliveryConditions: {
-  //       ...prev.deliveryConditions,
-  //       delivery,
-  //       deliveryCost:
-  //         delivery === "no" ? "" : prev.deliveryConditions.deliveryCost || "",
-  //     },
-  //     // Preserve the existing expectedRequirements field
-  //     expectedRequirements: prev.expectedRequirements,
-  //   }));
-  // };
-
-  const handleDeliveryChange = (e: RadioChangeEvent) => {
-    const delivery = e.target.value;
+  const handlePickupAllowedChange = (value: string) => {
     dispatch(
-      setFormData({
+      setExpectedRequirements({
         deliveryConditions: {
-          ...formData.deliveryConditions,
-          delivery,
-          deliveryCost:
-            delivery === "no"
-              ? ""
-              : formData.deliveryConditions?.deliveryCost || "",
+          ...formData.expectedRequirements.deliveryConditions,
+          pickup: {
+            allowed: value === "yes",
+            details: {
+              ...formData.expectedRequirements.deliveryConditions?.pickup
+                ?.details,
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const handlePickupDetailChange = (key: string, value: string) => {
+    dispatch(
+      setExpectedRequirements({
+        deliveryConditions: {
+          ...formData.expectedRequirements.deliveryConditions,
+          pickup: {
+            allowed:
+              formData.expectedRequirements.deliveryConditions?.pickup
+                ?.allowed || false, // Ensure `allowed` is always a boolean
+            details: {
+              ...formData.expectedRequirements.deliveryConditions?.pickup
+                ?.details,
+              [key]: value,
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const handleDeliveryAllowedChange = (value: string) => {
+    dispatch(
+      setExpectedRequirements({
+        deliveryConditions: {
+          ...formData.expectedRequirements.deliveryConditions,
+          delivery: {
+            allowed: value === "yes",
+            details: {
+              ...formData.expectedRequirements.deliveryConditions?.delivery
+                ?.details,
+            },
+          },
+        },
+      })
+    );
+  };
+
+  const handleDeliveryDetailChange = (key: string, value: string) => {
+    dispatch(
+      setExpectedRequirements({
+        deliveryConditions: {
+          ...formData.expectedRequirements.deliveryConditions,
+          delivery: {
+            allowed:
+              formData.expectedRequirements.deliveryConditions?.delivery
+                ?.allowed || false,
+            details: {
+              ...formData.expectedRequirements.deliveryConditions?.delivery
+                ?.details,
+              [key]: value,
+            },
+          },
         },
       })
     );
   };
 
   const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
-  const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
-
-  // const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const delivery = e.target.value;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     deliveryConditions: {
-  //       ...prev.deliveryConditions,
-  //       delivery,
-  //       deliveryCost:
-  //         delivery === "no" ? "" : prev.deliveryConditions?.deliveryCost || "",
-  //     },
-  //   }));
-  // };
-
-  // const handleDecisionChange = (e) => {
-  //   const decision = e.target.value;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     materialConditions: {
-  //       ...prev.materialConditions,
-  //       decision,
-  //       percentage:
-  //         decision === "no" ? "" : prev.materialConditions?.percentage || "",
-  //     },
-  //   }));
-  // };
-
-  // const handlePickupChange = (e) => {
-  //   const pickup = e.target.value;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     deliveryConditions: {
-  //       ...prev.deliveryConditions,
-  //       pickup,
-  //       pickupDetails:
-  //         pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
-  //     },
-  //   }));
-  // };
-
-  // const handleDeliveryChange = (e) => {
-  //   const delivery = e.target.value;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     deliveryConditions: {
-  //       ...prev.deliveryConditions,
-  //       delivery,
-  //       deliveryCost:
-  //         delivery === "no" ? "" : prev.deliveryConditions?.deliveryCost || "",
-  //     },
-  //   }));
-  // };
+  // const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
 
   return (
     <Formik
       initialValues={{
-        ...formData.proposedOffer,
-        ...formData.materialConditions,
-        ...formData.deliveryConditions,
+        ...formData.expectedRequirements,
       }}
       onSubmit={(values) => {
-        const collectedData = {
-          proposedOffer: {
-            ...formData.proposedOffer,
-            ...values,
-          },
-          materialConditions: {
-            ...formData.materialConditions,
-            ...values,
-          },
-          deliveryConditions: {
-            ...formData.deliveryConditions,
-            ...values,
-          },
-
-          expectedRequirements: {
-            ...formData.deliveryConditions,
-            ...values,
-          },
-        };
-        // console.log("Collected Form Data:", collectedData);
-        // setFormData(collectedData);
-        // handleNext();
-        console.log("Collected Form Data:", collectedData);
-        dispatch(setFormData(collectedData));
-        dispatch(setCurrentStep(2)); // Move to the next step
+        dispatch(setExpectedRequirements(values));
+        console.log(formData.expectedRequirements);
+        dispatch(setCurrentStep(3)); // Move to the next step
       }}
     >
       {() => (
@@ -221,46 +320,78 @@ const ExchangeDetailsForm = () => {
           <>
             <div className="text-center">
               <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">
-                Details Of the Expected Requirements
+                {t(`Details Of The Expected Requirements`)}
               </h2>
               <p className="text-gray-600">
-                Finance your projects or expenses with your unused services or
-                goods!
+                {t(
+                  `Finance Your Projects Or Expenses With Your Unused Services Or Goods!`
+                )}
               </p>
             </div>
 
-            <div>
-              <Input type="file" name="zone1adv" />
+            {/* zone 1 insertion banner Advertising */}
+            <div className="text-center p-5">
+              <h2 className="mb-5 text-lg font-bold">
+                {t("Zone 1 Insertion Banner Advertising")}
+              </h2>
+              <label
+                htmlFor="zone1-banner"
+                className="inline-block cursor-pointer p-4 border-2 border-dashed border-gray-400 rounded-lg bg-gray-100 hover:bg-gray-200"
+              >
+                <Image
+                  src={
+                    formData.expectedRequirements.zoneOneBanner ||
+                    "/imagetoselect.png"
+                  } // Replace with the URL or path to your upload icon/image // Replace with the URL or path to your upload icon/image
+                  alt="Upload Banner"
+                  className="max-w-full h-auto mx-auto mb-2"
+                  width={100}
+                  height={100}
+                />
+                <p className="text-gray-600">{t(`Click to upload`)}</p>
+              </label>
+              <input
+                id="zone1-banner"
+                type="file"
+                name="zone1 Advertising banner"
+                className="hidden"
+                onChange={handleZoneOneBannerChange}
+              />
             </div>
 
-            <div className="text-center">
-              <h4>Details of the Expected need </h4>
-              <h4>Detail your needs as preceisely as possible</h4>
+            {/* Details of the expected need */}
+            <div className="text-center bg-gray-50">
+              <h4>{t(`Details Of The Expected Need`)}</h4>
+              <h4>{t(`Detail Your Needs As Precisely As Possible`)}</h4>
             </div>
 
             {/* Title of the Offer */}
             <div>
               <label className="block text-gray-700 font-semibold mb-1">
-                Title of the Offer
+                {t("Title of the Offer")}
               </label>
               <Input
                 name="title"
-                placeholder="Enter title"
+                placeholder={t("Enter Title")}
                 className="w-full p-2 border rounded-md"
+                value={formData.expectedRequirements.title} // Bind value to Redux state
+                onChange={(e) =>
+                  dispatch(setExpectedRequirements({ title: e.target.value }))
+                }
               />
             </div>
 
             {/* Offer Type */}
             <div>
               <label className="block text-gray-700 font-semibold mb-1">
-                What do you offer?
+                {t("what do you Offer")}
               </label>
               <Radio.Group name="offerType" className="flex flex-wrap gap-4">
-                <Radio name="Good" value="Good">
-                  A Good
+                <Radio name="offerType" value="Good">
+                  {t("Good")}
                 </Radio>
-                <Radio name="Service" value="Service">
-                  A Service
+                <Radio name="offerType" value="Service">
+                  {t("Service")}
                 </Radio>
               </Radio.Group>
             </div>
@@ -269,28 +400,40 @@ const ExchangeDetailsForm = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-gray-700 font-semibold mb-1">
-                  Category
+                  {t("Category")}
                 </label>
                 <Select
                   name="category"
-                  placeholder="Select Category"
+                  placeholder={t("Category")}
                   className="w-full"
+                  value={formData.expectedRequirements.category}
+                  onChange={(value) =>
+                    dispatch(setExpectedRequirements({ category: value }))
+                  }
                 >
-                  <Select.Option value="Electronics">Electronics</Select.Option>
-                  <Select.Option value="Health">Health</Select.Option>
+                  <Select.Option value="Electronics">
+                    {t("Electronics")}
+                  </Select.Option>
+                  <Select.Option value="Health">{t("Health")}</Select.Option>
                 </Select>
               </div>
               <div>
                 <label className="block text-gray-700 font-semibold mb-1">
-                  Subcategory
+                  {t("SubCategory")}
                 </label>
                 <Select
                   name="subcategory"
-                  placeholder="Select Subcategory"
+                  placeholder={t("SubCategory")}
                   className="w-full"
+                  value={formData.expectedRequirements.subcategory}
+                  onChange={(value) =>
+                    dispatch(setExpectedRequirements({ subcategory: value }))
+                  }
                 >
-                  <Select.Option value="Accessories">Accessories</Select.Option>
-                  <Select.Option value="Health">Health</Select.Option>
+                  <Select.Option value="Accessories">
+                    {t("Accessories")}
+                  </Select.Option>
+                  <Select.Option value="Health">{t("Health")}</Select.Option>
                 </Select>
               </div>
             </div>
@@ -298,371 +441,462 @@ const ExchangeDetailsForm = () => {
             {/* Featured Product Status */}
             <div>
               <label className="block text-gray-700 font-semibold mb-1">
-                Desired Product Status
+                {t("FeaturedProductStatus")}
               </label>
               <Select
                 name="featuredProductStatus"
-                placeholder="Select Status"
+                placeholder={t("featuredProductStatus")}
                 className="w-full"
+                value={formData.expectedRequirements.featuredProductStatus}
+                onChange={(value) =>
+                  dispatch(
+                    setExpectedRequirements({ featuredProductStatus: value })
+                  )
+                }
               >
-                <Select.Option value="Nine">Nine</Select.Option>
-                <Select.Option value="Very Good Condition">
-                  Very Good Condition
+                <Select.Option value="New">{t("New")}</Select.Option>
+                <Select.Option value="GoodCondition">
+                  {t("GoodCondition")}
                 </Select.Option>
-                <Select.Option value="Good Conditon">
-                  Good Conditon
-                </Select.Option>
-                <Select.Option value="Used">Used</Select.Option>
-                <Select.Option value="Need for repair">
-                  Need for repair
-                </Select.Option>
+                <Select.Option value="Used">{t("Used")}</Select.Option>
               </Select>
             </div>
 
-            {/* Additional description of your needs */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-1">
-                Additional description of your needs
+            {/* Additional Description of Your Offer */}
+            <div className="p-1 space-y-4">
+              <label
+                htmlFor="additionaldescription"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                {t(`Additional Description Of Your Offer`)}
               </label>
-              <textarea
+              <Input
+                type="text"
                 name="additionaldescription"
-                placeholder="Provide details"
-                rows={4}
-                className="w-full p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="additionaldescription"
+                placeholder="Enter additional details about your offer"
+                className="w-full p-2 border rounded-md"
+                value={
+                  formData.expectedRequirements.additionalDescription || ""
+                }
+                onChange={(e) =>
+                  dispatch(
+                    setExpectedRequirements({
+                      additionalDescription: e.target.value,
+                    })
+                  )
+                }
               />
-            </div>
 
-            {/* images to be selected */}
-            <div>
+              {/* images to select */}
               <div className="mt-4">
-                <h3 className="text-lg font-bold text-center mb-4">
-                  Upload Images of Desired Product
-                </h3>
-                <p className="text-gray-600 text-center mb-4">
-                  Select up to 3 images of the product you want to upload.
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {/* Image Upload Field 1 */}
-                  <div className="flex flex-col items-center">
-                    <label
-                      htmlFor="image1"
-                      className="flex flex-col items-center justify-center w-full p-4 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+                <label
+                  htmlFor="offer-images"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
+                >
+                  {t(`Upload Any Images Of The Offer`)}
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center space-y-2"
                     >
-                      {/* <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-blue-600 mb-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                      <label
+                        htmlFor={`offer-image-${index}`}
+                        className="cursor-pointer flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-400 hover:bg-gray-50"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 4v16m8-8H4"
+                        <Image
+                          src={
+                            formData.expectedRequirements.images[index] ||
+                            "/imagetoselect.png"
+                          } // Show selected image or default placeholder // Replace this with your actual icon path
+                          alt="Select Image"
+                          // className="h-12 w-12"
+                          className="object-cover w-20 h-20 rounded-md"
+                          width={100}
+                          height={100}
                         />
-                      </svg> */}
-                      <Image
-                        src="/imagetoselect.png"
-                        width={50}
-                        height={50}
-                        alt="image1"
+                        <span className="text-sm text-gray-500">
+                          Select Image
+                        </span>
+                      </label>
+                      <input
+                        type="file"
+                        name={`offerImage-${index}`}
+                        id={`offer-image-${index}`}
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) =>
+                          handleImageChange(index, e.target.files?.[0] || null)
+                        }
                       />
-                      <span className="text-gray-600 text-sm">
-                        Choose Image 1
-                      </span>
-                    </label>
-                    <Input
-                      id="image1"
-                      name="image1"
-                      type="file"
-                      className="hidden"
-                    />
-                  </div>
-
-                  {/* Image Upload Field 2 */}
-                  <div className="flex flex-col items-center">
-                    <label
-                      htmlFor="image2"
-                      className="flex flex-col items-center justify-center w-full p-4 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
-                    >
-                      <Image
-                        src="/imagetoselect.png"
-                        width={50}
-                        height={50}
-                        alt="image1"
-                      />
-                      <span className="text-gray-600 text-sm">
-                        Choose Image 2
-                      </span>
-                    </label>
-                    <Input
-                      id="image2"
-                      name="image2"
-                      type="file"
-                      className="hidden"
-                    />
-                  </div>
-
-                  {/* Image Upload Field 3 */}
-                  <div className="flex flex-col items-center">
-                    <label
-                      htmlFor="image3"
-                      className="flex flex-col items-center justify-center w-full p-4 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
-                    >
-                      <Image
-                        src="/imagetoselect.png"
-                        width={50}
-                        height={50}
-                        alt="image1"
-                      />
-                      <span className="text-gray-600 text-sm">
-                        Choose Image 3
-                      </span>
-                    </label>
-                    <Input
-                      id="image3"
-                      name="image3"
-                      type="file"
-                      className="hidden"
-                    />
-                  </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              upload any images of desired product
             </div>
 
             {/* Offer Dates */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-gray-700 font-semibold mb-1">
-                  Offer Start Date
+                  {t("OfferStartDate")}
                 </label>
-                <DatePicker name="startDate" className="w-full" />
+                <DatePicker
+                  name="startDate"
+                  className="w-full"
+                  onChange={(date) =>
+                    dispatch(
+                      setExpectedRequirements({
+                        startDate: date?.toDate() || null,
+                      })
+                    )
+                  }
+                />
               </div>
               <div>
                 <label className="block text-gray-700 font-semibold mb-1">
-                  Offer End Date
+                  {t("OfferEndDate")}
                 </label>
-                <DatePicker name="endDate" className="w-full" />
+                <DatePicker
+                  name="endDate"
+                  className="w-full"
+                  onChange={(date) =>
+                    dispatch(
+                      setExpectedRequirements({
+                        endDate: date?.toDate() || null,
+                      })
+                    )
+                  }
+                />
               </div>
             </div>
 
-            {/* Header */}
-            <div className="text-center">
-              <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">
-                Material Conditions of the Exchange
-              </h2>
-              <p className="text-gray-600">
-                Provide details regarding payment and delivery conditions.
-              </p>
-            </div>
-
-            {/* Estimated Value */}
+            {/* Form of Exchange */}
             <div>
               <label className="block text-gray-700 font-semibold mb-1">
-                Estimated Value of the Exchange
+                {t("FormOfExchange")}
+              </label>
+              <Select
+                name="formOfExchange"
+                placeholder={t("formOfExchange")}
+                className="w-full"
+                value={formData.expectedRequirements.formOfExchange}
+                onChange={(value) =>
+                  dispatch(setExpectedRequirements({ formOfExchange: value }))
+                }
+              >
+                <Select.Option value="Exchange">{t("Exchange")}</Select.Option>
+                <Select.Option value="Classic Sale">
+                  {t("Classic Sale")}
+                </Select.Option>
+                <Select.Option value="Auction">{t("Auction")}</Select.Option>
+                <Select.Option value="Donation">{t("Donation")}</Select.Option>
+                {/* <Select.Option value="Sale">{t("Sale")}</Select.Option>
+              <Select.Option value="Gift">{t("Gift")}</Select.Option> */}
+              </Select>
+            </div>
+
+            {/* Material Conditions */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-center">
+                {t("Material conditions of the exchange")}
+              </h3>
+              <div>
+                <p className="font-semibold text-gray-700">
+                  {t("Estimated value of the exchange")}
+                </p>
+                <Input
+                  name="estimatedValueofExchange"
+                  type="number"
+                  value={
+                    formData.expectedRequirements.materialConditions
+                      ?.estimatedValue || ""
+                  }
+                  onChange={handleEstimatedValueChange} // Attach the handler
+                />
+                <div>
+                  <label className="block text-gray-700 mb-1">
+                    {t("Deposit Payment for booking")}
+                  </label>
+                  <Radio.Group
+                    name="decision"
+                    value={
+                      formData.expectedRequirements.materialConditions
+                        ?.decision || ""
+                    }
+                    onChange={handleDecisionChange}
+                    className="flex gap-4"
+                  >
+                    <Radio name="decision" value="yes">
+                      {t("yes")}
+                    </Radio>
+                    <Radio name="decision" value="no">
+                      {t("no")}
+                    </Radio>
+                  </Radio.Group>
+                </div>
+
+                {formData.expectedRequirements.materialConditions?.decision ===
+                  "yes" && (
+                  <div className="mt-4">
+                    <label
+                      htmlFor="percentage"
+                      className="block text-gray-700 font-semibold mb-1"
+                    >
+                      {t("DepositPercentage")}
+                    </label>
+                    <Input
+                      name="percentage"
+                      id="percentage"
+                      type="number"
+                      value={
+                        formData.expectedRequirements.materialConditions
+                          ?.depositPayment?.percentage || ""
+                      }
+                      onChange={handlePercentageChange}
+                      placeholder={t("DepositPercentage")}
+                      className="w-full"
+                      min={0}
+                      max={100}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Other Contingent Coverage Required */}
+            <div className="font-semibold">
+              <label htmlFor="othercontingentcoveragerequired">
+                {t(`Other Contingent Coverage Required`)}
               </label>
               <Input
-                name="estimatedValue"
-                placeholder="Enter estimated value"
-                className="w-full p-2 border rounded-md"
+                type="text"
+                name="othercontingentcoveragerequired"
+                id="othercontingentcoveragerequired"
+                value={
+                  formData.expectedRequirements.materialConditions
+                    ?.otherContingentCoverageRequired || ""
+                }
+                onChange={handleContingentCoverageChange} // Attach the handler
               />
-            </div>
-
-            {/* Deposit Payment */}
-            <div>
-              <label className="block text-gray-700 font-semibold mb-1">
-                Deposit Payment for Booking
-              </label>
-              <Radio.Group
-                name="decision"
-                value={formData.materialConditions?.decision || ""}
-                onChange={handleDecisionChange}
-                className="flex flex-wrap gap-4"
-              >
-                <Radio name="depositpaymentyes" value="yes">
-                  Yes
-                </Radio>
-                <Radio name="depositpaymentno" value="no">
-                  No
-                </Radio>
-              </Radio.Group>
-              {formData.materialConditions?.decision === "yes" && (
-                <div className="mt-4">
-                  <label
-                    htmlFor="percentage"
-                    className="block text-gray-700 font-semibold mb-1"
-                  >
-                    Deposit Percentage (%):
-                  </label>
-                  <Input
-                    id="percentage"
-                    name="percentage"
-                    type="number"
-                    placeholder="Enter percentage"
-                    className="w-full p-2 border rounded-md"
-                  />
-                </div>
-              )}
             </div>
 
             {/* Money Back Guarantee */}
             <div className="mt-4">
-              <label className="block text-gray-700 font-semibold mb-2">
-                Money Back Guarantee:
+              <label className="block text-gray-700 font-semibold mb-1">
+                {t("MoneyBackGuarantee")}
               </label>
               <Radio.Group
                 name="moneyBackGuarantee"
-                className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap"
+                className="flex flex-wrap gap-4"
+                value={
+                  formData.expectedRequirements.guarantees?.moneyBackGuarantee
+                    ? "yes"
+                    : "no"
+                } // Map boolean to "yes"/"no"
+                onChange={handleMoneyBackGuaranteeChange} // Handle state update
               >
-                <Radio
-                  name="moneyBackGuarantee"
-                  value="yes"
-                  className="w-full sm:w-auto text-center"
-                >
-                  Yes
+                <Radio name="moneyBackGuarantee" value="yes">
+                  {t("yes")}
                 </Radio>
-                <Radio
-                  name="moneyBackGuarantee"
-                  value="no"
-                  className="w-full sm:w-auto text-center"
-                >
-                  No
+                <Radio name="moneyBackGuarantee" value="no">
+                  {t("no")}
                 </Radio>
               </Radio.Group>
             </div>
 
             {/* Satisfaction Guarantee */}
             <div className="mt-4">
-              <label className="block text-gray-700 font-semibold mb-2">
-                Satisfaction or Exchange Guarantee:
+              <label className="block text-gray-700 font-semibold mb-1">
+                {t("SatisfactionGuarantee")}
               </label>
               <Radio.Group
                 name="satisfactionGuarantee"
-                className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap"
+                className="flex flex-wrap gap-4"
+                value={
+                  formData.expectedRequirements.guarantees
+                    ?.satisfactionGuarantee
+                    ? "yes"
+                    : "no"
+                } // Map boolean to "yes"/"no"
+                onChange={handleSatisfactionGuaranteeChange} // Handle state update
               >
-                <Radio
-                  name="satisfactionGuarantee"
-                  value="yes"
-                  className="w-full sm:w-auto text-center"
-                >
-                  Yes
+                <Radio name="satisfactionGuarantee" value="yes">
+                  {t("yes")}
                 </Radio>
-                <Radio
-                  name="satisfactionGuarantee"
-                  value="no"
-                  className="w-full sm:w-auto text-center"
-                >
-                  No
+                <Radio name="satisfactionGuarantee" value="no">
+                  {t("no")}
                 </Radio>
               </Radio.Group>
             </div>
 
-            {/* Other Contingent Coverage */}
-            <div>
+            {/* Desired Payment Form */}
+            <div className="mt-4">
               <label className="block text-gray-700 font-semibold mb-1">
-                Other Contingent Coverage Required
+                {t("DesiredPaymentForm")}
               </label>
-              <textarea
-                name="otherCoverage"
-                placeholder="Provide details"
-                rows={4}
-                className="w-full p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
+              <Select
+                name="desiredPaymentForm"
+                className="w-full"
+                value={
+                  formData.expectedRequirements.paymentDetails
+                    ?.desiredPaymentForm
+                }
+                onChange={(value) =>
+                  dispatch(
+                    setExpectedRequirements({
+                      paymentDetails: {
+                        ...formData.expectedRequirements.paymentDetails,
+                        desiredPaymentForm: value, // Update desiredPaymentForm in Redux state
+                      },
+                    })
+                  )
+                }
+              >
+                <Select.Option value="exchange-sum">
+                  {t("Exchange + or - Additional Sum")}
+                </Select.Option>
+                <Select.Option value="exchange-service">
+                  {t("Exchange + or - Benefit or Service")}
+                </Select.Option>
+              </Select>
             </div>
 
-            {/* Payment and Delivery Methods */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Payment Form */}
-              <div>
-                <label className="block text-gray-700 font-semibold mb-1">
-                  Desired Payment Form
-                </label>
-                <Select
-                  name="desiredPaymentForm"
-                  placeholder="Select Payment Form"
-                  className="w-full"
-                >
-                  <Select.Option value="exchange-sum">
-                    Exchange +/- Sum
-                  </Select.Option>
-                  <Select.Option value="exchange-service">
-                    Exchange +/- Service
-                  </Select.Option>
-                </Select>
-              </div>
-
-              {/* Payment Type */}
-              <div>
-                <label className="block text-gray-700 font-semibold mb-1">
-                  Desired Payment Type
-                </label>
-                <Select
-                  name="desiredPaymentType"
-                  placeholder="Select Payment Type"
-                  className="w-full"
-                >
-                  <Select.Option value="hand-to-hand">
-                    Hand-to-Hand Exchange
-                  </Select.Option>
-                  <Select.Option value="before-delivery">
-                    Payment Before Delivery
-                  </Select.Option>
-                  <Select.Option value="after-delivery">
-                    Payment After Delivery
-                  </Select.Option>
-                </Select>
-              </div>
+            {/* Desired Payment Type */}
+            <div className="mt-4">
+              <label className="block text-gray-700 font-semibold mb-1">
+                {t("DesiredPaymentType")}
+              </label>
+              <Select
+                name="desiredPaymentType"
+                className="w-full"
+                value={
+                  formData.expectedRequirements.paymentDetails
+                    ?.desiredPaymentType
+                }
+                onChange={(value) =>
+                  dispatch(
+                    setExpectedRequirements({
+                      paymentDetails: {
+                        ...formData.expectedRequirements.paymentDetails,
+                        desiredPaymentType: value, // Update desiredPaymentForm in Redux state
+                      },
+                    })
+                  )
+                }
+              >
+                <Select.Option value="hand-to-hand">
+                  {t("handToHand")}
+                </Select.Option>
+                <Select.Option value="before-delivery">
+                  {t("Exchange & Payment Before Delivery")}
+                </Select.Option>
+                <Select.Option value="after-delivery">
+                  {t("Exchange & Payment After Delivery")}
+                </Select.Option>
+              </Select>
             </div>
 
             {/* Delivery Conditions */}
             <div className="mt-6">
               <h2 className="text-xl font-bold text-center mb-4">
-                Delivery Conditions
+                {t("DeliveryConditions")}
               </h2>
 
               {/* Pickup */}
+              {/* og code */}
               <div className="mt-4">
                 <label className="block text-gray-700 font-semibold mb-1">
-                  Pickup:
+                  {t("Pickup")}
                 </label>
+
                 <Radio.Group
                   name="pickup"
                   className="flex flex-wrap gap-4"
-                  value={formData.deliveryConditions?.pickup || ""}
-                  onChange={handlePickupChange}
+                  value={
+                    formData.expectedRequirements.deliveryConditions?.pickup
+                      ?.allowed
+                      ? "yes"
+                      : "no"
+                  }
+                  onChange={(e) => handlePickupAllowedChange(e.target.value)} // Use an intermediate handler
                 >
                   <Radio name="pickup" value="yes">
-                    Yes
+                    {t("yes")}
                   </Radio>
                   <Radio name="pickup" value="no">
-                    No
+                    {t("no")}
                   </Radio>
                 </Radio.Group>
-                {formData.deliveryConditions?.pickup === "yes" && (
+
+                {formData.expectedRequirements.deliveryConditions?.pickup
+                  ?.allowed && (
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-gray-700 mb-1">
-                        Pickup Address:
+                        {t("PickupAddress")}
                       </label>
-                      <Input name="pickupAddress" placeholder="Enter Address" />
+                      <Input
+                        name="pickupAddress"
+                        value={
+                          formData.expectedRequirements.deliveryConditions
+                            ?.pickup?.details?.address || ""
+                        }
+                        onChange={(e) =>
+                          handlePickupDetailChange("address", e.target.value)
+                        }
+                        placeholder={t("Address")}
+                      />
                     </div>
                     <div>
                       <label className="block text-gray-700 mb-1">
-                        Country:
+                        {t("Country")}
                       </label>
-                      <Input name="pickupCountry" placeholder="Enter Country" />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 mb-1">City:</label>
-                      <Input name="pickupCity" placeholder="Enter City" />
+                      <Input
+                        name="pickupCountry"
+                        value={
+                          formData.expectedRequirements.deliveryConditions
+                            ?.pickup?.details?.country || ""
+                        }
+                        onChange={(e) =>
+                          handlePickupDetailChange("country", e.target.value)
+                        }
+                        placeholder={t("Country")}
+                      />
                     </div>
                     <div>
                       <label className="block text-gray-700 mb-1">
-                        Campus:
+                        {t("City")}
                       </label>
-                      <Input name="pickupCampus" placeholder="Enter Campus" />
+                      <Input
+                        name="pickupCity"
+                        value={
+                          formData.expectedRequirements.deliveryConditions
+                            ?.pickup?.details?.city || ""
+                        }
+                        onChange={(e) =>
+                          handlePickupDetailChange("city", e.target.value)
+                        }
+                        placeholder={t("City")}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 mb-1">
+                        {t("campus")}
+                      </label>
+                      <Input
+                        name="pickupCampus"
+                        value={
+                          formData.expectedRequirements.deliveryConditions
+                            ?.pickup?.details?.campus || ""
+                        }
+                        onChange={(e) =>
+                          handlePickupDetailChange("campus", e.target.value)
+                        }
+                        placeholder={t("Campus")}
+                      />
                     </div>
                   </div>
                 )}
@@ -671,50 +905,87 @@ const ExchangeDetailsForm = () => {
               {/* Delivery */}
               <div className="mt-4">
                 <label className="block text-gray-700 font-semibold mb-1">
-                  Delivery:
+                  {t("Delivery")}
                 </label>
                 <Radio.Group
                   name="delivery"
                   className="flex flex-wrap gap-4"
-                  value={formData.deliveryConditions?.delivery || ""}
-                  onChange={handleDeliveryChange}
+                  value={
+                    formData.expectedRequirements.deliveryConditions?.delivery
+                      ?.allowed
+                      ? "yes"
+                      : "no"
+                  }
+                  onChange={(e) => handleDeliveryAllowedChange(e.target.value)}
                 >
                   <Radio name="delivery" value="yes">
-                    Yes
+                    {t("yes")}
                   </Radio>
                   <Radio name="delivery" value="no">
-                    No
+                    {t("no")}
                   </Radio>
                 </Radio.Group>
-                {formData.deliveryConditions?.delivery === "yes" && (
+
+                {formData.expectedRequirements.deliveryConditions?.delivery
+                  ?.allowed && (
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-gray-700 mb-1">
-                        Delivery Cost:
-                      </label>
-                      <Input name="deliveryCost" placeholder="Enter Cost" />
-                    </div>
-                    <div>
-                      <label className="block text-gray-700 mb-1">
-                        Country:
+                        {t("DeliveryCost (€)")}
                       </label>
                       <Input
-                        name="deliveryCountry"
-                        placeholder="Enter Country"
+                        name="deliveryCost"
+                        value={
+                          formData.expectedRequirements.deliveryConditions
+                            ?.delivery?.details?.cost || ""
+                        }
+                        onChange={(e) =>
+                          handleDeliveryDetailChange("cost", e.target.value)
+                        }
+                        placeholder={t("Cost")}
                       />
                     </div>
                     <div>
-                      <label className="block text-gray-700 mb-1">City:</label>
-                      <Input name="deliveryCity" placeholder="Enter City" />
+                      <label className="block text-gray-700 mb-1">
+                        {t("Country")}
+                      </label>
+                      <Input
+                        name="deliveryCountry"
+                        value={
+                          formData.expectedRequirements.deliveryConditions
+                            ?.delivery?.details?.country || ""
+                        }
+                        onChange={(e) =>
+                          handleDeliveryDetailChange("country", e.target.value)
+                        }
+                        placeholder={t("Country")}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 mb-1">
+                        {t("City")}
+                      </label>
+                      <Input
+                        name="deliveryCity"
+                        value={
+                          formData.expectedRequirements.deliveryConditions
+                            ?.delivery?.details?.city || ""
+                        }
+                        onChange={(e) =>
+                          handleDeliveryDetailChange("city", e.target.value)
+                        }
+                        placeholder={t("City")}
+                      />
                     </div>
                   </div>
                 )}
               </div>
             </div>
-            {/* geolocation of the transaction */}
+
+            {/* Geolocation */}
             <div className="mt-4">
               <h2 className="text-xl font-bold text-center mb-4">
-                Geolocation of the transaction
+                {t("Geolocation")}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -722,14 +993,27 @@ const ExchangeDetailsForm = () => {
                     htmlFor="geoCampus"
                     className="block text-gray-700 font-semibold mb-1"
                   >
-                    GeoLocation of Campus
+                    {t("Campus")}
                   </label>
                   <Input
                     id="geoCampus"
                     name="GeoLocation of campus"
                     type="text"
-                    placeholder="Enter campus location"
+                    placeholder={t("CampusLocation")}
                     className="w-full p-2 border rounded"
+                    value={
+                      formData.expectedRequirements.geolocation?.campus || ""
+                    }
+                    onChange={(e) =>
+                      dispatch(
+                        setExpectedRequirements({
+                          geolocation: {
+                            ...formData.expectedRequirements.geolocation,
+                            campus: e.target.value, // Update campus
+                          },
+                        })
+                      )
+                    }
                   />
                 </div>
                 <div>
@@ -737,42 +1021,68 @@ const ExchangeDetailsForm = () => {
                     htmlFor="geoCountry"
                     className="block text-gray-700 font-semibold mb-1"
                   >
-                    GeoLocation of Country
+                    {t("Country")}
                   </label>
                   <Input
                     id="geoCountry"
                     name="GeoLocation of country"
                     type="text"
-                    placeholder="Enter country location"
+                    placeholder={t("Country")}
                     className="w-full p-2 border rounded"
+                    value={
+                      formData.expectedRequirements.geolocation?.country || ""
+                    }
+                    onChange={(e) =>
+                      dispatch(
+                        setExpectedRequirements({
+                          geolocation: {
+                            ...formData.expectedRequirements.geolocation,
+                            country: e.target.value, // Update country
+                          },
+                        })
+                      )
+                    }
                   />
                 </div>
               </div>
             </div>
-
+            {/* other special conditions */}
             <div className="mt-4">
               <h2 className="text-xl font-bold text-center mb-4">
-                Other Special Conditions
+                {t("Other Special Conditions")}
               </h2>
-              <p className="text-gray-700 text-center mb-4">
-                Additional description of the payment or delivery methods
-              </p>
 
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Textarea Input */}
                 <div>
                   <label
-                    htmlFor="description"
+                    htmlFor="AdditionalDescriptionofpaymentorDeliveryMethod"
                     className="block text-gray-700 font-semibold mb-1"
                   >
-                    Description
+                    {t(
+                      "Additional Description of the payment or Delivery Method"
+                    )}
                   </label>
                   <textarea
-                    id="description"
+                    id="AdditionalDescriptionofpaymentorDeliveryMethod"
                     name="description"
-                    placeholder="Enter description"
+                    placeholder={t("Description")}
                     rows={4}
                     className="w-full p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={
+                      formData.expectedRequirements.otherSpecialConditions
+                        ?.additionalDescription || ""
+                    }
+                    onChange={(e) =>
+                      dispatch(
+                        setExpectedRequirements({
+                          otherSpecialConditions: {
+                            ...formData.expectedRequirements
+                              .otherSpecialConditions,
+                            additionalDescription: e.target.value, // Update description
+                          },
+                        })
+                      )
+                    }
                   ></textarea>
                 </div>
 
@@ -782,7 +1092,7 @@ const ExchangeDetailsForm = () => {
                     htmlFor="fileUpload"
                     className="block text-gray-700 font-semibold mb-1"
                   >
-                    Upload File
+                    {t("uploadFile")}
                   </label>
                   <div className="flex items-center space-x-6">
                     <label
@@ -791,13 +1101,13 @@ const ExchangeDetailsForm = () => {
                     >
                       <Image
                         src="/documents.png" // Replace this with your file icon path
-                        alt="Upload Icon"
+                        alt={t("uploadIconAlt")}
                         width={50}
                         height={50}
                         className="mr-2"
                       />
                       <span className="text-gray-600 text-base">
-                        Choose File
+                        {t("chooseFile")}
                       </span>
                     </label>
                     <input
@@ -805,47 +1115,21 @@ const ExchangeDetailsForm = () => {
                       name="file"
                       type="file"
                       className="hidden"
+                      onChange={handleFileChange} // Attach the handler
                     />
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Upload File */}
-            {/* <div className="mt-4">
-              <label className="block text-gray-700 font-semibold mb-1">
-                Upload File
-              </label>
-              <div className="flex items-center space-x-6">
-                <label
-                  htmlFor="fileUpload"
-                  className="flex items-center justify-center w-full p-4 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
-                >
-                  <Image
-                    src="/upload-icon.png"
-                    alt="Upload"
-                    width={30}
-                    height={30}
-                  />
-                  <span className="ml-2 text-gray-600">Choose File</span>
-                </label>
-                <input
-                  id="fileUpload"
-                  name="file"
-                  type="file"
-                  className="hidden"
-                />
-              </div>
-            </div> */}
-
             {/* Navigation Buttons */}
             <div className="flex justify-end">
               <button
                 type="submit"
                 className="bg-blue-600 text-white px-4 py-2 rounded-md"
-                onClick={handleNext}
+                // onClick={handleNext}
               >
-                Next
+                {t(`Next`)}
               </button>
             </div>
           </>
@@ -857,378 +1141,824 @@ const ExchangeDetailsForm = () => {
 
 export default ExchangeDetailsForm;
 
-{
-  /* Delivery Conditions */
-}
-{
-  /* <div>
-  <h3 className="text-lg font-bold mb-4 text-center">Delivery Conditions</h3>
-  {/* Pickup 
-  <div className="mt-4">
-    <label className="block text-gray-700 font-semibold mb-1">Pickup:</label>
-    <Radio.Group name="pickup" className="flex flex-wrap gap-4">
-      <Radio value="yes">Yes</Radio>
-      <Radio value="no">No</Radio>
-    </Radio.Group>
-  </div>
+// "use client";
 
-  {/* Pickup Details 
-  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-    <div>
-      <label className="block text-gray-700 font-semibold mb-1">Address</label>
-      <Input
-        name="pickupAddress"
-        placeholder="Enter address"
-        className="w-full"
-      />
-    </div>
-    <div>
-      <label className="block text-gray-700 font-semibold mb-1">Country</label>
-      <Input
-        name="pickupCountry"
-        placeholder="Enter country"
-        className="w-full"
-      />
-    </div>
-  </div>
-</div>; */
-}
-
-{
-  /* Other Special Conditions */
-}
-{
-  /* <div className="mt-4">
-<h3 className="text-lg font-bold mb-4 text-center">
-  Other Special Conditions
-</h3>
-<div>
-  <label className="block text-gray-700 font-semibold mb-1">
-    Additional Description
-  </label>
-  <textarea
-    name="specialDescription"
-    rows={4}
-    placeholder="Enter additional description"
-    className="w-full p-3 border rounded-md resize-none"
-  ></textarea>
-</div>
-</div> */
-}
-
+// import React from "react";
 // import { Formik, Form } from "formik";
-// import { Input, Radio, Select, TextArea } from "formik-antd";
-// import { useFormContext } from "../component/FormContext";
+// import { RadioChangeEvent } from "antd";
+// import { Input, Radio, Select, DatePicker } from "formik-antd";
+// import Image from "next/image";
+// // import { useFormContext } from "../component/FormContext";
+// import {
+//   setFormData,
+//   setCurrentStep,
+// } from "@/store/slices/productForProductFormSlice";
+// import { useDispatch, useSelector } from "react-redux";
+// import { RootState } from "@/store/store";
+// import { useTranslations } from "next-intl";
 
-// const MaterialExchangeForm = () => {
-//   const { handleBack } = useFormContext();
+// const ExchangeDetailsForm = () => {
+//   const dispatch = useDispatch();
+//   const t = useTranslations("form");
+//   // const { formData, setFormData, handleNext } = useFormContext();
+
+//   const { formData, currentStep } = useSelector(
+//     (state: RootState) => state.productForProductExchangeForm
+//   );
+
+//   const handleDecisionChange = (e: RadioChangeEvent) => {
+//     const decision = e.target.value;
+//     dispatch(
+//       setFormData({
+//         materialConditions: {
+//           ...formData.materialConditions,
+//           decision,
+//           percentage:
+//             decision === "no"
+//               ? ""
+//               : formData.materialConditions?.percentage || "",
+//         },
+//       })
+//     );
+//   };
+
+//   // const handleDecisionChange = (e: RadioChangeEvent) => {
+//   //   const decision = e.target.value;
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     materialConditions: {
+//   //       ...prev.materialConditions,
+//   //       decision,
+//   //       percentage:
+//   //         decision === "no" ? "" : prev.materialConditions?.percentage || "",
+//   //     },
+//   //   }));
+//   // };
+
+//   // const handlePickupChange = (e: RadioChangeEvent) => {
+//   //   const pickup = e.target.value as "" | "yes" | "no"; // Explicitly cast to the expected literal type
+
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     deliveryConditions: {
+//   //       ...prev.deliveryConditions,
+//   //       pickup,
+//   //       pickupDetails:
+//   //         pickup === "no" ? "" : prev.deliveryConditions.pickupDetails || "",
+//   //     },
+//   //     // Ensure expectedRequirements is included in the updated object
+//   //     expectedRequirements: prev.expectedRequirements,
+//   //   }));
+//   // };
+
+//   const handlePickupChange = (e: RadioChangeEvent) => {
+//     const pickup = e.target.value as "" | "yes" | "no";
+//     dispatch(
+//       setFormData({
+//         deliveryConditions: {
+//           ...formData.deliveryConditions,
+//           pickup,
+//           pickupDetails:
+//             pickup === "no"
+//               ? ""
+//               : formData.deliveryConditions.pickupDetails || "",
+//         },
+//       })
+//     );
+//   };
+//   // const handlePickupChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//   //   const pickup = e.target.value;
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     deliveryConditions: {
+//   //       ...prev.deliveryConditions,
+//   //       pickup,
+//   //       pickupDetails:
+//   //         pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
+//   //     },
+//   //   }));
+//   // };
+
+//   // const handleDeliveryChange = (e: RadioChangeEvent) => {
+//   //   const delivery = e.target.value as "" | "yes" | "no"; // Explicitly cast to the literal type
+
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     deliveryConditions: {
+//   //       ...prev.deliveryConditions,
+//   //       delivery,
+//   //       deliveryCost:
+//   //         delivery === "no" ? "" : prev.deliveryConditions.deliveryCost || "",
+//   //     },
+//   //     // Preserve the existing expectedRequirements field
+//   //     expectedRequirements: prev.expectedRequirements,
+//   //   }));
+//   // };
+
+//   const handleDeliveryChange = (e: RadioChangeEvent) => {
+//     const delivery = e.target.value;
+//     dispatch(
+//       setFormData({
+//         deliveryConditions: {
+//           ...formData.deliveryConditions,
+//           delivery,
+//           deliveryCost:
+//             delivery === "no"
+//               ? ""
+//               : formData.deliveryConditions?.deliveryCost || "",
+//         },
+//       })
+//     );
+//   };
+
+//   const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
+//   // const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
+
+//   // const handleDeliveryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//   //   const delivery = e.target.value;
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     deliveryConditions: {
+//   //       ...prev.deliveryConditions,
+//   //       delivery,
+//   //       deliveryCost:
+//   //         delivery === "no" ? "" : prev.deliveryConditions?.deliveryCost || "",
+//   //     },
+//   //   }));
+//   // };
+
+//   // const handleDecisionChange = (e) => {
+//   //   const decision = e.target.value;
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     materialConditions: {
+//   //       ...prev.materialConditions,
+//   //       decision,
+//   //       percentage:
+//   //         decision === "no" ? "" : prev.materialConditions?.percentage || "",
+//   //     },
+//   //   }));
+//   // };
+
+//   // const handlePickupChange = (e) => {
+//   //   const pickup = e.target.value;
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     deliveryConditions: {
+//   //       ...prev.deliveryConditions,
+//   //       pickup,
+//   //       pickupDetails:
+//   //         pickup === "no" ? {} : prev.deliveryConditions?.pickupDetails || {},
+//   //     },
+//   //   }));
+//   // };
+
+//   // const handleDeliveryChange = (e) => {
+//   //   const delivery = e.target.value;
+//   //   setFormData((prev) => ({
+//   //     ...prev,
+//   //     deliveryConditions: {
+//   //       ...prev.deliveryConditions,
+//   //       delivery,
+//   //       deliveryCost:
+//   //         delivery === "no" ? "" : prev.deliveryConditions?.deliveryCost || "",
+//   //     },
+//   //   }));
+//   // };
 
 //   return (
 //     <Formik
 //       initialValues={{
-//         estimatedValue: "",
-//         depositPayment: "",
-//         contingentCoverage: "",
-//         moneyBackGuarantee: "",
-//         satisfactionGuarantee: "",
-//         desiredPaymentForm: "",
-//         desiredPaymentType: "",
-//         pickup: "",
-//         pickupAddress: "",
-//         country: "",
-//         city: "",
-//         campus: "",
-//         delivery: "",
-//         deliveryCost: "",
-//         geolocationCampus: "",
-//         geolocationCountry: "",
-//         specialConditions: "",
+//         ...formData.proposedOffer,
+//         ...formData.materialConditions,
+//         ...formData.deliveryConditions,
 //       }}
 //       onSubmit={(values) => {
-//         console.log("Form Data:", values);
+//         const collectedData = {
+//           proposedOffer: {
+//             ...formData.proposedOffer,
+//             ...values,
+//           },
+//           materialConditions: {
+//             ...formData.materialConditions,
+//             ...values,
+//           },
+//           deliveryConditions: {
+//             ...formData.deliveryConditions,
+//             ...values,
+//           },
+
+//           expectedRequirements: {
+//             ...formData.deliveryConditions,
+//             ...values,
+//           },
+//         };
+//         // console.log("Collected Form Data:", collectedData);
+//         // setFormData(collectedData);
+//         // handleNext();
+//         console.log("Collected Form Data:", collectedData);
+//         dispatch(setFormData(collectedData));
+//         dispatch(setCurrentStep(2)); // Move to the next step
 //       }}
 //     >
 //       {() => (
-//         <Form className="space-y-6 p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">
-//           {/* Section: Material Conditions */}
-//           <div>
-//             <h2 className="text-xl font-bold text-blue-600 mb-4 text-center">
-//               Material Conditions of the Exchange
-//             </h2>
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Estimated Value of the Exchange (€)
-//                 </label>
-//                 <Input name="estimatedValue" placeholder="Enter value" />
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Deposit Payment (%)
-//                 </label>
-//                 <Input name="depositPayment" placeholder="Enter percentage" />
-//               </div>
-//               <div className="md:col-span-2">
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Contingent Coverage
-//                 </label>
-//                 <Input.TextArea
-//                   name="contingentCoverage"
-//                   rows={4}
-//                   placeholder="Enter details of coverage"
-//                 />
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Money Back Guarantee
-//                 </label>
-//                 <Radio.Group name="moneyBackGuarantee" className="space-x-4">
-//                   <Radio value="yes">Yes</Radio>
-//                   <Radio value="no">No</Radio>
-//                 </Radio.Group>
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Satisfaction Guarantee
-//                 </label>
-//                 <Radio.Group name="satisfactionGuarantee" className="space-x-4">
-//                   <Radio value="yes">Yes</Radio>
-//                   <Radio value="no">No</Radio>
-//                 </Radio.Group>
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Desired Payment Form
-//                 </label>
-//                 <Select name="desiredPaymentForm" placeholder="Select form">
-//                   <Select.Option value="exchangeAdditionalSum">
-//                     Exchange +/- Additional Sum
-//                   </Select.Option>
-//                   <Select.Option value="exchangeService">
-//                     Exchange +/- Benefit or Service
-//                   </Select.Option>
-//                 </Select>
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Desired Payment Type
-//                 </label>
-//                 <Select name="desiredPaymentType" placeholder="Select type">
-//                   <Select.Option value="handToHand">
-//                     Hand-to-Hand Exchange
-//                   </Select.Option>
-//                   <Select.Option value="beforeDelivery">
-//                     Exchange & Payment Before Delivery
-//                   </Select.Option>
-//                   <Select.Option value="afterDelivery">
-//                     Exchange & Payment After Delivery
-//                   </Select.Option>
-//                 </Select>
-//               </div>
+//         <Form className="space-y-6 p-4 md:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto border border-gray-200">
+//           <>
+//             <div className="text-center">
+//               <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">
+//                 {t(`Details Of The Expected Requirements`)}
+//               </h2>
+//               <p className="text-gray-600">
+//                 {t(
+//                   `Finance Your Projects Or Expenses With Your Unused Services Or Goods!`
+//                 )}
+//               </p>
 //             </div>
-//           </div>
 
-//           {/* Section: Delivery Conditions */}
-//           <div>
-//             <h2 className="text-xl font-bold text-blue-600 mb-4 text-center">
-//               Delivery Conditions
-//             </h2>
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Pickup
-//                 </label>
-//                 <Radio.Group name="pickup" className="space-x-4">
-//                   <Radio value="yes">Yes</Radio>
-//                   <Radio value="no">No</Radio>
-//                 </Radio.Group>
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Pickup Address
-//                 </label>
-//                 <Input name="pickupAddress" placeholder="Enter address" />
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Country
-//                 </label>
-//                 <Input name="country" placeholder="Enter country" />
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   City
-//                 </label>
-//                 <Input name="city" placeholder="Enter city" />
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Campus
-//                 </label>
-//                 <Input name="campus" placeholder="Enter campus" />
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Delivery
-//                 </label>
-//                 <Radio.Group name="delivery" className="space-x-4">
-//                   <Radio value="yes">Yes</Radio>
-//                   <Radio value="no">No</Radio>
-//                 </Radio.Group>
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Delivery Cost (€)
-//                 </label>
-//                 <Input name="deliveryCost" placeholder="Enter cost" />
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* Section: Geolocation */}
-//           <div>
-//             <h2 className="text-xl font-bold text-blue-600 mb-4 text-center">
-//               Geolocation of the Transaction
-//             </h2>
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Campus
-//                 </label>
-//                 <Input
-//                   name="geolocationCampus"
-//                   placeholder="Enter geolocation of campus"
+//             {/* zone 1 insertion banner Advertising */}
+//             <div className="text-center p-5">
+//               <h2 className="mb-5 text-lg font-bold">
+//                 {t("Zone 1 Insertion Banner Advertising")}
+//               </h2>
+//               <label
+//                 htmlFor="zone1-banner"
+//                 className="inline-block cursor-pointer p-4 border-2 border-dashed border-gray-400 rounded-lg bg-gray-100 hover:bg-gray-200"
+//               >
+//                 <Image
+//                   src="/imagetoselect.png" // Replace with the URL or path to your upload icon/image
+//                   alt="Upload Banner"
+//                   className="max-w-full h-auto mx-auto mb-2"
+//                   width={100}
+//                   height={100}
 //                 />
-//               </div>
-//               <div>
-//                 <label className="block text-gray-700 font-semibold mb-1">
-//                   Country
-//                 </label>
-//                 <Input
-//                   name="geolocationCountry"
-//                   placeholder="Enter geolocation of country"
-//                 />
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* Section: Special Conditions */}
-//           <div>
-//             <h2 className="text-xl font-bold text-blue-600 mb-4 text-center">
-//               Other Special Conditions
-//             </h2>
-//             <div>
-//               <label className="block text-gray-700 font-semibold mb-1">
-//                 Additional Description
+//                 <p className="text-gray-600">{t(`Click to upload`)}</p>
 //               </label>
-//               <Input.TextArea
-//                 name="specialConditions"
-//                 rows={4}
-//                 placeholder="Enter additional description"
+//               <input
+//                 id="zone1-banner"
+//                 type="file"
+//                 name="zone1 Advertising banner"
+//                 className="hidden"
 //               />
 //             </div>
-//           </div>
 
-//           {/* Navigation Buttons */}
-//           <div className="flex justify-between mt-8">
-//             <button
-//               type="button"
-//               className="bg-gray-400 text-white px-4 py-2 rounded-md"
-//               onClick={handleBack}
-//             >
-//               Back
-//             </button>
-//             <button
-//               type="submit"
-//               className="bg-blue-600 text-white px-4 py-2 rounded-md"
-//             >
-//               Submit
-//             </button>
-//           </div>
+//             {/* Details of the expected need */}
+//             <div className="text-center bg-gray-50">
+//               <h4>{t(`Details Of The Expected Need`)}</h4>
+//               <h4>{t(`Detail Your Needs As Precisely As Possible`)}</h4>
+//             </div>
+
+//             {/* Title of the Offer */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Title of the Offer`)}
+//               </label>
+//               <Input
+//                 name="title"
+//                 placeholder="Enter title"
+//                 className="w-full p-2 border rounded-md"
+//               />
+//             </div>
+
+//             {/* Offer Type */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`What Do You Want?`)}
+//               </label>
+//               <Radio.Group name="offerType" className="flex flex-wrap gap-4">
+//                 <Radio name="Good" value="Good">
+//                   {t(`Good`)}
+//                 </Radio>
+//                 <Radio name="Service" value="Service">
+//                   {t(`Service`)}
+//                 </Radio>
+//               </Radio.Group>
+//             </div>
+
+//             {/* Category and Subcategory */}
+//             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`Category`)}
+//                 </label>
+//                 <Select
+//                   name="category"
+//                   placeholder="Select Category"
+//                   className="w-full"
+//                 >
+//                   <Select.Option value="Electronics">
+//                     {t(`Electronics`)}
+//                   </Select.Option>
+//                   <Select.Option value="Health">{t(`Health`)}</Select.Option>
+//                 </Select>
+//               </div>
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`SubCategory`)}
+//                 </label>
+//                 <Select
+//                   name="subcategory"
+//                   placeholder="Select Subcategory"
+//                   className="w-full"
+//                 >
+//                   <Select.Option value="Accessories">
+//                     {t(`Accessories`)}
+//                   </Select.Option>
+//                   <Select.Option value="Health">{t(`Health`)}</Select.Option>
+//                 </Select>
+//               </div>
+//             </div>
+
+//             {/* Featured Product Status */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Desired Product Status`)}
+//               </label>
+//               <Select
+//                 name="featuredProductStatus"
+//                 placeholder="Select Status"
+//                 className="w-full"
+//               >
+//                 <Select.Option value="Nine">{t(`Nine`)}</Select.Option>
+//                 <Select.Option value="Very Good Condition">
+//                   {t(`Very Good Condition`)}
+//                 </Select.Option>
+//                 <Select.Option value="Good Conditon">
+//                   {t(`Good Condition`)}
+//                 </Select.Option>
+//                 <Select.Option value="Used">{t(`Used`)}</Select.Option>
+//                 <Select.Option value="Need for repair">
+//                   {t(`Need For Repair`)}
+//                 </Select.Option>
+//               </Select>
+//             </div>
+
+//             {/* Additional Description of Your Offer */}
+//             <div className="p-1 space-y-4">
+//               <label
+//                 htmlFor="additionaldescription"
+//                 className="block text-sm font-semibold text-gray-700"
+//               >
+//                 {t(`Additional Description Of Your Offer`)}
+//               </label>
+//               <Input
+//                 type="text"
+//                 name="additionaldescription"
+//                 id="additionaldescription"
+//                 placeholder="Enter additional details about your offer"
+//                 className="w-full p-2 border rounded-md"
+//               />
+
+//               <div className="mt-4">
+//                 <label
+//                   htmlFor="offer-images"
+//                   className="block text-sm font-semibold text-gray-700 mb-2"
+//                 >
+//                   {t(`Upload Any Images Of The Offer`)}
+//                 </label>
+//                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+//                   {Array.from({ length: 3 }).map((_, index) => (
+//                     <div
+//                       key={index}
+//                       className="flex flex-col items-center space-y-2"
+//                     >
+//                       <label
+//                         htmlFor={`offer-image-${index}`}
+//                         className="cursor-pointer flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-400 hover:bg-gray-50"
+//                       >
+//                         <Image
+//                           src="/imagetoselect.png" // Replace this with your actual icon path
+//                           alt="Select Image"
+//                           className="h-12 w-12"
+//                           width={100}
+//                           height={100}
+//                         />
+//                         <span className="text-sm text-gray-500">
+//                           {t(`Select Image`)}
+//                         </span>
+//                       </label>
+//                       <input
+//                         type="file"
+//                         name={`offerImage-${index}`}
+//                         id={`offer-image-${index}`}
+//                         accept="image/*"
+//                         className="hidden"
+//                       />
+//                     </div>
+//                   ))}
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* Offer Dates */}
+//             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`OfferStartDate`)}
+//                 </label>
+//                 <DatePicker name="startDate" className="w-full" />
+//               </div>
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`OfferEndDate`)}
+//                 </label>
+//                 <DatePicker name="endDate" className="w-full" />
+//               </div>
+//             </div>
+
+//             {/* Form of Exchange */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t("FormOfExchange")}
+//               </label>
+//               <Select
+//                 name="formOfExchange"
+//                 placeholder={t("formOfExchange")}
+//                 className="w-full"
+//               >
+//                 <Select.Option value="Sale">{t("Sale")}</Select.Option>
+//                 <Select.Option value="Gift">{t("Gift")}</Select.Option>
+//               </Select>
+//             </div>
+
+//             {/* Header */}
+//             <div className="text-center">
+//               <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">
+//                 {t(`Material conditions of the exchange`)}
+//               </h2>
+//             </div>
+
+//             {/* Estimated Value */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Estimated value of the exchange`)}
+//               </label>
+//               <Input
+//                 name="estimatedValue"
+//                 placeholder="Enter estimated value"
+//                 className="w-full p-2 border rounded-md"
+//               />
+//             </div>
+
+//             {/* Deposit Payment */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Deposit Payment for booking`)}
+//               </label>
+//               <Radio.Group
+//                 name="decision"
+//                 value={formData.materialConditions?.decision || ""}
+//                 onChange={handleDecisionChange}
+//                 className="flex flex-wrap gap-4"
+//               >
+//                 <Radio name="depositpaymentyes" value="yes">
+//                   {t(`yes`)}
+//                 </Radio>
+//                 <Radio name="depositpaymentno" value="no">
+//                   {t(`no`)}
+//                 </Radio>
+//               </Radio.Group>
+//               {formData.materialConditions?.decision === "yes" && (
+//                 <div className="mt-4">
+//                   <label
+//                     htmlFor="percentage"
+//                     className="block text-gray-700 font-semibold mb-1"
+//                   >
+//                     {t(`Deposit Percentage (%)`)}:
+//                   </label>
+//                   <Input
+//                     id="percentage"
+//                     name="percentage"
+//                     type="number"
+//                     placeholder="Enter percentage"
+//                     className="w-full p-2 border rounded-md"
+//                   />
+//                 </div>
+//               )}
+//             </div>
+
+//             {/* Other Contingent Coverage */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Other Contingent Coverage Required`)}
+//               </label>
+//               <textarea
+//                 name="otherCoverage"
+//                 placeholder="Provide details"
+//                 rows={4}
+//                 className="w-full p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+//               />
+//             </div>
+
+//             {/* Money Back Guarantee */}
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-2">
+//                 {t(`MoneyBackGuarantee`)}
+//               </label>
+//               <Radio.Group
+//                 name="moneyBackGuarantee"
+//                 className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap"
+//               >
+//                 <Radio
+//                   name="moneyBackGuarantee"
+//                   value="yes"
+//                   className="w-full sm:w-auto text-center"
+//                 >
+//                   {t(`yes`)}
+//                 </Radio>
+//                 <Radio
+//                   name="moneyBackGuarantee"
+//                   value="no"
+//                   className="w-full sm:w-auto text-center"
+//                 >
+//                   {t(`no`)}
+//                 </Radio>
+//               </Radio.Group>
+//             </div>
+
+//             {/* Satisfaction Guarantee */}
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-2">
+//                 {t(`Satisfaction or Exchange Guarantee`)}
+//               </label>
+//               <Radio.Group
+//                 name="satisfactionGuarantee"
+//                 className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap"
+//               >
+//                 <Radio
+//                   name="satisfactionGuarantee"
+//                   value="yes"
+//                   className="w-full sm:w-auto text-center"
+//                 >
+//                   {t(`yes`)}
+//                 </Radio>
+//                 <Radio
+//                   name="satisfactionGuarantee"
+//                   value="no"
+//                   className="w-full sm:w-auto text-center"
+//                 >
+//                   {t(`no`)}
+//                 </Radio>
+//               </Radio.Group>
+//             </div>
+
+//             {/* Payment and Delivery Methods */}
+//             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//               {/* Payment Form */}
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`DesiredPaymentForm`)}
+//                 </label>
+//                 <Select
+//                   name="desiredPaymentForm"
+//                   placeholder="Select Payment Form"
+//                   className="w-full"
+//                 >
+//                   <Select.Option value="exchange-sum">
+//                     {t(`Exchange + or - Additional Sum`)}
+//                   </Select.Option>
+//                   <Select.Option value="exchange-service">
+//                     {t(`Exchange + or - Benefit or Service`)}
+//                   </Select.Option>
+//                 </Select>
+//               </div>
+
+//               {/* Payment Type */}
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`DesiredPaymentType`)}
+//                 </label>
+//                 <Select
+//                   name="desiredPaymentType"
+//                   placeholder="Select Payment Type"
+//                   className="w-full"
+//                 >
+//                   <Select.Option value="hand-to-hand">
+//                     {t(`handToHand`)}
+//                   </Select.Option>
+//                   <Select.Option value="before-delivery">
+//                     {t(`Exchange & Payment Before Delivery`)}
+//                   </Select.Option>
+//                   <Select.Option value="after-delivery">
+//                     {t(`Exchange & Payment After Delivery`)}
+//                   </Select.Option>
+//                 </Select>
+//               </div>
+//             </div>
+
+//             {/* Delivery Conditions */}
+//             <div className="mt-6">
+//               <h2 className="text-xl font-bold text-center mb-4">
+//                 {t(`DeliveryConditions`)}
+//               </h2>
+
+//               {/* Pickup */}
+//               <div className="mt-4">
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`Pickup`)}
+//                 </label>
+//                 <Radio.Group
+//                   name="pickup"
+//                   className="flex flex-wrap gap-4"
+//                   value={formData.deliveryConditions?.pickup || ""}
+//                   onChange={handlePickupChange}
+//                 >
+//                   <Radio name="pickup" value="yes">
+//                     {t(`yes`)}
+//                   </Radio>
+//                   <Radio name="pickup" value="no">
+//                     {t(`no`)}
+//                   </Radio>
+//                 </Radio.Group>
+//                 {formData.deliveryConditions?.pickup === "yes" && (
+//                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+//                     <div>
+//                       <label className="block text-gray-700 mb-1">
+//                         {t(`PickupAddress`)}
+//                       </label>
+//                       <Input name="pickupAddress" placeholder="Enter Address" />
+//                     </div>
+//                     <div>
+//                       <label className="block text-gray-700 mb-1">
+//                         {t(`Country`)}
+//                       </label>
+//                       <Input name="pickupCountry" placeholder="Enter Country" />
+//                     </div>
+//                     <div>
+//                       <label className="block text-gray-700 mb-1">
+//                         {t(`City`)}
+//                       </label>
+//                       <Input name="pickupCity" placeholder="Enter City" />
+//                     </div>
+//                     <div>
+//                       <label className="block text-gray-700 mb-1">
+//                         {t(`Campus`)}
+//                       </label>
+//                       <Input name="pickupCampus" placeholder="Enter Campus" />
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+
+//               {/* Delivery */}
+//               <div className="mt-4">
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`Delivery`)}
+//                 </label>
+//                 <Radio.Group
+//                   name="delivery"
+//                   className="flex flex-wrap gap-4"
+//                   value={formData.deliveryConditions?.delivery || ""}
+//                   onChange={handleDeliveryChange}
+//                 >
+//                   <Radio name="delivery" value="yes">
+//                     {t(`yes`)}
+//                   </Radio>
+//                   <Radio name="delivery" value="no">
+//                     {t(`no`)}
+//                   </Radio>
+//                 </Radio.Group>
+//                 {formData.deliveryConditions?.delivery === "yes" && (
+//                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+//                     <div>
+//                       <label className="block text-gray-700 mb-1">
+//                         {t(`DeliveryCost (€)`)}
+//                       </label>
+//                       <Input name="deliveryCost" placeholder="Enter Cost" />
+//                     </div>
+//                     <div>
+//                       <label className="block text-gray-700 mb-1">
+//                         {t(`Country`)}
+//                       </label>
+//                       <Input
+//                         name="deliveryCountry"
+//                         placeholder="Enter Country"
+//                       />
+//                     </div>
+//                     <div>
+//                       <label className="block text-gray-700 mb-1">
+//                         {t(`City`)}
+//                       </label>
+//                       <Input name="deliveryCity" placeholder="Enter City" />
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+//             </div>
+//             {/* geolocation of the transaction */}
+//             <div className="mt-4">
+//               <h2 className="text-xl font-bold text-center mb-4">
+//                 {t(`Geolocation of the transaction`)}
+//               </h2>
+//               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//                 <div>
+//                   <label
+//                     htmlFor="geoCampus"
+//                     className="block text-gray-700 font-semibold mb-1"
+//                   >
+//                     {t(`Geolocation of Campus`)}
+//                   </label>
+//                   <Input
+//                     id="geoCampus"
+//                     name="GeoLocation of campus"
+//                     type="text"
+//                     placeholder="Enter campus location"
+//                     className="w-full p-2 border rounded"
+//                   />
+//                 </div>
+//                 <div>
+//                   <label
+//                     htmlFor="geoCountry"
+//                     className="block text-gray-700 font-semibold mb-1"
+//                   >
+//                     {t(`Geolocation of Country`)}
+//                   </label>
+//                   <Input
+//                     id="geoCountry"
+//                     name="GeoLocation of country"
+//                     type="text"
+//                     placeholder="Enter country location"
+//                     className="w-full p-2 border rounded"
+//                   />
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* other special conditions */}
+//             <div className="mt-4">
+//               <h2 className="text-xl font-bold text-center mb-4">
+//                 {t("Other Special Conditions")}
+//               </h2>
+
+//               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+//                 <div>
+//                   <label
+//                     htmlFor="AdditionalDescriptionofpaymentorDeliveryMethod"
+//                     className="block text-gray-700 font-semibold mb-1"
+//                   >
+//                     {t(
+//                       "Additional Description of the payment or Delivery Method"
+//                     )}
+//                   </label>
+//                   <textarea
+//                     // id="description"
+//                     id="AdditionalDescriptionofpaymentorDeliveryMethod"
+//                     name="description"
+//                     placeholder={t("Description")}
+//                     rows={4}
+//                     className="w-full p-3 border rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+//                   ></textarea>
+//                 </div>
+
+//                 {/* File Input */}
+//                 <div>
+//                   <label
+//                     htmlFor="fileUpload"
+//                     className="block text-gray-700 font-semibold mb-1"
+//                   >
+//                     {t("uploadFile")}
+//                   </label>
+//                   <div className="flex items-center space-x-6">
+//                     <label
+//                       htmlFor="fileUpload"
+//                       className="flex items-center justify-center w-full p-6 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+//                     >
+//                       <Image
+//                         src="/documents.png" // Replace this with your file icon path
+//                         alt={t("uploadIconAlt")}
+//                         width={50}
+//                         height={50}
+//                         className="mr-2"
+//                       />
+//                       <span className="text-gray-600 text-base">
+//                         {t("chooseFile")}
+//                       </span>
+//                     </label>
+//                     <input
+//                       id="fileUpload"
+//                       name="file"
+//                       type="file"
+//                       className="hidden"
+//                     />
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* Navigation Buttons */}
+//             <div className="flex justify-end">
+//               <button
+//                 type="submit"
+//                 className="bg-blue-600 text-white px-4 py-2 rounded-md"
+//                 onClick={handleNext}
+//               >
+//                 {t(`Next`)}
+//               </button>
+//             </div>
+//           </>
 //         </Form>
 //       )}
 //     </Formik>
 //   );
 // };
 
-// export default MaterialExchangeForm;
-
-// import { useFormContext } from "../component/FormContext";
-
-// export default function Page() {
-//   const { handleBack } = useFormContext();
-//   return (
-//     <div>
-//       <div>
-//         <div>
-//           <h3>Material conditions of the exchange</h3>
-//         </div>
-//         <div>
-//           Estimated value of the exchange <input type="text" />
-//         </div>
-//         <div>
-//           <p>
-//             deposit payement of booking Yes / No if yes{" "}
-//             <input type="text" id="depositpayment" />
-//             <label htmlFor="depositpayment">%</label>
-//           </p>
-//         </div>
-//         <div>
-//           <p>other Contigent Coverage Required</p>
-//           <textarea name="" id=""></textarea>
-//         </div>
-//         <div>
-//           <p>money back Gurantee Yes / NO</p>
-//           <p>Satisfaction or Exchanged Guarantee Yes / NO</p>
-//           <label htmlFor="desiredpaymentform">
-//             Desired Payement Form
-//             <select name="desiredpaymentform" id="desiredpaymentform">
-//               <option value="exchange with addtional sum">
-//                 Exchange +/- Additional Sum
-//               </option>
-//               <option value="exchange with serive">
-//                 Exchange +/- Benefit or Service
-//               </option>
-//             </select>
-//           </label>
-//           <label htmlFor="desiredpaymentform">
-//             Desired Payement Type
-//             <select name="desiredpaymenttype" id="desiredpaymenttype">
-//               <option value="Handtohandexchange">Hand to hand Exchange</option>
-//               <option value="Exchange payment before delivery">
-//                 Exchange & Payement before Delivery
-//               </option>
-//               <option value="Exchange payment after delivery">
-//                 Exchange & Payement after Delivery
-//               </option>
-//             </select>
-//           </label>
-//         </div>
-//         <div>
-//           <h4>Delivery conditions</h4>
-//           <p>Pickup Yes / No</p>
-//           <p>Pickup Address </p>
-//           <p>country</p>
-//           <p>city</p>
-//           <p>campus</p>
-//         </div>
-//         <div>
-//           <h4>Delivery</h4>
-//           <p>
-//             Delivery YES-NO (if yes) Delivery costs YES-NO (If yes), what is the
-//             amount: €.....................
-//           </p>
-//         </div>
-//       </div>
-//       <div>
-//         <p>Geolocation of the transaction</p>
-//         <p>Geolocation of the Campus Country Offer</p>
-//       </div>
-//       <div>
-//         other special conditions
-//         <p>Additional description of the payment or delivery methods</p>
-//       </div>
-//       <button onClick={handleBack}>back</button>
-//     </div>
-//   );
-// }
+// export default ExchangeDetailsForm;

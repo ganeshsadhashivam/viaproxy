@@ -9,6 +9,8 @@ import {
   BookOpen,
   HelpCircle,
   User,
+  LucideShoppingCart,
+  LogOut,
 } from "lucide-react";
 
 type Role = "admin" | "student";
@@ -56,7 +58,7 @@ export const roleNavigation = (role: Role, t: (key: string) => string) => {
         ],
       },
       {
-        label: t("student.exchangeMarket"),
+        label: t("student.exchange"),
         icon: TrendingUp,
         children: [
           {
@@ -85,17 +87,17 @@ export const roleNavigation = (role: Role, t: (key: string) => string) => {
                   },
                   {
                     label: t("student.exchangeProductForService"),
-                    path: "/dashboard/student/productforservice",
+                    path: "/dashboard/student/exchanges/productforservice",
                     icon: TrendingUp,
                   },
                   {
                     label: t("student.exchangeServiceForService"),
-                    path: "/dashboard/student/serviceforservice",
+                    path: "/dashboard/student/exchanges/serviceforservice",
                     icon: TrendingUp,
                   },
                   {
                     label: t("student.exchangeServiceForProduct"),
-                    path: "/dashboard/student/serviceforproduct",
+                    path: "/dashboard/student/exchanges/serviceforproduct",
                     icon: TrendingUp,
                   },
                 ],
@@ -131,24 +133,135 @@ export const roleNavigation = (role: Role, t: (key: string) => string) => {
         ],
       },
       {
-        label: t("student.myDonations"),
-        path: "/dashboard/student/donations",
+        label: t("student.Donation"),
         icon: Gift,
+        children: [
+          {
+            label: t("student.DonationManagement"),
+            icon: TrendingUp, // Add an appropriate icon for the management label
+            children: [
+              {
+                label: t("student.Find a donation offer"),
+                path: "",
+                icon: TrendingUp,
+              },
+              {
+                label: t("student.Submit a donation offer"),
+                path: "",
+                icon: TrendingUp,
+              },
+              {
+                label: t("student.My Donation offers"),
+                path: "",
+                icon: TrendingUp,
+              },
+            ],
+          },
+
+          {
+            label: t("student.My Donation Transactions"),
+            icon: TrendingUp, // Add an appropriate icon for the management label
+            children: [
+              {
+                label: t("student.Ongoing Donations"),
+                path: "",
+                icon: TrendingUp,
+              },
+              {
+                label: t("student.Donations made"),
+                path: "",
+                icon: TrendingUp,
+              },
+              {
+                label: t("student.Donations received"),
+                path: "",
+                icon: TrendingUp,
+              },
+            ],
+          },
+        ],
       },
+
       {
-        label: t("student.mySales"),
-        path: "/dashboard/student/sales",
+        label: t("student.Campus Market(Sale)"),
+        // path: "/dashboard/student/sales",
         icon: ShoppingCart,
+        children: [
+          {
+            label: t("student.Find a good deal"),
+            path: "",
+            icon: TrendingUp,
+          },
+          {
+            label: t("student.Submit an offer to sell"),
+            path: "",
+            icon: TrendingUp,
+          },
+          {
+            label: t("student.My Sales offers"),
+            path: "",
+            icon: TrendingUp,
+          },
+          {
+            label: t("student.My Sales Transactions"),
+            icon: LucideShoppingCart,
+            children: [
+              {
+                label: t("student.Current sales"),
+                path: "",
+                icon: TrendingUp,
+              },
+              {
+                label: t("student.Sales made"),
+                path: "",
+                icon: TrendingUp,
+              },
+              {
+                label: t("student.Proposals received"),
+                path: "",
+                icon: TrendingUp,
+              },
+            ],
+          },
+        ],
       },
       {
         label: t("student.helpSupport"),
-        path: "/dashboard/student/support",
+        // path: "/dashboard/student/support",
         icon: HelpCircle,
+        children: [
+          {
+            label: t("student.Legal mediation"),
+            path: "",
+            icon: TrendingUp,
+          },
+          {
+            label: t("student.Alert Management"),
+            path: "",
+            icon: TrendingUp,
+          },
+        ],
       },
       {
-        label: t("student.profile"),
-        path: "/dashboard/student/profile",
+        label: t("student.Parameters"),
+        // path: "/dashboard/student/profile",
         icon: User,
+        children: [
+          {
+            label: t("student.My Profile"),
+            path: "",
+            icon: TrendingUp,
+          },
+          {
+            label: t("student.My Social Networks"),
+            path: "",
+            icon: TrendingUp,
+          },
+        ],
+      },
+      {
+        label: t("student.Logout"),
+        icon: LogOut,
       },
     ],
   };
