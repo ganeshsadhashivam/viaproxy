@@ -42,7 +42,7 @@ export async function POST(req: Request) {
         role: user.role,
       },
       process.env.JWT_SECRET!,
-      { expiresIn: "1h" } // Token expires in 1 hour
+      { expiresIn: "5h" } // Token expires in 1 hour
     );
 
     // Set the JWT token in an HTTP-only cookie
@@ -60,15 +60,12 @@ export async function POST(req: Request) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       path: "/",
-      maxAge: 3600, // Token expiry (1 hour)
+      maxAge: 18000, // Token expiry (1 hour)
     });
 
     return response;
   } catch (error) {
-    return NextResponse.json(
-      { error: "An unexpected error occurred." },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
 

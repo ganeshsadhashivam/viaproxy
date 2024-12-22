@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setCurrentStep } from "@/store/slices/productForServiceFormSlice";
+import { FormProvider } from "./component/ProductForServiceContext";
 
 const PageContent = () => {
   const dispatch = useDispatch();
@@ -96,6 +97,7 @@ const PageContent = () => {
           </div>
         </div>
       ) : (
+        // <MultiStepForm />
         <MultiStepForm />
       )}
     </div>
@@ -104,9 +106,9 @@ const PageContent = () => {
 
 const Page = () => {
   return (
-    // <FormProvider>
-    <PageContent />
-    // </FormProvider>
+    <FormProvider>
+      <PageContent />
+    </FormProvider>
   );
 };
 

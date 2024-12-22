@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setCurrentStep } from "@/store/slices/productForProductFormSlice";
+import { FormProvider } from "./component/FormContext";
 
 const PageContent = () => {
   const dispatch = useDispatch();
@@ -104,9 +105,9 @@ const PageContent = () => {
 
 const Page = () => {
   return (
-    // <FormProvider>
-    <PageContent />
-    // </FormProvider>
+    <FormProvider>
+      <PageContent />
+    </FormProvider>
   );
 };
 

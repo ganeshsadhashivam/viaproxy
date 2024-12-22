@@ -1,0 +1,764 @@
+// // "use client";
+
+// import React, { useState } from "react";
+// import { ConfigProvider, Steps } from "antd";
+// // import { useFormContext } from "./component/FormContext";
+// import SubmitExchangeForm from "./component/SubmitExchangeForm";
+// import ExpectedRequirement from "./component/ExpectedRequirements";
+// import Success from "./component/Success";
+// import { useDispatch, useSelector } from "react-redux";
+// import { RootState } from "@/store/store";
+// import { setCurrentStep } from "@/store/slices/productForServiceFormSlice";
+// import { useTranslations } from "next-intl";
+// import * as Yup from "yup";
+
+// // const { Step } = Steps;
+
+// const { Step } = Steps;
+// type Geolocation = {
+//   campus: string;
+//   country: string;
+// };
+
+// type Guarantees = {
+//   moneyBackGuarantee: "yes" | "no";
+//   satisfactionGuarantee: "yes" | "no";
+// };
+
+// type DeliveryConditions = {
+//   pickup: {
+//     allowed: "yes" | "no";
+//     details: {
+//       address: string;
+//       country: string;
+//       city: string;
+//       campus: string;
+//     };
+//   };
+
+//   delivery: {
+//     allowed: "yes" | "no";
+//     costOption?: "yes" | "no"; // Determines whether delivery cost applies
+//     details: {
+//       amount?: string; // Amount is only required if costOption is "yes"
+//       country: string;
+//       city: string;
+//     };
+//   };
+// };
+
+// type OtherSpecialConditions = {
+//   additionalDescription: string;
+//   uploadedFiles: File[]; // Array of uploaded files
+// };
+
+// type PaymentDetails = {
+//   desiredPaymentForm: "exchange-sum" | "exchange-service" | "";
+//   desiredPaymentType:
+//     | "hand-to-hand"
+//     | "before-delivery"
+//     | "after-delivery"
+//     | "";
+// };
+
+// // Initial Form Values
+// type SubmitExchangeDetails = {
+//   zoneOneBanner: File | null;
+//   title: string;
+//   offerType: string;
+//   category: string;
+//   subcategory: string;
+//   featuredProductStatus: "New" | "GoodCondition" | "Used" | "";
+//   additionalDescription: string;
+//   images: (File | null)[];
+//   startDate: string; // Format: YYYY-MM-DD
+//   endDate: string; // Format: YYYY-MM-DD
+//   materialConditions: {
+//     estimatedValue: string;
+//     decision: "yes" | "no";
+//     depositPayment: { percentage: string };
+//     otherContingentCoverageRequired: string; // New field added here
+//   };
+//   guarantees: Guarantees;
+//   // paymentDetails: {
+//   //   desiredPaymentForm: "exchange-sum" | "exchange-service" | "";
+//   //   desiredPaymentType:
+//   //     | "hand-to-hand"
+//   //     | "before-delivery"
+//   //     | "after-delivery"
+//   //     | "";
+//   // };
+//   paymentDetails: PaymentDetails;
+//   deliveryConditions: DeliveryConditions;
+//   geolocation: Geolocation;
+//   otherSpecialConditions: OtherSpecialConditions;
+// };
+
+// const initialValues: SubmitExchangeDetails = {
+//   zoneOneBanner: null,
+//   title: "",
+//   offerType: "",
+//   category: "",
+//   subcategory: "",
+//   featuredProductStatus: "",
+//   additionalDescription: "",
+//   images: [null, null, null],
+//   startDate: "",
+//   endDate: "",
+//   materialConditions: {
+//     estimatedValue: "",
+//     decision: "no", // Default to "no"
+//     depositPayment: {
+//       percentage: "", // Empty percentage by default
+//     },
+//     otherContingentCoverageRequired: "", // New field added here
+//   },
+//   guarantees: {
+//     moneyBackGuarantee: "no", // Default value
+//     satisfactionGuarantee: "no", // Default value
+//   },
+//   // paymentDetails: {
+//   //   desiredPaymentForm: "",
+//   //   desiredPaymentType: "",
+//   // },
+//   paymentDetails: {
+//     desiredPaymentForm: "",
+//     desiredPaymentType: "",
+//   },
+//   deliveryConditions: {
+//     pickup: {
+//       allowed: "no", // Default value
+//       details: {
+//         address: "",
+//         country: "",
+//         city: "",
+//         campus: "",
+//       },
+//     },
+//     delivery: {
+//       allowed: "no", // Default to "no"
+//       costOption: "no", // Default to "no" for cost
+//       details: {
+//         amount: "", // Empty initially
+//         country: "",
+//         city: "",
+//       },
+//     },
+//   },
+//   geolocation: {
+//     campus: "",
+//     country: "",
+//   },
+//   otherSpecialConditions: {
+//     additionalDescription: "",
+//     uploadedFiles: [],
+//   },
+// };
+
+// // Validation Schema
+// const SubmitExchangeValidationSchema = Yup.object({
+//   zoneOneBanner: Yup.mixed<File>()
+//     .nullable() // Allow the value to be null
+//     .required("Zone One Banner is required") // Ensure file is provided
+//     .test(
+//       "fileType",
+//       "Unsupported file format. Only images are allowed.",
+//       (value) =>
+//         !value || // Allow null or undefined
+//         (value instanceof File &&
+//           ["image/jpeg", "image/png"].includes(value.type))
+//     )
+//     .test(
+//       "fileSize",
+//       "File size is too large. Maximum size is 5MB.",
+//       (value) =>
+//         !value || // Allow null or undefined
+//         (value instanceof File && value.size <= 5 * 1024 * 1024) // Limit to 5MB
+//     ),
+//   title: Yup.string().required("Title is required"),
+//   offerType: Yup.string().required("Offer type is required"),
+//   category: Yup.string()
+//     .required("Category is required")
+//     .oneOf(["Electronics", "Health"], "Invalid category selected"),
+
+//   subcategory: Yup.string()
+//     .required("SubCategory is required")
+//     .oneOf(["Accessories", "Health"], "Invalid subcategory selected"),
+//   featuredProductStatus: Yup.string()
+//     .oneOf(["New", "GoodCondition", "Used"], "Invalid status selected")
+//     .required("Featured Product Status is required"),
+//   additionalDescription: Yup.string(),
+//   images: Yup.array()
+//     .of(
+//       Yup.mixed<File>()
+//         .nullable()
+//         .test(
+//           "is-valid-file",
+//           "Each item must be a valid file or null",
+//           (value) => value === null || value instanceof File
+//         )
+//     )
+//     .min(1, "At least one image is required")
+//     .max(3, "No more than 3 images are allowed")
+//     .required("At least one image is required"),
+//   startDate: Yup.date()
+//     .required("Start Date is required")
+//     .typeError("Invalid date format"),
+//   endDate: Yup.date()
+//     .required("End Date is required")
+//     .min(Yup.ref("startDate"), "End Date cannot be before Start Date")
+//     .typeError("Invalid date format"),
+//   materialConditions: Yup.object({
+//     otherContingentCoverageRequired: Yup.string()
+//       .required("Other Contingent Coverage is required")
+//       .max(255, "Must be 255 characters or less"),
+//     estimatedValue: Yup.number()
+//       .required("Estimated value is required")
+//       .min(0, "Value cannot be negative"),
+//     decision: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid decision")
+//       .required("Decision is required"),
+//     depositPayment: Yup.object({
+//       percentage: Yup.number().when("decision", {
+//         is: (decision: string | undefined) =>
+//           typeof decision === "string" && decision === "yes",
+//         then: (schema) =>
+//           schema
+//             .min(0, "Percentage cannot be less than 0")
+//             .max(100, "Percentage cannot exceed 100")
+//             .required("Deposit percentage is required"),
+//         otherwise: (schema) => schema.notRequired(),
+//       }),
+//     }),
+//   }),
+//   paymentDetails: Yup.object({
+//     desiredPaymentForm: Yup.string()
+//       .oneOf(
+//         ["exchange-sum", "exchange-service"],
+//         "Invalid Desired Payment Form"
+//       )
+//       .required("Desired Payment Form is required"),
+//     desiredPaymentType: Yup.string()
+//       .oneOf(
+//         ["hand-to-hand", "before-delivery", "after-delivery"],
+//         "Invalid Desired Payment Type"
+//       )
+//       .required("Desired Payment Type is required"),
+//   }),
+//   guarantees: Yup.object({
+//     moneyBackGuarantee: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid choice")
+//       .required("Money Back Guarantee is required"),
+//     satisfactionGuarantee: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid choice")
+//       .required("Satisfaction Guarantee is required"),
+//   }),
+//   deliveryConditions: Yup.object({
+//     pickup: Yup.object({
+//       allowed: Yup.string()
+//         .oneOf(["yes", "no"], "Invalid option")
+//         .required("Pickup allowed is required"),
+//       details: Yup.object().when("allowed", (allowed: unknown) => {
+//         if (allowed === "yes") {
+//           return Yup.object({
+//             address: Yup.string().required("Address is required"),
+//             country: Yup.string().required("Country is required"),
+//             city: Yup.string().required("City is required"),
+//             campus: Yup.string().required("Campus is required"),
+//           });
+//         }
+//         return Yup.object().nullable(); //Allow null if not "yes"
+//       }),
+//     }),
+//   }),
+//   geolocation: Yup.object({
+//     campus: Yup.string().required("Campus is required"),
+//     country: Yup.string().required("Country is required"),
+//   }),
+//   otherSpecialConditions: Yup.object({
+//     additionalDescription: Yup.string()
+//       .required("Additional description is required")
+//       .max(500, "Description can't exceed 500 characters"),
+//     uploadedFiles: Yup.array()
+//       .of(
+//         Yup.mixed()
+//           .nullable()
+//           .test(
+//             "fileFormat",
+//             "Invalid file type. Only jpeg, jpg, png, pdf, doc, docx allowed.",
+//             (value) => {
+//               if (!value) return true; // Allow null values
+//               return (
+//                 value instanceof File &&
+//                 [
+//                   "image/jpeg",
+//                   "image/jpg",
+//                   "image/png",
+//                   "application/pdf",
+//                 ].includes(value.type)
+//               );
+//             }
+//           )
+//       )
+//       .max(1, "You can only upload 1 file"),
+//   }),
+// });
+
+// const MultiStepForm = () => {
+//   const dispatch = useDispatch();
+
+//   // State to hold form values across steps
+//   const [formValues, setFormValues] =
+//     useState<SubmitExchangeDetails>(initialValues);
+
+//   const { currentStep } = useSelector(
+//     (state: RootState) => state.productForServiceExchangeForm
+//   );
+
+//   const handleNext = (values: SubmitExchangeDetails) => {
+//     console.log("Collected Data in Parent Component:", values);
+//     dispatch(setCurrentStep(currentStep + 1)); // Advance to the next step
+//   };
+
+//   const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
+
+//   const steps = [
+//     {
+//       title: (
+//         <span className="text-xs sm:text-sm">Submit an Exchange Offer</span>
+//       ),
+//       description: (
+//         <span className="text-xs sm:text-sm">Submit Your Exchange</span>
+//       ),
+//     },
+//     {
+//       title: <span className="text-xs sm:text-sm">Expected Requirements</span>,
+//       description: (
+//         <span className="text-xs sm:text-sm">What do you need?</span>
+//       ),
+//     },
+//     {
+//       title: <span className="text-xs sm:text-sm">Success</span>,
+//       description: (
+//         <span className="text-xs sm:text-sm">Review and confirm</span>
+//       ),
+//     },
+//   ];
+
+//   return (
+//     <div className="p-6 max-w-5xl mx-auto">
+//       <Steps
+//         current={currentStep - 1}
+//         items={steps}
+//         className="mb-6 flex flex-row gap-4 overflow-x-auto whitespace-nowrap"
+//       />
+
+//       {currentStep === 1 && (
+//         <SubmitExchangeForm
+//           initialValues={formValues}
+//           validationSchema={SubmitExchangeValidationSchema}
+//           onSubmit={(values) => {
+//             setFormValues(values); // Update parent state
+//             handleNext(values); // Navigate to the next step
+//           }}
+//           setFormValues={setFormValues} // Pass setFormValues to allow direct updates
+//         />
+//       )}
+
+//       {/* {currentStep === 2 && <ExpectedRequirement />}
+//       {currentStep === 3 && <Success />} */}
+
+//       <div className="flex justify-start mt-6">
+//         <button
+//           onClick={handleBack}
+//           className="bg-blue-600 text-white px-4 py-2 rounded-md"
+//         >
+//           Back
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default MultiStepForm;
+
+// "use client";
+
+// import React, { useState } from "react";
+// import { ConfigProvider, Steps } from "antd";
+// // import { useFormContext } from "./component/FormContext";
+// import SubmitExchangeForm from "./component/SubmitExchangeForm";
+// import ExpectedRequirement from "./component/ExpectedRequirements";
+// import Success from "./component/Success";
+// import { useDispatch, useSelector } from "react-redux";
+// import { RootState } from "@/store/store";
+// import { setCurrentStep } from "@/store/slices/productForServiceFormSlice";
+// import { useTranslations } from "next-intl";
+// import * as Yup from "yup";
+
+// const { Step } = Steps;
+// type Geolocation = {
+//   campus: string;
+//   country: string;
+// };
+
+// type Guarantees = {
+//   moneyBackGuarantee: "yes" | "no";
+//   satisfactionGuarantee: "yes" | "no";
+// };
+
+// type DeliveryConditions = {
+//   pickup: {
+//     allowed: "yes" | "no";
+//     details: {
+//       address: string;
+//       country: string;
+//       city: string;
+//       campus: string;
+//     };
+//   };
+
+//   delivery: {
+//     allowed: "yes" | "no";
+//     costOption?: "yes" | "no"; // Determines whether delivery cost applies
+//     details: {
+//       amount?: string; // Amount is only required if costOption is "yes"
+//       country: string;
+//       city: string;
+//     };
+//   };
+// };
+
+// type OtherSpecialConditions = {
+//   additionalDescription: string;
+//   uploadedFiles: File[]; // Array of uploaded files
+// };
+
+// type PaymentDetails = {
+//   desiredPaymentForm: "exchange-sum" | "exchange-service" | "";
+//   desiredPaymentType:
+//     | "hand-to-hand"
+//     | "before-delivery"
+//     | "after-delivery"
+//     | "";
+// };
+
+// // Initial Form Values
+// type SubmitExchangeDetails = {
+//   zoneOneBanner: File | null;
+//   title: string;
+//   offerType: string;
+//   category: string;
+//   subcategory: string;
+//   featuredProductStatus: "New" | "GoodCondition" | "Used" | "";
+//   additionalDescription: string;
+//   images: (File | null)[];
+//   startDate: string; // Format: YYYY-MM-DD
+//   endDate: string; // Format: YYYY-MM-DD
+//   materialConditions: {
+//     estimatedValue: string;
+//     decision: "yes" | "no";
+//     depositPayment: { percentage: string };
+//     otherContingentCoverageRequired: string; // New field added here
+//   };
+//   guarantees: Guarantees;
+//   // paymentDetails: {
+//   //   desiredPaymentForm: "exchange-sum" | "exchange-service" | "";
+//   //   desiredPaymentType:
+//   //     | "hand-to-hand"
+//   //     | "before-delivery"
+//   //     | "after-delivery"
+//   //     | "";
+//   // };
+//   paymentDetails: PaymentDetails;
+//   deliveryConditions: DeliveryConditions;
+//   geolocation: Geolocation;
+//   otherSpecialConditions: OtherSpecialConditions;
+// };
+
+// const initialValues: SubmitExchangeDetails = {
+//   zoneOneBanner: null,
+//   title: "",
+//   offerType: "",
+//   category: "",
+//   subcategory: "",
+//   featuredProductStatus: "",
+//   additionalDescription: "",
+//   images: [null, null, null],
+//   startDate: "",
+//   endDate: "",
+//   materialConditions: {
+//     estimatedValue: "",
+//     decision: "no", // Default to "no"
+//     depositPayment: {
+//       percentage: "", // Empty percentage by default
+//     },
+//     otherContingentCoverageRequired: "", // New field added here
+//   },
+//   guarantees: {
+//     moneyBackGuarantee: "no", // Default value
+//     satisfactionGuarantee: "no", // Default value
+//   },
+//   // paymentDetails: {
+//   //   desiredPaymentForm: "",
+//   //   desiredPaymentType: "",
+//   // },
+//   paymentDetails: {
+//     desiredPaymentForm: "",
+//     desiredPaymentType: "",
+//   },
+//   deliveryConditions: {
+//     pickup: {
+//       allowed: "no", // Default value
+//       details: {
+//         address: "",
+//         country: "",
+//         city: "",
+//         campus: "",
+//       },
+//     },
+//     delivery: {
+//       allowed: "no", // Default to "no"
+//       costOption: "no", // Default to "no" for cost
+//       details: {
+//         amount: "", // Empty initially
+//         country: "",
+//         city: "",
+//       },
+//     },
+//   },
+//   geolocation: {
+//     campus: "",
+//     country: "",
+//   },
+//   otherSpecialConditions: {
+//     additionalDescription: "",
+//     uploadedFiles: [],
+//   },
+// };
+
+// // Validation Schema
+// const SubmitExchangeValidationSchema = Yup.object({
+//   zoneOneBanner: Yup.mixed()
+//     .required("Zone One Banner is required")
+//     .test(
+//       "fileFormat",
+//       "Only image files are allowed",
+//       (value) =>
+//         !value || (value instanceof File && value.type.startsWith("image/"))
+//     ),
+//   title: Yup.string().required("Title is required"),
+//   offerType: Yup.string().required("Offer type is required"),
+//   category: Yup.string()
+//     .required("Category is required")
+//     .oneOf(["Electronics", "Health"], "Invalid category selected"),
+
+//   subcategory: Yup.string()
+//     .required("SubCategory is required")
+//     .oneOf(["Accessories", "Health"], "Invalid subcategory selected"),
+//   featuredProductStatus: Yup.string()
+//     .oneOf(["New", "GoodCondition", "Used"], "Invalid status selected")
+//     .required("Featured Product Status is required"),
+//   additionalDescription: Yup.string(),
+//   images: Yup.array()
+//     .of(
+//       Yup.mixed<File>()
+//         .nullable()
+//         .test(
+//           "is-valid-file",
+//           "Each item must be a valid file or null",
+//           (value) => value === null || value instanceof File
+//         )
+//     )
+//     .min(1, "At least one image is required")
+//     .max(3, "No more than 3 images are allowed")
+//     .required("At least one image is required"),
+//   startDate: Yup.date()
+//     .required("Start Date is required")
+//     .typeError("Invalid date format"),
+//   endDate: Yup.date()
+//     .required("End Date is required")
+//     .min(Yup.ref("startDate"), "End Date cannot be before Start Date")
+//     .typeError("Invalid date format"),
+//   materialConditions: Yup.object({
+//     otherContingentCoverageRequired: Yup.string()
+//       .required("Other Contingent Coverage is required")
+//       .max(255, "Must be 255 characters or less"),
+//     estimatedValue: Yup.number()
+//       .required("Estimated value is required")
+//       .min(0, "Value cannot be negative"),
+//     decision: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid decision")
+//       .required("Decision is required"),
+//     depositPayment: Yup.object({
+//       percentage: Yup.number().when("decision", {
+//         is: (decision: string | undefined) =>
+//           typeof decision === "string" && decision === "yes",
+//         then: (schema) =>
+//           schema
+//             .min(0, "Percentage cannot be less than 0")
+//             .max(100, "Percentage cannot exceed 100")
+//             .required("Deposit percentage is required"),
+//         otherwise: (schema) => schema.notRequired(),
+//       }),
+//     }),
+//   }),
+//   paymentDetails: Yup.object({
+//     desiredPaymentForm: Yup.string()
+//       .oneOf(
+//         ["exchange-sum", "exchange-service"],
+//         "Invalid Desired Payment Form"
+//       )
+//       .required("Desired Payment Form is required"),
+//     desiredPaymentType: Yup.string()
+//       .oneOf(
+//         ["hand-to-hand", "before-delivery", "after-delivery"],
+//         "Invalid Desired Payment Type"
+//       )
+//       .required("Desired Payment Type is required"),
+//   }),
+//   guarantees: Yup.object({
+//     moneyBackGuarantee: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid choice")
+//       .required("Money Back Guarantee is required"),
+//     satisfactionGuarantee: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid choice")
+//       .required("Satisfaction Guarantee is required"),
+//   }),
+//   deliveryConditions: Yup.object({
+//     pickup: Yup.object({
+//       allowed: Yup.string()
+//         .oneOf(["yes", "no"], "Invalid option")
+//         .required("Pickup allowed is required"),
+//       details: Yup.object().when("allowed", (allowed: unknown) => {
+//         if (allowed === "yes") {
+//           return Yup.object({
+//             address: Yup.string().required("Address is required"),
+//             country: Yup.string().required("Country is required"),
+//             city: Yup.string().required("City is required"),
+//             campus: Yup.string().required("Campus is required"),
+//           });
+//         }
+//         return Yup.object().nullable(); //Allow null if not "yes"
+//       }),
+//     }),
+//   }),
+//   geolocation: Yup.object({
+//     campus: Yup.string().required("Campus is required"),
+//     country: Yup.string().required("Country is required"),
+//   }),
+//   otherSpecialConditions: Yup.object({
+//     additionalDescription: Yup.string()
+//       .required("Additional description is required")
+//       .max(500, "Description can't exceed 500 characters"),
+//     uploadedFiles: Yup.array()
+//       .of(
+//         Yup.mixed()
+//           .nullable()
+//           .test(
+//             "fileFormat",
+//             "Invalid file type. Only jpeg, jpg, png, pdf, doc, docx allowed.",
+//             (value) => {
+//               if (!value) return true; // Allow null values
+//               return (
+//                 value instanceof File &&
+//                 [
+//                   "image/jpeg",
+//                   "image/jpg",
+//                   "image/png",
+//                   "application/pdf",
+//                 ].includes(value.type)
+//               );
+//             }
+//           )
+//       )
+//       .max(1, "You can only upload 1 file"),
+//   }),
+// });
+
+// const MultiStepForm = () => {
+//   const dispatch = useDispatch();
+
+//   // State to hold form values across steps
+//   const [formValues, setFormValues] =
+//     useState<SubmitExchangeDetails>(initialValues);
+
+//   const { currentStep } = useSelector(
+//     (state: RootState) => state.productForServiceExchangeForm
+//   );
+
+//   // const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
+
+//   // const handleNext = () => {
+//   //   console.log("Current Form Values:", formValues); // Log the form values
+//   //   // dispatch(setCurrentStep(currentStep + 1)); // Move to the next step
+//   // };
+
+//   const handleNext = (values: SubmitExchangeDetails) => {
+//     console.log("Collected Data in Parent Component:", values);
+//   };
+//   const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
+
+//   //steps array
+
+//   const steps = [
+//     {
+//       title: (
+//         <span className="text-xs sm:text-sm">Submit an Exchange Offer</span>
+//       ),
+//       description: (
+//         <span className="text-xs sm:text-sm">Submit Your Exchange</span>
+//       ),
+//     },
+//     {
+//       title: <span className="text-xs sm:text-sm">Expected Requirements</span>,
+//       description: (
+//         <span className="text-xs sm:text-sm">What do you need?</span>
+//       ),
+//     },
+//     {
+//       title: <span className="text-xs sm:text-sm">Success</span>,
+//       description: (
+//         <span className="text-xs sm:text-sm">Review and confirm</span>
+//       ),
+//     },
+//   ];
+
+//   return (
+//     <div className="p-6 max-w-5xl mx-auto">
+//       {/* Steps Progress Bar */}
+//       {/* <Steps current={currentStep - 1} items={steps} className="mb-6" /> */}
+//       <Steps
+//         current={currentStep - 1}
+//         items={steps}
+//         className="mb-6 flex flex-row gap-4 overflow-x-auto whitespace-nowrap"
+//       />
+
+//       {/* Step Content */}
+//       {currentStep === 1 && (
+//         <SubmitExchangeForm
+//           initialValues={formValues}
+//           validationSchema={SubmitExchangeValidationSchema}
+//           onSubmit={(values: any) => {
+//             setFormValues(values); // Update parent state with current form values
+//             handleNext(values); // Navigate to the next step
+//           }}
+//           setFormValues={setFormValues} // Pass setFormValues to allow direct updates
+//         />
+//       )}
+//       {currentStep === 2 && <ExpectedRequirement />}
+//       {currentStep === 3 && <Success />}
+//       {/* Back Button */}
+//       <div className="flex justify-start mt-6">
+//         <button
+//           onClick={handleBack} // Navigate back to step 0
+//           className="bg-blue-600 text-white px-4 py-2 rounded-md"
+//         >
+//           Back
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default MultiStepForm;

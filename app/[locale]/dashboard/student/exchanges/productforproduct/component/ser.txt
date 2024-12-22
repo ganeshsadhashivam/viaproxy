@@ -1,0 +1,4704 @@
+// <Formik
+    //   initialValues={initialValues}
+    //   validationSchema={validationSchema}
+    //   onSubmit={handleSubmit}
+    //   enableReinitialize
+    // >
+    //   {({ setFieldValue, errors, isValid, values }) => (
+    //     <Form className="space-y-6 p-4 md:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto border border-gray-200">
+    //       {/* Title */}
+    //       <div className="text-center">
+    //         <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">
+    //           {t(`Submit An Exchange Offer`)}
+    //         </h2>
+    //         <p className="text-gray-600">
+    //           {t(
+    //             `Finance Your Projects Or Expenses With Your Unused Services Or Goods!`
+    //           )}
+    //         </p>
+    //       </div>
+
+    //       {/* Zone 1 Insertion Banner */}
+    //       <div className="text-center p-5">
+    //         <h2 className="mb-5 text-lg font-bold">
+    //           {t("Zone 1 Insertion Banner Advertising")}
+    //         </h2>
+    //         <label
+    //           htmlFor="zoneOneBanner"
+    //           className="inline-block cursor-pointer p-4 border-2 border-dashed border-gray-400 rounded-lg bg-gray-100 hover:bg-gray-200"
+    //         >
+    //           <Image
+    //             src={previewZoneOneBanner || "/imagetoselect.png"}
+    //             alt="Upload Banner"
+    //             className="max-w-full h-auto mx-auto mb-2"
+    //             width={100}
+    //             height={100}
+    //           />
+    //           <p className="text-gray-600">Click to upload</p>
+    //         </label>
+    //         <input
+    //           id="zoneOneBanner"
+    //           type="file"
+    //           name="zoneOneBanner"
+    //           accept="image/*"
+    //           className="hidden"
+    //           onChange={(event) =>
+    //             handleZoneOneBannerChange(event, setFieldValue, setFormData)
+    //           }
+    //         />
+    //         <ErrorMessage
+    //           name="zoneOneBanner"
+    //           component="div"
+    //           className="text-red-500 text-sm mt-2"
+    //         />
+    //       </div>
+
+    //       {/* Title of the Offer */}
+    //       <div>
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t(`Title of the Offer`)}
+    //         </label>
+    //         <Field name="title">
+    //           {({ field }: { field: any }) => (
+    //             <input
+    //               {...field} // Ensure Formik handles the value and onChange internally
+    //               placeholder="Enter Title"
+    //               className="w-full p-2 border rounded-md"
+    //               value={formData.submitExchangeDetails.title || ""}
+    //               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                 setFormData((prevData) => ({
+    //                   ...prevData,
+    //                   submitExchangeDetails: {
+    //                     ...prevData.submitExchangeDetails,
+    //                     title: event.target.value,
+    //                   },
+    //                 }));
+    //                 field.onChange(event); // Ensure Formik's internal state is also updated
+    //               }}
+    //             />
+    //           )}
+    //         </Field>
+    //         <ErrorMessage
+    //           name="title"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Offer Type */}
+    //       <div>
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t(`What do you Offer`)}
+    //         </label>
+    //         <div role="group" className="flex flex-wrap gap-4">
+    //           <label>
+    //             <Field
+    //               type="radio"
+    //               name="offerType"
+    //               value="Good"
+    //               checked={
+    //                 formData.submitExchangeDetails.offerType === "Good" ||
+    //                 values.offerType === "Good" // Sync with Formik and FormContext
+    //               }
+    //               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                 const selectedValue = event.target.value;
+    //                 // Update FormContext
+    //                 setFormData((prevData) => ({
+    //                   ...prevData,
+    //                   submitExchangeDetails: {
+    //                     ...prevData.submitExchangeDetails,
+    //                     offerType: selectedValue,
+    //                   },
+    //                 }));
+    //                 // Update Formik state
+    //                 setFieldValue("offerType", selectedValue, true);
+    //               }}
+    //             />{" "}
+    //             Good
+    //           </label>
+    //           <label>
+    //             <Field
+    //               type="radio"
+    //               name="offerType"
+    //               value="Service"
+    //               checked={
+    //                 formData.submitExchangeDetails.offerType === "Service" ||
+    //                 values.offerType === "Service" // Sync with Formik and FormContext
+    //               }
+    //               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                 const selectedValue = event.target.value;
+    //                 // Update FormContext
+    //                 setFormData((prevData) => ({
+    //                   ...prevData,
+    //                   submitExchangeDetails: {
+    //                     ...prevData.submitExchangeDetails,
+    //                     offerType: selectedValue,
+    //                   },
+    //                 }));
+    //                 // Update Formik state
+    //                 setFieldValue("offerType", selectedValue, true);
+    //               }}
+    //             />{" "}
+    //             Service
+    //           </label>
+    //         </div>
+    //         <ErrorMessage
+    //           name="offerType"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Category */}
+    //       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    //         <div>
+    //           <label className="block text-gray-700 font-semibold mb-1">
+    //             {t(`Category`)}
+    //           </label>
+    //           <Field
+    //             as="select"
+    //             name="category"
+    //             className="w-full p-2 border rounded-md"
+    //             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+    //               const selectedValue = event.target.value;
+
+    //               // Update Formik state
+    //               setFieldValue("category", selectedValue);
+
+    //               // Update FormContext
+    //               setFormData((prevData) => ({
+    //                 ...prevData,
+    //                 submitExchangeDetails: {
+    //                   ...prevData.submitExchangeDetails,
+    //                   category: selectedValue,
+    //                 },
+    //               }));
+    //             }}
+    //             value={formData.submitExchangeDetails.category || ""}
+    //           >
+    //             <option value="" disabled>
+    //               {t(`Select Category`)}
+    //             </option>
+    //             <option value="Electronics">{t(`Electronics`)}</option>
+    //             <option value="Health">{t(`Health`)}</option>
+    //           </Field>
+    //           <ErrorMessage
+    //             name="category"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+    //         </div>
+
+    //         <div>
+    //           <label className="block text-gray-700 font-semibold mb-1">
+    //             {t(`SubCategory`)}
+    //           </label>
+    //           <Field
+    //             as="select"
+    //             name="subcategory"
+    //             className="w-full p-2 border rounded-md"
+    //             onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+    //               const selectedValue = event.target.value;
+
+    //               // Update Formik state
+    //               setFieldValue("subcategory", selectedValue);
+
+    //               // Update FormContext
+    //               setFormData((prevData) => ({
+    //                 ...prevData,
+    //                 submitExchangeDetails: {
+    //                   ...prevData.submitExchangeDetails,
+    //                   subcategory: selectedValue,
+    //                 },
+    //               }));
+    //             }}
+    //             value={formData.submitExchangeDetails.subcategory || ""}
+    //           >
+    //             <option value="" disabled>
+    //               {t(`Select SubCategory`)}
+    //             </option>
+    //             <option value="Accessories">{t(`Accessories`)}</option>
+    //             <option value="Health">{t(`Health`)}</option>
+    //           </Field>
+    //           <ErrorMessage
+    //             name="subcategory"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+    //         </div>
+    //       </div>
+
+    //       {/* Featured Product Status */}
+    //       <div>
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t(`FeaturedProductStatus`)}
+    //         </label>
+    //         <Field
+    //           as="select"
+    //           name="featuredProductStatus"
+    //           className="w-full p-2 border rounded-md"
+    //           value={formData.submitExchangeDetails.featuredProductStatus || ""}
+    //           onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+    //             const selectedValue = event.target.value;
+
+    //             // Update Formik state
+    //             setFieldValue("featuredProductStatus", selectedValue);
+
+    //             // Update FormContext
+    //             setFormData((prevData) => ({
+    //               ...prevData,
+    //               submitExchangeDetails: {
+    //                 ...prevData.submitExchangeDetails,
+    //                 featuredProductStatus: selectedValue,
+    //               },
+    //             }));
+    //           }}
+    //         >
+    //           <option value="" disabled>
+    //             {t(`Select Status`)}
+    //           </option>
+    //           <option value="New">{t(`New`)}</option>
+    //           <option value="GoodCondition">{t(`Good Condition`)}</option>
+    //           <option value="Used">{t(`Used`)}</option>
+    //         </Field>
+    //         <ErrorMessage
+    //           name="featuredProductStatus"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Additional Description */}
+    //       <div>
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t(`Additional Description`)}
+    //         </label>
+    //         <Field
+    //           as="textarea"
+    //           name="additionalDescription"
+    //           placeholder="Enter additional details about your offer"
+    //           className="w-full p-2 border rounded-md"
+    //           value={formData.submitExchangeDetails.additionalDescription || ""} // Sync with FormContext
+    //           onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    //             const value = event.target.value;
+
+    //             // Update FormContext
+    //             setFormData((prevData) => ({
+    //               ...prevData,
+    //               submitExchangeDetails: {
+    //                 ...prevData.submitExchangeDetails,
+    //                 additionalDescription: value,
+    //               },
+    //             }));
+
+    //             // Update Formik state
+    //             setFieldValue("additionalDescription", value);
+    //           }}
+    //         />
+    //         <ErrorMessage
+    //           name="additionalDescription"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Images to Select */}
+    //       <div className="mt-4">
+    //         <label
+    //           htmlFor="offer-images"
+    //           className="block text-sm font-semibold text-gray-700 mb-2"
+    //         >
+    //           {t(`Upload Any Images Of The Offer`)}
+    //         </label>
+    //         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    //           {Array.from({ length: 3 }).map((_, index) => (
+    //             <div
+    //               key={index}
+    //               className="flex flex-col items-center space-y-2"
+    //             >
+    //               <label
+    //                 htmlFor={`offer-image-${index}`}
+    //                 className="cursor-pointer flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-400 hover:bg-gray-50"
+    //               >
+    //                 <Image
+    //                   src={
+    //                     previewImages[index] || "/imagetoselect.png" // Show dynamic preview or default placeholder
+    //                   }
+    //                   alt="Select Image"
+    //                   className="object-cover w-20 h-20 rounded-md"
+    //                   width={100}
+    //                   height={100}
+    //                 />
+    //                 <span className="text-sm text-gray-500">Select Image</span>
+    //               </label>
+    //               <input
+    //                 type="file"
+    //                 name={`images[${index}]`}
+    //                 id={`offer-image-${index}`}
+    //                 accept="image/*"
+    //                 className="hidden"
+    //                 onChange={(event) =>
+    //                   handleImageChange(
+    //                     event,
+    //                     index,
+    //                     setFieldValue,
+    //                     setFormData
+    //                   )
+    //                 }
+    //               />
+    //             </div>
+    //           ))}
+    //         </div>
+    //         <ErrorMessage
+    //           name="images"
+    //           component="div"
+    //           className="text-red-500 text-sm mt-2"
+    //         />
+    //       </div>
+
+    //       {/* Offer Dates */}
+    //       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    //         <div>
+    //           <label className="block text-gray-700 font-semibold mb-1">
+    //             {t(`OfferStartDate`)}
+    //           </label>
+    //           <Field
+    //             type="date"
+    //             name="startDate"
+    //             className="w-full p-2 border rounded-md"
+    //             value={
+    //               formData.submitExchangeDetails.startDate instanceof Date &&
+    //               !isNaN(formData.submitExchangeDetails.startDate.getTime())
+    //                 ? formData.submitExchangeDetails.startDate
+    //                     .toISOString()
+    //                     .split("T")[0]
+    //                 : ""
+    //             }
+    //             // Sync with FormContext
+    //             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //               const value = event.target.value
+    //                 ? new Date(event.target.value)
+    //                 : null;
+
+    //               // Update FormContext
+    //               setFormData((prevData) => ({
+    //                 ...prevData,
+    //                 submitExchangeDetails: {
+    //                   ...prevData.submitExchangeDetails,
+    //                   startDate: value,
+    //                 },
+    //               }));
+
+    //               // Update Formik state
+    //               setFieldValue("startDate", value);
+    //             }}
+    //           />
+    //           <ErrorMessage
+    //             name="startDate"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+    //         </div>
+    //         <div>
+    //           <label className="block text-gray-700 font-semibold mb-1">
+    //             {t(`OfferEndDate`)}
+    //           </label>
+    //           <Field
+    //             type="date"
+    //             name="endDate"
+    //             className="w-full p-2 border rounded-md"
+    //             value={
+    //               formData.submitExchangeDetails.endDate instanceof Date &&
+    //               !isNaN(formData.submitExchangeDetails.endDate.getTime())
+    //                 ? formData.submitExchangeDetails.endDate
+    //                     .toISOString()
+    //                     .split("T")[0]
+    //                 : ""
+    //             }
+    //             // Sync with FormContext
+    //             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //               const value = event.target.value
+    //                 ? new Date(event.target.value)
+    //                 : null;
+
+    //               // Update FormContext
+    //               setFormData((prevData) => ({
+    //                 ...prevData,
+    //                 submitExchangeDetails: {
+    //                   ...prevData.submitExchangeDetails,
+    //                   endDate: value,
+    //                 },
+    //               }));
+
+    //               // Update Formik state
+    //               setFieldValue("endDate", value);
+    //             }}
+    //           />
+    //           <ErrorMessage
+    //             name="endDate"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+    //         </div>
+    //       </div>
+
+    //       {/* Form of Exchange */}
+    //       <div>
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t(`FormOfExchange`)}
+    //         </label>
+    //         <Field
+    //           as="select"
+    //           name="formOfExchange"
+    //           className="w-full p-2 border rounded-md"
+    //           value={formData.submitExchangeDetails.formOfExchange || ""}
+    //           onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+    //             const value = event.target.value;
+
+    //             // Update FormContext
+    //             setFormData((prevData) => ({
+    //               ...prevData,
+    //               submitExchangeDetails: {
+    //                 ...prevData.submitExchangeDetails,
+    //                 formOfExchange: value,
+    //               },
+    //             }));
+
+    //             // Update Formik state
+    //             setFieldValue("formOfExchange", value);
+    //           }}
+    //         >
+    //           <option value="" disabled>
+    //             {t(`Select Form of Exchange`)}
+    //           </option>
+    //           <option value="Exchange">{t(`Exchange`)}</option>
+    //           <option value="Classic Sale">{t(`Classic Sale`)}</option>
+    //           <option value="Auction">{t(`Auction`)}</option>
+    //           <option value="Donation">{t(`Donation`)}</option>
+    //         </Field>
+    //         <ErrorMessage
+    //           name="formOfExchange"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Material Conditions */}
+    //       <div className="space-y-4">
+    //         <h3 className="text-lg font-bold text-center">
+    //           {t("Material conditions of the exchange")}
+    //         </h3>
+    //         <div>
+    //           <label className="font-semibold text-gray-700">
+    //             {t("Estimated value of the exchange")}
+    //           </label>
+    //           <Field
+    //             name="materialConditions.estimatedValue"
+    //             type="number"
+    //             className="w-full p-2 border rounded-md"
+    //             value={
+    //               formData.submitExchangeDetails.materialConditions
+    //                 .estimatedValue || ""
+    //             }
+    //             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //               const value = event.target.value;
+
+    //               // Update FormContext
+    //               setFormData((prevData) => ({
+    //                 ...prevData,
+    //                 submitExchangeDetails: {
+    //                   ...prevData.submitExchangeDetails,
+    //                   materialConditions: {
+    //                     ...prevData.submitExchangeDetails.materialConditions,
+    //                     estimatedValue: value,
+    //                   },
+    //                 },
+    //               }));
+
+    //               // Update Formik state
+    //               setFieldValue("materialConditions.estimatedValue", value);
+    //             }}
+    //           />
+    //           <ErrorMessage
+    //             name="materialConditions.estimatedValue"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+
+    //           <div>
+    //             <label className="block text-gray-700 mb-1">
+    //               {t("Deposit Payment for booking")}
+    //             </label>
+    //             <div role="group" className="flex gap-4">
+    //               <label>
+    //                 <Field
+    //                   type="radio"
+    //                   name="materialConditions.decision"
+    //                   value="yes"
+    //                   checked={
+    //                     formData.submitExchangeDetails.materialConditions
+    //                       .decision === "yes"
+    //                   }
+    //                   onChange={(
+    //                     event: React.ChangeEvent<HTMLInputElement>
+    //                   ) => {
+    //                     const value = event.target.value;
+
+    //                     // Update FormContext
+    //                     setFormData((prevData) => ({
+    //                       ...prevData,
+    //                       submitExchangeDetails: {
+    //                         ...prevData.submitExchangeDetails,
+    //                         materialConditions: {
+    //                           ...prevData.submitExchangeDetails
+    //                             .materialConditions,
+    //                           decision: value,
+    //                         },
+    //                       },
+    //                     }));
+
+    //                     // Update Formik state
+    //                     setFieldValue("materialConditions.decision", value);
+    //                   }}
+    //                 />{" "}
+    //                 {t("yes")}
+    //               </label>
+    //               <label>
+    //                 <Field
+    //                   type="radio"
+    //                   name="materialConditions.decision"
+    //                   value="no"
+    //                   checked={
+    //                     formData.submitExchangeDetails.materialConditions
+    //                       .decision === "no"
+    //                   }
+    //                   onChange={(
+    //                     event: React.ChangeEvent<HTMLInputElement>
+    //                   ) => {
+    //                     const value = event.target.value;
+
+    //                     // Update FormContext
+    //                     setFormData((prevData) => ({
+    //                       ...prevData,
+    //                       submitExchangeDetails: {
+    //                         ...prevData.submitExchangeDetails,
+    //                         materialConditions: {
+    //                           ...prevData.submitExchangeDetails
+    //                             .materialConditions,
+    //                           decision: value,
+    //                         },
+    //                       },
+    //                     }));
+
+    //                     // Update Formik state
+    //                     setFieldValue("materialConditions.decision", value);
+    //                   }}
+    //                 />{" "}
+    //                 {t("no")}
+    //               </label>
+    //             </div>
+    //             <ErrorMessage
+    //               name="materialConditions.decision"
+    //               component="div"
+    //               className="text-red-500 text-sm"
+    //             />
+    //           </div>
+
+    //           {formData.submitExchangeDetails.materialConditions.decision ===
+    //             "yes" && (
+    //             <div className="mt-4">
+    //               <label
+    //                 htmlFor="percentage"
+    //                 className="block text-gray-700 font-semibold mb-1"
+    //               >
+    //                 {t("DepositPercentage (%)")}
+    //               </label>
+    //               <Field
+    //                 name="materialConditions.depositPayment.percentage"
+    //                 type="number"
+    //                 className="w-full p-2 border rounded-md"
+    //                 min={0}
+    //                 max={100}
+    //                 value={
+    //                   formData.submitExchangeDetails.materialConditions
+    //                     .depositPayment.percentage || ""
+    //                 }
+    //                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                   const value = event.target.value;
+
+    //                   // Update FormContext
+    //                   setFormData((prevData) => ({
+    //                     ...prevData,
+    //                     submitExchangeDetails: {
+    //                       ...prevData.submitExchangeDetails,
+    //                       materialConditions: {
+    //                         ...prevData.submitExchangeDetails
+    //                           .materialConditions,
+    //                         depositPayment: {
+    //                           ...prevData.submitExchangeDetails
+    //                             .materialConditions.depositPayment,
+    //                           percentage: value,
+    //                         },
+    //                       },
+    //                     },
+    //                   }));
+
+    //                   // Update Formik state
+    //                   setFieldValue(
+    //                     "materialConditions.depositPayment.percentage",
+    //                     value
+    //                   );
+    //                 }}
+    //               />
+    //               <ErrorMessage
+    //                 name="materialConditions.depositPayment.percentage"
+    //                 component="div"
+    //                 className="text-red-500 text-sm"
+    //               />
+    //             </div>
+    //           )}
+    //         </div>
+    //       </div>
+
+    //       {/* Other Contingent Coverage Required */}
+    //       <div className="font-semibold">
+    //         <label htmlFor="materialConditions.otherContingentCoverageRequired">
+    //           {t(`Other Contingent Coverage Required`)}
+    //         </label>
+    //         <Field
+    //           type="text"
+    //           name="materialConditions.otherContingentCoverageRequired"
+    //           className="w-full p-2 border rounded-md"
+    //           value={
+    //             formData.submitExchangeDetails.materialConditions
+    //               .otherContingentCoverageRequired || ""
+    //           } // Sync value with FormContext
+    //           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //             const value = event.target.value;
+
+    //             // Update FormContext
+    //             setFormData((prevData) => ({
+    //               ...prevData,
+    //               submitExchangeDetails: {
+    //                 ...prevData.submitExchangeDetails,
+    //                 materialConditions: {
+    //                   ...prevData.submitExchangeDetails.materialConditions,
+    //                   otherContingentCoverageRequired: value,
+    //                 },
+    //               },
+    //             }));
+
+    //             // Update Formik state
+    //             setFieldValue(
+    //               "materialConditions.otherContingentCoverageRequired",
+    //               value
+    //             );
+    //           }}
+    //         />
+    //         <ErrorMessage
+    //           name="materialConditions.otherContingentCoverageRequired"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Guarantees */}
+    //       <div className="mt-4">
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t("MoneyBackGuarantee")}
+    //         </label>
+    //         <div role="group" className="flex gap-4">
+    //           <label>
+    //             <Field
+    //               type="radio"
+    //               name="guarantees.moneyBackGuarantee"
+    //               value="yes"
+    //               checked={
+    //                 formData.submitExchangeDetails.guarantees
+    //                   .moneyBackGuarantee === "yes"
+    //               } // Sync with FormContext
+    //               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                 const value = event.target.value;
+
+    //                 // Update FormContext
+    //                 setFormData((prevData) => ({
+    //                   ...prevData,
+    //                   submitExchangeDetails: {
+    //                     ...prevData.submitExchangeDetails,
+    //                     guarantees: {
+    //                       ...prevData.submitExchangeDetails.guarantees,
+    //                       moneyBackGuarantee: value,
+    //                     },
+    //                   },
+    //                 }));
+
+    //                 // Update Formik state
+    //                 setFieldValue("guarantees.moneyBackGuarantee", value);
+    //               }}
+    //             />{" "}
+    //             {t("yes")}
+    //           </label>
+    //           <label>
+    //             <Field
+    //               type="radio"
+    //               name="guarantees.moneyBackGuarantee"
+    //               value="no"
+    //               checked={
+    //                 formData.submitExchangeDetails.guarantees
+    //                   .moneyBackGuarantee === "no"
+    //               } // Sync with FormContext
+    //               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                 const value = event.target.value;
+
+    //                 // Update FormContext
+    //                 setFormData((prevData) => ({
+    //                   ...prevData,
+    //                   submitExchangeDetails: {
+    //                     ...prevData.submitExchangeDetails,
+    //                     guarantees: {
+    //                       ...prevData.submitExchangeDetails.guarantees,
+    //                       moneyBackGuarantee: value,
+    //                     },
+    //                   },
+    //                 }));
+
+    //                 // Update Formik state
+    //                 setFieldValue("guarantees.moneyBackGuarantee", value);
+    //               }}
+    //             />{" "}
+    //             {t("no")}
+    //           </label>
+    //         </div>
+    //         <ErrorMessage
+    //           name="guarantees.moneyBackGuarantee"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       <div className="mt-4">
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t("SatisfactionGuarantee")}
+    //         </label>
+    //         <div role="group" className="flex gap-4">
+    //           <label>
+    //             <Field
+    //               type="radio"
+    //               name="guarantees.satisfactionGuarantee"
+    //               value="yes"
+    //               checked={
+    //                 formData.submitExchangeDetails.guarantees
+    //                   .satisfactionGuarantee === "yes"
+    //               } // Sync with FormContext
+    //               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                 const value = event.target.value;
+
+    //                 // Update FormContext
+    //                 setFormData((prevData) => ({
+    //                   ...prevData,
+    //                   submitExchangeDetails: {
+    //                     ...prevData.submitExchangeDetails,
+    //                     guarantees: {
+    //                       ...prevData.submitExchangeDetails.guarantees,
+    //                       satisfactionGuarantee: value,
+    //                     },
+    //                   },
+    //                 }));
+
+    //                 // Update Formik state
+    //                 setFieldValue("guarantees.satisfactionGuarantee", value);
+    //               }}
+    //             />{" "}
+    //             {t("yes")}
+    //           </label>
+    //           <label>
+    //             <Field
+    //               type="radio"
+    //               name="guarantees.satisfactionGuarantee"
+    //               value="no"
+    //               checked={
+    //                 formData.submitExchangeDetails.guarantees
+    //                   .satisfactionGuarantee === "no"
+    //               } // Sync with FormContext
+    //               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                 const value = event.target.value;
+
+    //                 // Update FormContext
+    //                 setFormData((prevData) => ({
+    //                   ...prevData,
+    //                   submitExchangeDetails: {
+    //                     ...prevData.submitExchangeDetails,
+    //                     guarantees: {
+    //                       ...prevData.submitExchangeDetails.guarantees,
+    //                       satisfactionGuarantee: value,
+    //                     },
+    //                   },
+    //                 }));
+
+    //                 // Update Formik state
+    //                 setFieldValue("guarantees.satisfactionGuarantee", value);
+    //               }}
+    //             />{" "}
+    //             {t("no")}
+    //           </label>
+    //         </div>
+    //         <ErrorMessage
+    //           name="guarantees.satisfactionGuarantee"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Payment Details */}
+    //       <div className="mt-4">
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t("DesiredPaymentForm")}
+    //         </label>
+    //         <Field
+    //           as="select"
+    //           name="paymentDetails.desiredPaymentForm"
+    //           className="w-full p-2 border rounded-md"
+    //           value={
+    //             formData.submitExchangeDetails.paymentDetails.desiredPaymentForm
+    //           } // Sync with FormContext
+    //           onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+    //             const value = event.target.value;
+
+    //             // Update FormContext
+    //             setFormData((prevData) => ({
+    //               ...prevData,
+    //               submitExchangeDetails: {
+    //                 ...prevData.submitExchangeDetails,
+    //                 paymentDetails: {
+    //                   ...prevData.submitExchangeDetails.paymentDetails,
+    //                   desiredPaymentForm: value,
+    //                 },
+    //               },
+    //             }));
+
+    //             // Update Formik state
+    //             setFieldValue("paymentDetails.desiredPaymentForm", value);
+    //           }}
+    //         >
+    //           <option value="" disabled>
+    //             {t("Select Payment Form")}
+    //           </option>
+    //           <option value="exchange-sum">
+    //             {t("Exchange + or - Additional Sum")}
+    //           </option>
+    //           <option value="exchange-service">
+    //             {t("Exchange + or - Benefit or Service")}
+    //           </option>
+    //         </Field>
+    //         <ErrorMessage
+    //           name="paymentDetails.desiredPaymentForm"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       <div className="mt-4">
+    //         <label className="block text-gray-700 font-semibold mb-1">
+    //           {t("DesiredPaymentType")}
+    //         </label>
+    //         <Field
+    //           as="select"
+    //           name="paymentDetails.desiredPaymentType"
+    //           className="w-full p-2 border rounded-md"
+    //           value={
+    //             formData.submitExchangeDetails.paymentDetails.desiredPaymentType
+    //           } // Sync with FormContext
+    //           onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+    //             const value = event.target.value;
+
+    //             // Update FormContext
+    //             setFormData((prevData) => ({
+    //               ...prevData,
+    //               submitExchangeDetails: {
+    //                 ...prevData.submitExchangeDetails,
+    //                 paymentDetails: {
+    //                   ...prevData.submitExchangeDetails.paymentDetails,
+    //                   desiredPaymentType: value,
+    //                 },
+    //               },
+    //             }));
+
+    //             // Update Formik state
+    //             setFieldValue("paymentDetails.desiredPaymentType", value);
+    //           }}
+    //         >
+    //           <option value="" disabled>
+    //             {t("Select Payment Type")}
+    //           </option>
+    //           <option value="hand-to-hand">{t("handToHand")}</option>
+    //           <option value="before-delivery">
+    //             {t("Exchange & Payment Before Delivery")}
+    //           </option>
+    //           <option value="after-delivery">
+    //             {t("Exchange & Payment After Delivery")}
+    //           </option>
+    //         </Field>
+    //         <ErrorMessage
+    //           name="paymentDetails.desiredPaymentType"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Delivery Conditions */}
+    //       <div className="mt-6">
+    //         <h2 className="text-xl font-bold text-center mb-4">
+    //           {t("DeliveryConditions")}
+    //         </h2>
+
+    //         {/* Pickup */}
+    //         <div className="mt-4">
+    //           <label className="block text-gray-700 font-semibold mb-1">
+    //             {t("Pickup")}
+    //           </label>
+    //           <div className="flex gap-4">
+    //             <label className="flex items-center">
+    //               <Field
+    //                 type="radio"
+    //                 name="deliveryConditions.pickup.allowed"
+    //                 value="yes"
+    //                 className="mr-2"
+    //                 checked={
+    //                   formData.submitExchangeDetails.deliveryConditions.pickup
+    //                     .allowed === "yes"
+    //                 } // Sync with FormContext
+    //                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                   const value = event.target.value as "" | "yes" | "no";
+
+    //                   // Update FormContext
+    //                   setFormData((prevData) => ({
+    //                     ...prevData,
+    //                     submitExchangeDetails: {
+    //                       ...prevData.submitExchangeDetails,
+    //                       deliveryConditions: {
+    //                         ...prevData.submitExchangeDetails
+    //                           .deliveryConditions,
+    //                         pickup: {
+    //                           ...prevData.submitExchangeDetails
+    //                             .deliveryConditions.pickup,
+    //                           allowed: value,
+    //                         },
+    //                       },
+    //                     },
+    //                   }));
+
+    //                   // Update Formik state
+    //                   setFieldValue("deliveryConditions.pickup.allowed", value);
+    //                 }}
+    //               />
+    //               {t("yes")}
+    //             </label>
+
+    //             <label className="flex items-center">
+    //               <Field
+    //                 type="radio"
+    //                 name="deliveryConditions.pickup.allowed"
+    //                 value="no"
+    //                 className="mr-2"
+    //                 checked={
+    //                   formData.submitExchangeDetails.deliveryConditions.pickup
+    //                     .allowed === "no"
+    //                 } // Sync with FormContext
+    //                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                   const value = event.target.value as "" | "yes" | "no";
+
+    //                   // Update FormContext
+    //                   setFormData((prevData) => ({
+    //                     ...prevData,
+    //                     submitExchangeDetails: {
+    //                       ...prevData.submitExchangeDetails,
+    //                       deliveryConditions: {
+    //                         ...prevData.submitExchangeDetails
+    //                           .deliveryConditions,
+    //                         pickup: {
+    //                           ...prevData.submitExchangeDetails
+    //                             .deliveryConditions.pickup,
+    //                           allowed: value,
+    //                         },
+    //                       },
+    //                     },
+    //                   }));
+
+    //                   // Update Formik state
+    //                   setFieldValue("deliveryConditions.pickup.allowed", value);
+    //                 }}
+    //               />
+    //               {t("no")}
+    //             </label>
+    //           </div>
+    //           <ErrorMessage
+    //             name="deliveryConditions.pickup.allowed"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+
+    //           <Field name="deliveryConditions.pickup.allowed">
+    //             {({ field }: { field: FieldInputProps<string> }) =>
+    //               field.value === "yes" && (
+    //                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    //                   {(["address", "country", "city", "campus"] as const).map(
+    //                     (key) => (
+    //                       <div key={key}>
+    //                         <label className="block text-gray-700 mb-1">
+    //                           {t(key.charAt(0).toUpperCase() + key.slice(1))}
+    //                         </label>
+    //                         <Field
+    //                           name={`deliveryConditions.pickup.details.${key}`}
+    //                           className="w-full p-2 border rounded-md"
+    //                           value={
+    //                             formData.submitExchangeDetails
+    //                               .deliveryConditions.pickup.details[key]
+    //                           } // Sync with FormContext
+    //                           onChange={(
+    //                             event: React.ChangeEvent<HTMLInputElement>
+    //                           ) => {
+    //                             const value = event.target.value;
+
+    //                             // Update FormContext
+    //                             setFormData((prevData) => ({
+    //                               ...prevData,
+    //                               submitExchangeDetails: {
+    //                                 ...prevData.submitExchangeDetails,
+    //                                 deliveryConditions: {
+    //                                   ...prevData.submitExchangeDetails
+    //                                     .deliveryConditions,
+    //                                   pickup: {
+    //                                     ...prevData.submitExchangeDetails
+    //                                       .deliveryConditions.pickup,
+    //                                     details: {
+    //                                       ...prevData.submitExchangeDetails
+    //                                         .deliveryConditions.pickup.details,
+    //                                       [key]: value,
+    //                                     },
+    //                                   },
+    //                                 },
+    //                               },
+    //                             }));
+
+    //                             // Update Formik state
+    //                             setFieldValue(
+    //                               `deliveryConditions.pickup.details.${key}`,
+    //                               value
+    //                             );
+    //                           }}
+    //                         />
+    //                         <ErrorMessage
+    //                           name={`deliveryConditions.pickup.details.${key}`}
+    //                           component="div"
+    //                           className="text-red-500 text-sm"
+    //                         />
+    //                       </div>
+    //                     )
+    //                   )}
+    //                 </div>
+    //               )
+    //             }
+    //           </Field>
+    //         </div>
+
+    //         {/* delivery */}
+    //         {/* Delivery */}
+    //         <div className="mt-4">
+    //           <label className="block text-gray-700 font-semibold mb-1">
+    //             {t("Delivery")}
+    //           </label>
+    //           <div className="flex gap-4">
+    //             <label className="flex items-center">
+    //               <Field
+    //                 type="radio"
+    //                 name="deliveryConditions.delivery.allowed"
+    //                 value="yes"
+    //                 className="mr-2"
+    //                 checked={
+    //                   formData.submitExchangeDetails.deliveryConditions.delivery
+    //                     .allowed === "yes"
+    //                 }
+    //                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                   const value = event.target.value as "" | "yes" | "no";
+    //                   // Update FormContext
+    //                   setFormData((prevData) => ({
+    //                     ...prevData,
+    //                     submitExchangeDetails: {
+    //                       ...prevData.submitExchangeDetails,
+    //                       deliveryConditions: {
+    //                         ...prevData.submitExchangeDetails
+    //                           .deliveryConditions,
+    //                         delivery: {
+    //                           ...prevData.submitExchangeDetails
+    //                             .deliveryConditions.delivery,
+    //                           allowed: value,
+    //                         },
+    //                       },
+    //                     },
+    //                   }));
+    //                   // Update Formik
+    //                   setFieldValue(
+    //                     "deliveryConditions.delivery.allowed",
+    //                     value
+    //                   );
+    //                 }}
+    //               />
+    //               {t("yes")}
+    //             </label>
+    //             <label className="flex items-center">
+    //               <Field
+    //                 type="radio"
+    //                 name="deliveryConditions.delivery.allowed"
+    //                 value="no"
+    //                 className="mr-2"
+    //                 checked={
+    //                   formData.submitExchangeDetails.deliveryConditions.delivery
+    //                     .allowed === "no"
+    //                 }
+    //                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+    //                   const value = event.target.value as "" | "yes" | "no";
+    //                   // Update FormContext
+    //                   setFormData((prevData) => ({
+    //                     ...prevData,
+    //                     submitExchangeDetails: {
+    //                       ...prevData.submitExchangeDetails,
+    //                       deliveryConditions: {
+    //                         ...prevData.submitExchangeDetails
+    //                           .deliveryConditions,
+    //                         delivery: {
+    //                           ...prevData.submitExchangeDetails
+    //                             .deliveryConditions.delivery,
+    //                           allowed: value,
+    //                         },
+    //                       },
+    //                     },
+    //                   }));
+    //                   // Update Formik
+    //                   setFieldValue(
+    //                     "deliveryConditions.delivery.allowed",
+    //                     value
+    //                   );
+    //                 }}
+    //               />
+    //               {t("no")}
+    //             </label>
+    //           </div>
+    //           <ErrorMessage
+    //             name="deliveryConditions.delivery.allowed"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+
+    //           <Field name="deliveryConditions.delivery.allowed">
+    //             {({ field }: { field: FieldInputProps<string> }) =>
+    //               field.value === "yes" && (
+    //                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    //                   {["cost", "country", "city"].map((key) => (
+    //                     <div key={key}>
+    //                       <label className="block text-gray-700 mb-1">
+    //                         {t(key.charAt(0).toUpperCase() + key.slice(1))}
+    //                       </label>
+    //                       <Field
+    //                         name={`deliveryConditions.delivery.details.${key}`}
+    //                         className="w-full p-2 border rounded-md"
+    //                         value={
+    //                           formData.submitExchangeDetails.deliveryConditions
+    //                             .delivery.details[
+    //                             key as keyof typeof formData.submitExchangeDetails.deliveryConditions.delivery.details
+    //                           ]
+    //                         }
+    //                         onChange={(
+    //                           event: React.ChangeEvent<HTMLInputElement>
+    //                         ) => {
+    //                           const value = event.target.value;
+
+    //                           // Update FormContext
+    //                           setFormData((prevData) => ({
+    //                             ...prevData,
+    //                             submitExchangeDetails: {
+    //                               ...prevData.submitExchangeDetails,
+    //                               deliveryConditions: {
+    //                                 ...prevData.submitExchangeDetails
+    //                                   .deliveryConditions,
+    //                                 delivery: {
+    //                                   ...prevData.submitExchangeDetails
+    //                                     .deliveryConditions.delivery,
+    //                                   details: {
+    //                                     ...prevData.submitExchangeDetails
+    //                                       .deliveryConditions.delivery.details,
+    //                                     [key]: value,
+    //                                   },
+    //                                 },
+    //                               },
+    //                             },
+    //                           }));
+
+    //                           // Update Formik
+    //                           setFieldValue(
+    //                             `deliveryConditions.delivery.details.${key}`,
+    //                             value
+    //                           );
+    //                         }}
+    //                       />
+    //                       <ErrorMessage
+    //                         name={`deliveryConditions.delivery.details.${key}`}
+    //                         component="div"
+    //                         className="text-red-500 text-sm"
+    //                       />
+    //                     </div>
+    //                   ))}
+    //                 </div>
+    //               )
+    //             }
+    //           </Field>
+    //         </div>
+
+    //         {/* Geolocation */}
+    //         <div className="mt-4">
+    //           <h2 className="text-xl font-bold text-center mb-4">
+    //             {t("Geolocation")}
+    //           </h2>
+    //           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    //             {(["campus", "country"] as const).map((key) => (
+    //               <div>
+    //                 <label className="block text-gray-700 mb-1">
+    //                   {t(key.charAt(0).toUpperCase() + key.slice(1))}
+    //                 </label>
+    //                 <Field
+    //                   key={key}
+    //                   name={`geolocation.${key}`}
+    //                   id={key}
+    //                   className="w-full p-2 border rounded-md"
+    //                   value={formData.submitExchangeDetails.geolocation[key]} // Sync with FormContext
+    //                   onChange={(
+    //                     event: React.ChangeEvent<HTMLInputElement>
+    //                   ) => {
+    //                     const value = event.target.value;
+
+    //                     // Update Formik's state
+    //                     setFieldValue(`geolocation.${key}`, value);
+
+    //                     // Update FormContext
+    //                     setFormData((prevData) => ({
+    //                       ...prevData,
+    //                       submitExchangeDetails: {
+    //                         ...prevData.submitExchangeDetails,
+    //                         geolocation: {
+    //                           ...prevData.submitExchangeDetails.geolocation,
+    //                           [key]: value,
+    //                         },
+    //                       },
+    //                     }));
+    //                   }}
+    //                 />
+    //                 <ErrorMessage
+    //                   name={`geolocation.${key}`}
+    //                   component="div"
+    //                   className="text-red-500 text-sm"
+    //                 />
+    //               </div>
+    //             ))}
+    //           </div>
+    //         </div>
+    //       </div>
+
+    //       {/* Other Special Conditions */}
+    //       <div className="mt-4">
+    //         <h2 className="text-xl font-bold text-center mb-4">
+    //           {t("Other Special Conditions")}
+    //         </h2>
+    //         <div>
+    //           <label
+    //             htmlFor="otherSpecialConditions.additionalDescription"
+    //             className="block text-gray-700 font-semibold mb-1"
+    //           >
+    //             {t("Additional Description of the payment or Delivery Method")}
+    //           </label>
+    //           <Field name="otherSpecialConditions.additionalDescription">
+    //             {({
+    //               field, // Access Formik field props
+    //             }: {
+    //               field: FieldInputProps<string>;
+    //             }) => (
+    //               <textarea
+    //                 {...field} // Bind Formik field props
+    //                 id="otherSpecialConditions.additionalDescription"
+    //                 rows={4}
+    //                 className="w-full p-3 border rounded-md resize-none"
+    //                 onChange={(
+    //                   event: React.ChangeEvent<HTMLTextAreaElement>
+    //                 ) => {
+    //                   const value = event.target.value;
+
+    //                   // Update FormContext
+    //                   setFormData((prevData) => ({
+    //                     ...prevData,
+    //                     submitExchangeDetails: {
+    //                       ...prevData.submitExchangeDetails,
+    //                       otherSpecialConditions: {
+    //                         ...prevData.submitExchangeDetails
+    //                           .otherSpecialConditions,
+    //                         additionalDescription: value,
+    //                       },
+    //                     },
+    //                   }));
+
+    //                   // Update Formik state
+    //                   field.onChange(event);
+    //                 }}
+    //                 value={
+    //                   formData.submitExchangeDetails.otherSpecialConditions
+    //                     .additionalDescription
+    //                 } // Sync with FormContext
+    //               />
+    //             )}
+    //           </Field>
+    //           <ErrorMessage
+    //             name="otherSpecialConditions.additionalDescription"
+    //             component="div"
+    //             className="text-red-500 text-sm"
+    //           />
+    //         </div>
+    //       </div>
+
+    //       {/* File Upload */}
+
+    //       <div className="mt-4">
+    //         <label
+    //           htmlFor="fileUpload"
+    //           className="block text-gray-700 font-semibold mb-1"
+    //         >
+    //           {t("uploadFile")}
+    //         </label>
+    //         <div className="flex items-center space-x-6">
+    //           <label
+    //             htmlFor="fileUpload"
+    //             className="flex items-center justify-center w-full p-6 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+    //           >
+    //             <Image
+    //               src={previewFileIcon || "/documents.png"} // Dynamic preview based on selected file or default
+    //               alt={t("uploadIconAlt")}
+    //               width={50}
+    //               height={50}
+    //               className="mr-2"
+    //             />
+    //             <span className="text-gray-600 text-base">
+    //               {selectedFileName || t("chooseFile")}
+    //             </span>
+    //           </label>
+    //           <Field name="submitExchangeDetails.otherSpecialConditions.uploadedFiles">
+    //             {({ field, form }: { field: any; form: FormikProps<any> }) => (
+    //               <>
+    //                 <input
+    //                   id="fileUpload"
+    //                   name={field.name}
+    //                   type="file"
+    //                   className="hidden"
+    //                   accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
+    //                   onChange={(
+    //                     event: React.ChangeEvent<HTMLInputElement>
+    //                   ) => {
+    //                     const file = event.target.files?.[0];
+    //                     if (file) {
+    //                       console.log("Selected file type:", file.type);
+    //                       console.log("Selected file name:", file.name);
+
+    //                       // Update Formik field value
+    //                       form.setFieldValue(
+    //                         "submitExchangeDetails.otherSpecialConditions.uploadedFiles",
+    //                         [file] // Replace with the selected file
+    //                       );
+
+    //                       // Update FormContext value
+    //                       setFormData((prevData) => ({
+    //                         ...prevData,
+    //                         submitExchangeDetails: {
+    //                           ...prevData.submitExchangeDetails,
+    //                           otherSpecialConditions: {
+    //                             ...prevData.submitExchangeDetails
+    //                               .otherSpecialConditions,
+    //                             uploadedFiles: [file], // Replace with the selected file
+    //                           },
+    //                         },
+    //                       }));
+
+    //                       // Update preview
+    //                       const reader = new FileReader();
+    //                       reader.onload = () => {
+    //                         setPreviewFileIcon(
+    //                           file.type === "application/pdf"
+    //                             ? "/pdf.png"
+    //                             : ["doc", "docx"].includes(
+    //                                 file.name.split(".").pop()!.toLowerCase()
+    //                               )
+    //                             ? "/word.png"
+    //                             : "/documents.png"
+    //                         );
+    //                         setSelectedFileName(file.name);
+    //                       };
+    //                       reader.readAsDataURL(file);
+    //                     }
+    //                   }}
+    //                 />
+    //               </>
+    //             )}
+    //           </Field>
+    //         </div>
+    //         <ErrorMessage
+    //           name="submitExchangeDetails.otherSpecialConditions.uploadedFiles"
+    //           component="div"
+    //           className="text-red-500 text-sm"
+    //         />
+    //       </div>
+
+    //       {/* Submit Button */}
+    //       <div className="flex justify-end">
+    //         <button
+    //           type="submit"
+    //           className="bg-blue-600 text-white px-4 py-2 rounded-md"
+    //           onClick={() => console.log("Submit button clicked")}
+    //         >
+    //           Next
+    //         </button>
+    //       </div>
+    //       {/* Debugging Section */}
+    //       <pre>{JSON.stringify(errors, null, 2)}</pre>
+    //       <p>Form is {isValid ? "valid" : "invalid"}</p>
+    //     </Form>
+    //   )}
+    // </Formik>
+  );
+};
+
+export default SubmitexchangeForm;
+
+{
+  /* <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      enableReinitialize
+    >
+      {({ setFieldValue, errors, isValid, values }) => (
+        <Form className="space-y-6 p-4 md:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto border border-gray-200"></Form>
+<div className="mt-4">
+<label
+  htmlFor="fileUpload"
+  className="block text-gray-700 font-semibold mb-1"
+>
+  {t("uploadFile")}
+</label>
+<div className="flex items-center space-x-6">
+  <label
+    htmlFor="fileUpload"
+    className="flex items-center justify-center w-full p-6 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+  >
+    <Image
+      src={previewFileIcon || "/documents.png"} // Dynamic preview based on selected file or default
+      alt={t("uploadIconAlt")}
+      width={50}
+      height={50}
+      className="mr-2"
+    />
+    <span className="text-gray-600 text-base">
+      {selectedFileName || t("chooseFile")}
+    </span>
+  </label>
+  <Field name="submitExchangeDetails.otherSpecialConditions.uploadedFiles">
+    {({ field,form }: { field: any; form: FormikProps<any> }) => (
+      <>
+        <input
+          id="fileUpload"
+          name={field.name}
+          type="file"
+          className="hidden"
+          accept=".jpeg,.jpg,.png,.pdf,.doc,.docx"
+          onChange={(
+            event: React.ChangeEvent<HTMLInputElement>
+          ) => {
+            const file = event.target.files?.[0];
+            if (file) {
+              console.log("Selected file type:", file.type);
+              console.log("Selected file name:", file.name);
+
+              // Update Formik field value
+              form.setFieldValue(
+                "submitExchangeDetails.otherSpecialConditions.uploadedFiles",
+                [file] // Replace with a single file
+              );
+
+              // Update FormContext value
+              setFormData((prevData) => ({
+                ...prevData,
+                submitExchangeDetails: {
+                  ...prevData.submitExchangeDetails,
+                  otherSpecialConditions: {
+                    ...prevData.submitExchangeDetails
+                      .otherSpecialConditions,
+                    uploadedFiles: [file], // Replace with the selected file
+                  },
+                },
+              }));
+
+              // Update preview
+              const reader = new FileReader();
+              reader.onload = () => {
+                setPreviewFileIcon(
+                  file.type === "application/pdf"
+                    ? "/pdf.png"
+                    : ["doc", "docx"].includes(
+                        file.name.split(".").pop()!.toLowerCase()
+                      )
+                    ? "/word.png"
+                    : "/documents.png"
+                );
+                setSelectedFileName(file.name);
+              };
+              reader.readAsDataURL(file);
+            }
+          }}
+        />
+      </>
+    )}
+  </Field>
+</div>
+<ErrorMessage
+  name="submitExchangeDetails.otherSpecialConditions.uploadedFiles"
+  component="div"
+  className="text-red-500 text-sm"
+/>
+</div>
+</Formik> */
+
+
+
+
+
+
+
+
+
+
+
+
+//copy of working
+// import {
+//   Formik,
+//   Form,
+//   Field,
+//   ErrorMessage,
+//   FieldInputProps,
+//   FormikProps,
+//   FormikContextType,
+// } from "formik";
+// import * as Yup from "yup";
+// import Image from "next/image";
+// import React, { useState } from "react";
+// import { useTranslations } from "next-intl";
+// import { useDispatch } from "react-redux";
+// import { setCurrentStep } from "@/store/slices/productForProductFormSlice";
+// import { useFormContext } from "./FormContext";
+
+// const validationSchema = Yup.object({
+//   zoneOneBanner: Yup.mixed<File>()
+//     .nullable() // Allow the value to be null
+//     .required("Zone One Banner is required") // Ensure file is provided
+//     .test(
+//       "fileType",
+//       "Unsupported file format. Only images are allowed.",
+//       (value) =>
+//         !value || // Allow null or undefined
+//         (value instanceof File &&
+//           ["image/jpeg", "image/png"].includes(value.type))
+//     )
+//     .test(
+//       "fileSize",
+//       "File size is too large. Maximum size is 5MB.",
+//       (value) =>
+//         !value || // Allow null or undefined
+//         (value instanceof File && value.size <= 5 * 1024 * 1024) // Limit to 5MB
+//     ),
+
+//   title: Yup.string().required("Title is required"),
+//   images: Yup.array()
+//     .of(
+//       Yup.mixed<File>()
+//         .nullable()
+//         .test(
+//           "is-valid-file",
+//           "Each item must be a valid file or null",
+//           (value) => value === null || value instanceof File
+//         )
+//     )
+//     .length(3, "Exactly 3 images are required"),
+
+//   offerType: Yup.string()
+//     .oneOf(["Good", "Service"], "Invalid Offer Type")
+//     .required("Offer Type is required"),
+//   category: Yup.string().required("Category is required"),
+//   subcategory: Yup.string().required("Subcategory is required"),
+//   featuredProductStatus: Yup.string()
+//     .oneOf(["New", "GoodCondition", "Used"], "Invalid Product Status")
+//     .required("Product Status is required"),
+//   additionalDescription: Yup.string().max(500, "Description is too long"),
+//   //   startDate: Yup.date().required("Start date is required"),
+//   //   endDate: Yup.date()
+//   //     .required("End date is required")
+//   //     .min(Yup.ref("startDate"), "End date can't be before start date"),
+//   startDate: Yup.date().required("Start date is required"),
+//   endDate: Yup.date()
+//     .required("End date is required")
+//     .min(Yup.ref("startDate"), "End date can't be before start date")
+//     .test(
+//       "is-greater",
+//       "End date must be greater than start date",
+//       function (value) {
+//         const { startDate } = this.parent;
+//         return value && startDate && new Date(value) > new Date(startDate);
+//       }
+//     ),
+//   formOfExchange: Yup.string()
+//     .oneOf(
+//       ["Exchange", "Classic Sale", "Auction", "Donation"],
+//       "Invalid Exchange Type"
+//     )
+//     .required("Form of Exchange is required"),
+//   materialConditions: Yup.object({
+//     estimatedValue: Yup.number()
+//       .required("Estimated value is required")
+//       .min(0, "Value cannot be negative"),
+//     decision: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid decision")
+//       .required("Decision is required"),
+
+//     depositPayment: Yup.object({
+//       percentage: Yup.number().when("decision", (decision: unknown, schema) => {
+//         // Ensure decision is a string
+//         if (typeof decision === "string" && decision === "yes") {
+//           return schema
+//             .min(0)
+//             .max(100)
+//             .required("Deposit percentage is required");
+//         }
+//         return schema.notRequired();
+//       }),
+//     }),
+//     otherContingentCoverageRequired: Yup.string(),
+//   }),
+
+//   guarantees: Yup.object({
+//     moneyBackGuarantee: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid value")
+//       .required("Money back guarantee is required"),
+//     satisfactionGuarantee: Yup.string()
+//       .oneOf(["yes", "no"], "Invalid value")
+//       .required("Satisfaction guarantee is required"),
+//   }),
+//   paymentDetails: Yup.object({
+//     desiredPaymentForm: Yup.string().required("Payment form is required"),
+//     desiredPaymentType: Yup.string().required("Payment type is required"),
+//   }),
+//   deliveryConditions: Yup.object({
+//     pickup: Yup.object({
+//       allowed: Yup.string().oneOf(["yes", "no"], "Invalid option").required(),
+
+//       details: Yup.object().when("allowed", (allowed, schema) => {
+//         if (typeof allowed === "string" && allowed === "yes") {
+//           return Yup.object({
+//             address: Yup.string().required("Address is required"),
+//             country: Yup.string().required("Country is required"),
+//             city: Yup.string().required("City is required"),
+//             campus: Yup.string().required("Campus is required"),
+//           });
+//         }
+//         return schema; // If "allowed" is not "yes", retain the existing schema
+//       }),
+//     }),
+
+//     delivery: Yup.object({
+//       allowed: Yup.string().oneOf(["yes", "no"], "Invalid option").required(),
+//       //   details: Yup.object().when("allowed", {
+//       //     is: "yes",
+//       //     then: Yup.object({
+//       //       cost: Yup.number()
+//       //         .required("Cost is required")
+//       //         .min(0, "Invalid cost"),
+//       //       country: Yup.string().required("Country is required"),
+//       //       city: Yup.string().required("City is required"),
+//       //     }),
+//       //   }),
+//       details: Yup.object().when("allowed", (allowed, schema) => {
+//         if (Array.isArray(allowed) && allowed.includes("yes")) {
+//           // If 'allowed' is an array and contains "yes"
+//           return schema.shape({
+//             cost: Yup.number()
+//               .required("Cost is required")
+//               .min(0, "Invalid cost"),
+//             country: Yup.string().required("Country is required"),
+//             city: Yup.string().required("City is required"),
+//           });
+//         } else if (typeof allowed === "string" && allowed === "yes") {
+//           // If 'allowed' is a string and equals "yes"
+//           return schema.shape({
+//             cost: Yup.number()
+//               .required("Cost is required")
+//               .min(0, "Invalid cost"),
+//             country: Yup.string().required("Country is required"),
+//             city: Yup.string().required("City is required"),
+//           });
+//         }
+//         return schema; // Keep the existing schema if condition is not met
+//       }),
+//     }),
+//   }),
+//   geolocation: Yup.object({
+//     campus: Yup.string().required("Campus location is required"),
+//     country: Yup.string().required("Country is required"),
+//   }),
+//   otherSpecialConditions: Yup.object({
+//     additionalDescription: Yup.string().required("Description is required"),
+//   }),
+
+//   file: Yup.mixed<File>() // Allow null for initial state
+//     .required("File is required") // Ensure a file is uploaded
+//     .test(
+//       "fileType",
+//       "Unsupported file format. Only PDF or Word documents are allowed.",
+//       (value) =>
+//         !value || // Allow null
+//         (value instanceof File &&
+//           [
+//             "application/pdf", // PDF
+//             "application/msword", // DOC
+//             "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
+//           ].includes(value.type)) // Validate file type
+//     )
+//     .test(
+//       "fileSize",
+//       "File size is too large. Maximum size is 5MB.",
+//       (value) =>
+//         !value || // Allow null
+//         (value instanceof File && value.size <= 5 * 1024 * 1024) // Validate file size
+//     ),
+// });
+
+// const SubmitexchangeForm = () => {
+//   const { formData, setFormData } = useFormContext();
+//   console.log(formData);
+//   const dispatch = useDispatch();
+//   const t = useTranslations("form");
+
+//   const [previewFileIcon, setPreviewFileIcon] = React.useState<string | null>(
+//     null
+//   );
+
+//   const [selectedFileName, setSelectedFileName] = React.useState<string | null>(
+//     null
+//   );
+
+//   //   const [previewImage, setPreviewImage] = useState("/imagetoselect.png");
+
+//   const [previewImages, setPreviewImages] = React.useState<(string | null)[]>([
+//     null,
+//     null,
+//     null,
+//   ]);
+
+//   const [previewZoneOneBanner, setPreviewZoneOneBanner] = React.useState<
+//     string | null
+//   >(null);
+
+//   // Use FormContext as the source of truth for initial values
+//   const initialValues = formData.submitExchangeDetails;
+//   //   const initialValues = {
+//   //     title: "",
+//   //     offerType: "",
+//   //     category: "",
+//   //     subcategory: "",
+//   //     featuredProductStatus: "",
+//   //     additionalDescription: "",
+//   //     images: [null, null, null] as (File | null)[], // Define as array of File or null
+//   //     startDate: "",
+//   //     endDate: "",
+//   //     formOfExchange: "",
+//   //     materialConditions: {
+//   //       estimatedValue: "",
+//   //       decision: "no",
+//   //       depositPayment: {
+//   //         percentage: "",
+//   //       },
+//   //       otherContingentCoverageRequired: "",
+//   //     },
+//   //     guarantees: {
+//   //       moneyBackGuarantee: "no",
+//   //       satisfactionGuarantee: "no",
+//   //     },
+//   //     paymentDetails: {
+//   //       desiredPaymentForm: "",
+//   //       desiredPaymentType: "",
+//   //     },
+//   //     deliveryConditions: {
+//   //       pickup: {
+//   //         allowed: "no",
+//   //         details: {
+//   //           address: "",
+//   //           country: "",
+//   //           city: "",
+//   //           campus: "",
+//   //         },
+//   //       },
+//   //       delivery: {
+//   //         allowed: "no",
+//   //         details: {
+//   //           cost: "",
+//   //           country: "",
+//   //           city: "",
+//   //         },
+//   //       },
+//   //     },
+//   //     geolocation: {
+//   //       campus: "",
+//   //       country: "",
+//   //     },
+//   //     otherSpecialConditions: {
+//   //       additionalDescription: "",
+//   //     },
+//   //     file: null,
+//   //   };
+
+//   //   const handleZoneOneBannerChange = (
+//   //     event: React.ChangeEvent<HTMLInputElement>,
+//   //     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+//   //   ) => {
+//   //     const file = event.target.files?.[0] || null;
+//   //     if (file) {
+//   //       const reader = new FileReader();
+//   //       reader.onload = () => setPreviewZoneOneBanner(reader.result as string); // Set preview
+//   //       reader.readAsDataURL(file);
+//   //     }
+//   //     setFieldValue("zoneOneBanner", file); // Update Formik state
+//   //   };
+//   const handleZoneOneBannerChange = (
+//     event: React.ChangeEvent<HTMLInputElement>,
+//     setFieldValue: (
+//       field: string,
+//       value: any,
+//       shouldValidate?: boolean
+//     ) => void,
+//     setFormData: React.Dispatch<
+//       React.SetStateAction<{
+//         submitExchangeDetails: typeof formData.submitExchangeDetails;
+//         expectedRequirementsDetails: typeof formData.expectedRequirementsDetails;
+//       }>
+//     > // Update FormContext
+//   ) => {
+//     const file = event.target.files?.[0] || null;
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onload = () => setPreviewZoneOneBanner(reader.result as string); // Set preview
+//       reader.readAsDataURL(file);
+//     }
+
+//     // Update Formik state
+//     setFieldValue("zoneOneBanner", file);
+
+//     // Update FormContext
+//     setFormData((prevData) => ({
+//       ...prevData,
+//       submitExchangeDetails: {
+//         ...prevData.submitExchangeDetails,
+//         zoneOneBanner: file,
+//       },
+//       expectedRequirementsDetails: {
+//         ...prevData.expectedRequirementsDetails, // Preserve existing values
+//       },
+//     }));
+//   };
+
+//   const handleImageChange = (
+//     event: React.ChangeEvent<HTMLInputElement>,
+//     index: number,
+//     setFieldValue: (
+//       field: string,
+//       value: any,
+//       shouldValidate?: boolean
+//     ) => void,
+//     setFormData: React.Dispatch<
+//       React.SetStateAction<{
+//         submitExchangeDetails: typeof formData.submitExchangeDetails;
+//         expectedRequirementsDetails: typeof formData.expectedRequirementsDetails;
+//       }>
+//     >
+//   ) => {
+//     const file = event.target.files?.[0]; // Get the selected file
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onload = () => {
+//         setPreviewImages((prev) => {
+//           const updatedPreviews = [...prev]; // Create a copy of the current state
+//           updatedPreviews[index] = reader.result as string; // Update the specific index
+//           return updatedPreviews;
+//         });
+//       };
+//       reader.readAsDataURL(file);
+
+//       // Update Formik's images array
+//       setFieldValue(`images[${index}]`, file);
+
+//       // Update FormContext's images array
+//       setFormData((prevData) => {
+//         const updatedImages = [...prevData.submitExchangeDetails.images]; // Copy current images array
+//         updatedImages[index] = file; // Update the specific index
+
+//         return {
+//           ...prevData,
+//           submitExchangeDetails: {
+//             ...prevData.submitExchangeDetails,
+//             images: updatedImages,
+//           },
+//           expectedRequirementsDetails: {
+//             ...prevData.expectedRequirementsDetails, // Preserve other fields
+//           },
+//         };
+//       });
+//     }
+//   };
+
+//   //   const handleImageChange = (
+//   //     event: React.ChangeEvent<HTMLInputElement>,
+//   //     index: number,
+//   //     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+//   //   ) => {
+//   //     const file = event.target.files?.[0]; // Get the selected file
+//   //     if (file) {
+//   //       const reader = new FileReader();
+//   //       reader.onload = () => {
+//   //         setPreviewImages((prev) => {
+//   //           const updatedPreviews = [...prev]; // Create a copy of the current state
+//   //           updatedPreviews[index] = reader.result as string; // Update the specific index
+//   //           return updatedPreviews;
+//   //         });
+//   //       };
+//   //       reader.readAsDataURL(file);
+
+//   //       // Update the images array in Formik
+//   //       setFieldValue(`images[${index}]`, file);
+//   //     }
+//   //   };
+
+//   const handleFileChange = (
+//     event: React.ChangeEvent<HTMLInputElement>,
+//     setFieldValue: (
+//       field: string,
+//       value: any,
+//       shouldValidate?: boolean
+//     ) => void,
+//     setPreviewFileIcon: (iconPath: string) => void,
+//     setSelectedFileName: (fileName: string) => void
+//   ) => {
+//     const file = event.target.files?.[0]; // Access the first selected file
+//     if (file) {
+//       setFieldValue("file", file, true); // Update Formik's field value
+
+//       // Update preview image and file name dynamically
+//       if (file.type === "application/pdf") {
+//         setPreviewFileIcon("/pdf.png");
+//       } else if (
+//         [
+//           "application/msword",
+//           "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+//         ].includes(file.type)
+//       ) {
+//         setPreviewFileIcon("/word.png");
+//       } else {
+//         setPreviewFileIcon("/documents.png"); // Default icon
+//       }
+
+//       setSelectedFileName(file.name); // Update the selected file name
+//     }
+//   };
+
+//   //   const handleInputChange = (field: string, value: any) => {
+//   //     setFormData((prevData) => ({ ...prevData, [field]: value }));
+//   //   };
+
+//   const handleSubmit = (values: typeof initialValues) => {
+//     console.log("Submitted Values:", values);
+
+//     dispatch(setCurrentStep(2));
+//   };
+
+//   return (
+//     <Formik
+//       initialValues={initialValues}
+//       validationSchema={validationSchema}
+//       onSubmit={handleSubmit}
+//       enableReinitialize
+//     >
+//       {({ setFieldValue, errors, isValid, values }) => (
+//         <Form className="space-y-6 p-4 md:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto border border-gray-200">
+//           {/* Title */}
+//           <div className="text-center">
+//             <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">
+//               {t(`Submit An Exchange Offer`)}
+//             </h2>
+//             <p className="text-gray-600">
+//               {t(
+//                 `Finance Your Projects Or Expenses With Your Unused Services Or Goods!`
+//               )}
+//             </p>
+//           </div>
+
+//           {/* Zone 1 Insertion Banner */}
+//           <div className="text-center p-5">
+//             <h2 className="mb-5 text-lg font-bold">
+//               {t("Zone 1 Insertion Banner Advertising")}
+//             </h2>
+//             <label
+//               htmlFor="zoneOneBanner"
+//               className="inline-block cursor-pointer p-4 border-2 border-dashed border-gray-400 rounded-lg bg-gray-100 hover:bg-gray-200"
+//             >
+//               <Image
+//                 src={previewZoneOneBanner || "/imagetoselect.png"}
+//                 alt="Upload Banner"
+//                 className="max-w-full h-auto mx-auto mb-2"
+//                 width={100}
+//                 height={100}
+//               />
+//               <p className="text-gray-600">Click to upload</p>
+//             </label>
+//             <input
+//               id="zoneOneBanner"
+//               type="file"
+//               name="zoneOneBanner"
+//               accept="image/*"
+//               className="hidden"
+//               //   onChange={(event) => {
+//               //     const file = event.target.files?.[0];
+//               //     if (file) {
+//               //       setFieldValue("zoneOneBanner", file); // Update Formik state
+//               //       const reader = new FileReader();
+//               //       reader.onload = () =>
+//               //         setPreviewZoneOneBanner(reader.result as string);
+//               //       reader.readAsDataURL(file);
+//               //     }
+//               //   }}
+//               onChange={(event) =>
+//                 handleZoneOneBannerChange(event, setFieldValue, setFormData)
+//               }
+//             />
+//             <ErrorMessage
+//               name="zoneOneBanner"
+//               component="div"
+//               className="text-red-500 text-sm mt-2"
+//             />
+//           </div>
+
+//           {/* Title of the Offer */}
+//           <div>
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t(`Title of the Offer`)}
+//             </label>
+//             <Field name="title">
+//               {({ field }: { field: any }) => (
+//                 <input
+//                   {...field} // Ensure Formik handles the value and onChange internally
+//                   placeholder="Enter Title"
+//                   className="w-full p-2 border rounded-md"
+//                   value={formData.submitExchangeDetails.title || ""}
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                     setFormData((prevData) => ({
+//                       ...prevData,
+//                       submitExchangeDetails: {
+//                         ...prevData.submitExchangeDetails,
+//                         title: event.target.value,
+//                       },
+//                     }));
+//                     field.onChange(event); // Ensure Formik's internal state is also updated
+//                   }}
+//                 />
+//               )}
+//             </Field>
+//             <ErrorMessage
+//               name="title"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Offer Type */}
+//           <div>
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t(`What do you Offer`)}
+//             </label>
+//             <div role="group" className="flex flex-wrap gap-4">
+//               <label>
+//                 <Field
+//                   type="radio"
+//                   name="offerType"
+//                   value="Good"
+//                   checked={
+//                     formData.submitExchangeDetails.offerType === "Good" ||
+//                     values.offerType === "Good" // Sync with Formik and FormContext
+//                   }
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                     const selectedValue = event.target.value;
+//                     // Update FormContext
+//                     setFormData((prevData) => ({
+//                       ...prevData,
+//                       submitExchangeDetails: {
+//                         ...prevData.submitExchangeDetails,
+//                         offerType: selectedValue,
+//                       },
+//                     }));
+//                     // Update Formik state
+//                     setFieldValue("offerType", selectedValue, true);
+//                   }}
+//                 />{" "}
+//                 Good
+//               </label>
+//               <label>
+//                 <Field
+//                   type="radio"
+//                   name="offerType"
+//                   value="Service"
+//                   checked={
+//                     formData.submitExchangeDetails.offerType === "Service" ||
+//                     values.offerType === "Service" // Sync with Formik and FormContext
+//                   }
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                     const selectedValue = event.target.value;
+//                     // Update FormContext
+//                     setFormData((prevData) => ({
+//                       ...prevData,
+//                       submitExchangeDetails: {
+//                         ...prevData.submitExchangeDetails,
+//                         offerType: selectedValue,
+//                       },
+//                     }));
+//                     // Update Formik state
+//                     setFieldValue("offerType", selectedValue, true);
+//                   }}
+//                 />{" "}
+//                 Service
+//               </label>
+//             </div>
+//             <ErrorMessage
+//               name="offerType"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Category */}
+//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Category`)}
+//               </label>
+//               <Field
+//                 as="select"
+//                 name="category"
+//                 className="w-full p-2 border rounded-md"
+//                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+//                   const selectedValue = event.target.value;
+
+//                   // Update Formik state
+//                   setFieldValue("category", selectedValue);
+
+//                   // Update FormContext
+//                   setFormData((prevData) => ({
+//                     ...prevData,
+//                     submitExchangeDetails: {
+//                       ...prevData.submitExchangeDetails,
+//                       category: selectedValue,
+//                     },
+//                   }));
+//                 }}
+//                 value={formData.submitExchangeDetails.category || ""}
+//               >
+//                 <option value="" disabled>
+//                   {t(`Select Category`)}
+//                 </option>
+//                 <option value="Electronics">{t(`Electronics`)}</option>
+//                 <option value="Health">{t(`Health`)}</option>
+//               </Field>
+//               <ErrorMessage
+//                 name="category"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`SubCategory`)}
+//               </label>
+//               <Field
+//                 as="select"
+//                 name="subcategory"
+//                 className="w-full p-2 border rounded-md"
+//                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+//                   const selectedValue = event.target.value;
+
+//                   // Update Formik state
+//                   setFieldValue("subcategory", selectedValue);
+
+//                   // Update FormContext
+//                   setFormData((prevData) => ({
+//                     ...prevData,
+//                     submitExchangeDetails: {
+//                       ...prevData.submitExchangeDetails,
+//                       subcategory: selectedValue,
+//                     },
+//                   }));
+//                 }}
+//                 value={formData.submitExchangeDetails.subcategory || ""}
+//               >
+//                 <option value="" disabled>
+//                   {t(`Select SubCategory`)}
+//                 </option>
+//                 <option value="Accessories">{t(`Accessories`)}</option>
+//                 <option value="Health">{t(`Health`)}</option>
+//               </Field>
+//               <ErrorMessage
+//                 name="subcategory"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+//           </div>
+
+//           {/* Featured Product Status */}
+//           <div>
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t(`FeaturedProductStatus`)}
+//             </label>
+//             <Field
+//               as="select"
+//               name="featuredProductStatus"
+//               className="w-full p-2 border rounded-md"
+//               value={formData.submitExchangeDetails.featuredProductStatus || ""}
+//               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+//                 const selectedValue = event.target.value;
+
+//                 // Update Formik state
+//                 setFieldValue("featuredProductStatus", selectedValue);
+
+//                 // Update FormContext
+//                 setFormData((prevData) => ({
+//                   ...prevData,
+//                   submitExchangeDetails: {
+//                     ...prevData.submitExchangeDetails,
+//                     featuredProductStatus: selectedValue,
+//                   },
+//                 }));
+//               }}
+//             >
+//               <option value="" disabled>
+//                 {t(`Select Status`)}
+//               </option>
+//               <option value="New">{t(`New`)}</option>
+//               <option value="GoodCondition">{t(`Good Condition`)}</option>
+//               <option value="Used">{t(`Used`)}</option>
+//             </Field>
+//             <ErrorMessage
+//               name="featuredProductStatus"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+//           {/* Additional Description */}
+//           <div>
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t(`Additional Description`)}
+//             </label>
+//             <Field
+//               as="textarea"
+//               name="additionalDescription"
+//               placeholder="Enter additional details about your offer"
+//               className="w-full p-2 border rounded-md"
+//               value={formData.submitExchangeDetails.additionalDescription || ""} // Sync with FormContext
+//               onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+//                 const value = event.target.value;
+
+//                 // Update FormContext
+//                 setFormData((prevData) => ({
+//                   ...prevData,
+//                   submitExchangeDetails: {
+//                     ...prevData.submitExchangeDetails,
+//                     additionalDescription: value,
+//                   },
+//                 }));
+
+//                 // Update Formik state
+//                 setFieldValue("additionalDescription", value);
+//               }}
+//             />
+//             <ErrorMessage
+//               name="additionalDescription"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Images to Select */}
+//           <div className="mt-4">
+//             <label
+//               htmlFor="offer-images"
+//               className="block text-sm font-semibold text-gray-700 mb-2"
+//             >
+//               {t(`Upload Any Images Of The Offer`)}
+//             </label>
+//             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+//               {Array.from({ length: 3 }).map((_, index) => (
+//                 <div
+//                   key={index}
+//                   className="flex flex-col items-center space-y-2"
+//                 >
+//                   <label
+//                     htmlFor={`offer-image-${index}`}
+//                     className="cursor-pointer flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-400 hover:bg-gray-50"
+//                   >
+//                     <Image
+//                       src={
+//                         previewImages[index] || "/imagetoselect.png" // Show dynamic preview or default placeholder
+//                       }
+//                       alt="Select Image"
+//                       className="object-cover w-20 h-20 rounded-md"
+//                       width={100}
+//                       height={100}
+//                     />
+//                     <span className="text-sm text-gray-500">Select Image</span>
+//                   </label>
+//                   <input
+//                     type="file"
+//                     name={`images[${index}]`}
+//                     id={`offer-image-${index}`}
+//                     accept="image/*"
+//                     className="hidden"
+//                     onChange={(event) =>
+//                       handleImageChange(
+//                         event,
+//                         index,
+//                         setFieldValue,
+//                         setFormData
+//                       )
+//                     }
+//                   />
+//                 </div>
+//               ))}
+//             </div>
+//             <ErrorMessage
+//               name="images"
+//               component="div"
+//               className="text-red-500 text-sm mt-2"
+//             />
+//           </div>
+
+//           {/* Offer Dates */}
+//           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`OfferStartDate`)}
+//               </label>
+//               <Field
+//                 type="date"
+//                 name="startDate"
+//                 className="w-full p-2 border rounded-md"
+//                 value={
+//                   formData.submitExchangeDetails.startDate instanceof Date &&
+//                   !isNaN(formData.submitExchangeDetails.startDate.getTime())
+//                     ? formData.submitExchangeDetails.startDate
+//                         .toISOString()
+//                         .split("T")[0]
+//                     : ""
+//                 }
+//                 // Sync with FormContext
+//                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                   const value = event.target.value
+//                     ? new Date(event.target.value)
+//                     : null;
+
+//                   // Update FormContext
+//                   setFormData((prevData) => ({
+//                     ...prevData,
+//                     submitExchangeDetails: {
+//                       ...prevData.submitExchangeDetails,
+//                       startDate: value,
+//                     },
+//                   }));
+
+//                   // Update Formik state
+//                   setFieldValue("startDate", value);
+//                 }}
+//               />
+//               <ErrorMessage
+//                 name="startDate"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`OfferEndDate`)}
+//               </label>
+//               <Field
+//                 type="date"
+//                 name="endDate"
+//                 className="w-full p-2 border rounded-md"
+//                 value={
+//                   formData.submitExchangeDetails.endDate instanceof Date &&
+//                   !isNaN(formData.submitExchangeDetails.endDate.getTime())
+//                     ? formData.submitExchangeDetails.endDate
+//                         .toISOString()
+//                         .split("T")[0]
+//                     : ""
+//                 }
+//                 // Sync with FormContext
+//                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                   const value = event.target.value
+//                     ? new Date(event.target.value)
+//                     : null;
+
+//                   // Update FormContext
+//                   setFormData((prevData) => ({
+//                     ...prevData,
+//                     submitExchangeDetails: {
+//                       ...prevData.submitExchangeDetails,
+//                       endDate: value,
+//                     },
+//                   }));
+
+//                   // Update Formik state
+//                   setFieldValue("endDate", value);
+//                 }}
+//               />
+//               <ErrorMessage
+//                 name="endDate"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+//           </div>
+
+//           {/* Form of Exchange */}
+//           <div>
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t(`FormOfExchange`)}
+//             </label>
+//             <Field
+//               as="select"
+//               name="formOfExchange"
+//               className="w-full p-2 border rounded-md"
+//               value={formData.submitExchangeDetails.formOfExchange || ""}
+//               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+//                 const value = event.target.value;
+
+//                 // Update FormContext
+//                 setFormData((prevData) => ({
+//                   ...prevData,
+//                   submitExchangeDetails: {
+//                     ...prevData.submitExchangeDetails,
+//                     formOfExchange: value,
+//                   },
+//                 }));
+
+//                 // Update Formik state
+//                 setFieldValue("formOfExchange", value);
+//               }}
+//             >
+//               <option value="" disabled>
+//                 {t(`Select Form of Exchange`)}
+//               </option>
+//               <option value="Exchange">{t(`Exchange`)}</option>
+//               <option value="Classic Sale">{t(`Classic Sale`)}</option>
+//               <option value="Auction">{t(`Auction`)}</option>
+//               <option value="Donation">{t(`Donation`)}</option>
+//             </Field>
+//             <ErrorMessage
+//               name="formOfExchange"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Material Conditions */}
+//           <div className="space-y-4">
+//             <h3 className="text-lg font-bold text-center">
+//               {t("Material conditions of the exchange")}
+//             </h3>
+//             <div>
+//               <label className="font-semibold text-gray-700">
+//                 {t("Estimated value of the exchange")}
+//               </label>
+//               <Field
+//                 name="materialConditions.estimatedValue"
+//                 type="number"
+//                 className="w-full p-2 border rounded-md"
+//                 value={
+//                   formData.submitExchangeDetails.materialConditions
+//                     .estimatedValue || ""
+//                 }
+//                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                   const value = event.target.value;
+
+//                   // Update FormContext
+//                   setFormData((prevData) => ({
+//                     ...prevData,
+//                     submitExchangeDetails: {
+//                       ...prevData.submitExchangeDetails,
+//                       materialConditions: {
+//                         ...prevData.submitExchangeDetails.materialConditions,
+//                         estimatedValue: value,
+//                       },
+//                     },
+//                   }));
+
+//                   // Update Formik state
+//                   setFieldValue("materialConditions.estimatedValue", value);
+//                 }}
+//               />
+//               <ErrorMessage
+//                 name="materialConditions.estimatedValue"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+
+//               <div>
+//                 <label className="block text-gray-700 mb-1">
+//                   {t("Deposit Payment for booking")}
+//                 </label>
+//                 <div role="group" className="flex gap-4">
+//                   <label>
+//                     <Field
+//                       type="radio"
+//                       name="materialConditions.decision"
+//                       value="yes"
+//                       checked={
+//                         formData.submitExchangeDetails.materialConditions
+//                           .decision === "yes"
+//                       }
+//                       onChange={(
+//                         event: React.ChangeEvent<HTMLInputElement>
+//                       ) => {
+//                         const value = event.target.value;
+
+//                         // Update FormContext
+//                         setFormData((prevData) => ({
+//                           ...prevData,
+//                           submitExchangeDetails: {
+//                             ...prevData.submitExchangeDetails,
+//                             materialConditions: {
+//                               ...prevData.submitExchangeDetails
+//                                 .materialConditions,
+//                               decision: value,
+//                             },
+//                           },
+//                         }));
+
+//                         // Update Formik state
+//                         setFieldValue("materialConditions.decision", value);
+//                       }}
+//                     />{" "}
+//                     {t("yes")}
+//                   </label>
+//                   <label>
+//                     <Field
+//                       type="radio"
+//                       name="materialConditions.decision"
+//                       value="no"
+//                       checked={
+//                         formData.submitExchangeDetails.materialConditions
+//                           .decision === "no"
+//                       }
+//                       onChange={(
+//                         event: React.ChangeEvent<HTMLInputElement>
+//                       ) => {
+//                         const value = event.target.value;
+
+//                         // Update FormContext
+//                         setFormData((prevData) => ({
+//                           ...prevData,
+//                           submitExchangeDetails: {
+//                             ...prevData.submitExchangeDetails,
+//                             materialConditions: {
+//                               ...prevData.submitExchangeDetails
+//                                 .materialConditions,
+//                               decision: value,
+//                             },
+//                           },
+//                         }));
+
+//                         // Update Formik state
+//                         setFieldValue("materialConditions.decision", value);
+//                       }}
+//                     />{" "}
+//                     {t("no")}
+//                   </label>
+//                 </div>
+//                 <ErrorMessage
+//                   name="materialConditions.decision"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+//               </div>
+
+//               {formData.submitExchangeDetails.materialConditions.decision ===
+//                 "yes" && (
+//                 <div className="mt-4">
+//                   <label
+//                     htmlFor="percentage"
+//                     className="block text-gray-700 font-semibold mb-1"
+//                   >
+//                     {t("DepositPercentage (%)")}
+//                   </label>
+//                   <Field
+//                     name="materialConditions.depositPayment.percentage"
+//                     type="number"
+//                     className="w-full p-2 border rounded-md"
+//                     min={0}
+//                     max={100}
+//                     value={
+//                       formData.submitExchangeDetails.materialConditions
+//                         .depositPayment.percentage || ""
+//                     }
+//                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                       const value = event.target.value;
+
+//                       // Update FormContext
+//                       setFormData((prevData) => ({
+//                         ...prevData,
+//                         submitExchangeDetails: {
+//                           ...prevData.submitExchangeDetails,
+//                           materialConditions: {
+//                             ...prevData.submitExchangeDetails
+//                               .materialConditions,
+//                             depositPayment: {
+//                               ...prevData.submitExchangeDetails
+//                                 .materialConditions.depositPayment,
+//                               percentage: value,
+//                             },
+//                           },
+//                         },
+//                       }));
+
+//                       // Update Formik state
+//                       setFieldValue(
+//                         "materialConditions.depositPayment.percentage",
+//                         value
+//                       );
+//                     }}
+//                   />
+//                   <ErrorMessage
+//                     name="materialConditions.depositPayment.percentage"
+//                     component="div"
+//                     className="text-red-500 text-sm"
+//                   />
+//                 </div>
+//               )}
+//             </div>
+//           </div>
+
+//           {/* Other Contingent Coverage Required */}
+//           <div className="font-semibold">
+//             <label htmlFor="materialConditions.otherContingentCoverageRequired">
+//               {t(`Other Contingent Coverage Required`)}
+//             </label>
+//             <Field
+//               type="text"
+//               name="materialConditions.otherContingentCoverageRequired"
+//               className="w-full p-2 border rounded-md"
+//               value={
+//                 formData.submitExchangeDetails.materialConditions
+//                   .otherContingentCoverageRequired || ""
+//               } // Sync value with FormContext
+//               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                 const value = event.target.value;
+
+//                 // Update FormContext
+//                 setFormData((prevData) => ({
+//                   ...prevData,
+//                   submitExchangeDetails: {
+//                     ...prevData.submitExchangeDetails,
+//                     materialConditions: {
+//                       ...prevData.submitExchangeDetails.materialConditions,
+//                       otherContingentCoverageRequired: value,
+//                     },
+//                   },
+//                 }));
+
+//                 // Update Formik state
+//                 setFieldValue(
+//                   "materialConditions.otherContingentCoverageRequired",
+//                   value
+//                 );
+//               }}
+//             />
+//             <ErrorMessage
+//               name="materialConditions.otherContingentCoverageRequired"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Guarantees */}
+//           <div className="mt-4">
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t("MoneyBackGuarantee")}
+//             </label>
+//             <div role="group" className="flex gap-4">
+//               <label>
+//                 <Field
+//                   type="radio"
+//                   name="guarantees.moneyBackGuarantee"
+//                   value="yes"
+//                   checked={
+//                     formData.submitExchangeDetails.guarantees
+//                       .moneyBackGuarantee === "yes"
+//                   } // Sync with FormContext
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                     const value = event.target.value;
+
+//                     // Update FormContext
+//                     setFormData((prevData) => ({
+//                       ...prevData,
+//                       submitExchangeDetails: {
+//                         ...prevData.submitExchangeDetails,
+//                         guarantees: {
+//                           ...prevData.submitExchangeDetails.guarantees,
+//                           moneyBackGuarantee: value,
+//                         },
+//                       },
+//                     }));
+
+//                     // Update Formik state
+//                     setFieldValue("guarantees.moneyBackGuarantee", value);
+//                   }}
+//                 />{" "}
+//                 {t("yes")}
+//               </label>
+//               <label>
+//                 <Field
+//                   type="radio"
+//                   name="guarantees.moneyBackGuarantee"
+//                   value="no"
+//                   checked={
+//                     formData.submitExchangeDetails.guarantees
+//                       .moneyBackGuarantee === "no"
+//                   } // Sync with FormContext
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                     const value = event.target.value;
+
+//                     // Update FormContext
+//                     setFormData((prevData) => ({
+//                       ...prevData,
+//                       submitExchangeDetails: {
+//                         ...prevData.submitExchangeDetails,
+//                         guarantees: {
+//                           ...prevData.submitExchangeDetails.guarantees,
+//                           moneyBackGuarantee: value,
+//                         },
+//                       },
+//                     }));
+
+//                     // Update Formik state
+//                     setFieldValue("guarantees.moneyBackGuarantee", value);
+//                   }}
+//                 />{" "}
+//                 {t("no")}
+//               </label>
+//             </div>
+//             <ErrorMessage
+//               name="guarantees.moneyBackGuarantee"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           <div className="mt-4">
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t("SatisfactionGuarantee")}
+//             </label>
+//             <div role="group" className="flex gap-4">
+//               <label>
+//                 <Field
+//                   type="radio"
+//                   name="guarantees.satisfactionGuarantee"
+//                   value="yes"
+//                   checked={
+//                     formData.submitExchangeDetails.guarantees
+//                       .satisfactionGuarantee === "yes"
+//                   } // Sync with FormContext
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                     const value = event.target.value;
+
+//                     // Update FormContext
+//                     setFormData((prevData) => ({
+//                       ...prevData,
+//                       submitExchangeDetails: {
+//                         ...prevData.submitExchangeDetails,
+//                         guarantees: {
+//                           ...prevData.submitExchangeDetails.guarantees,
+//                           satisfactionGuarantee: value,
+//                         },
+//                       },
+//                     }));
+
+//                     // Update Formik state
+//                     setFieldValue("guarantees.satisfactionGuarantee", value);
+//                   }}
+//                 />{" "}
+//                 {t("yes")}
+//               </label>
+//               <label>
+//                 <Field
+//                   type="radio"
+//                   name="guarantees.satisfactionGuarantee"
+//                   value="no"
+//                   checked={
+//                     formData.submitExchangeDetails.guarantees
+//                       .satisfactionGuarantee === "no"
+//                   } // Sync with FormContext
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                     const value = event.target.value;
+
+//                     // Update FormContext
+//                     setFormData((prevData) => ({
+//                       ...prevData,
+//                       submitExchangeDetails: {
+//                         ...prevData.submitExchangeDetails,
+//                         guarantees: {
+//                           ...prevData.submitExchangeDetails.guarantees,
+//                           satisfactionGuarantee: value,
+//                         },
+//                       },
+//                     }));
+
+//                     // Update Formik state
+//                     setFieldValue("guarantees.satisfactionGuarantee", value);
+//                   }}
+//                 />{" "}
+//                 {t("no")}
+//               </label>
+//             </div>
+//             <ErrorMessage
+//               name="guarantees.satisfactionGuarantee"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Payment Details */}
+//           <div className="mt-4">
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t("DesiredPaymentForm")}
+//             </label>
+//             <Field
+//               as="select"
+//               name="paymentDetails.desiredPaymentForm"
+//               className="w-full p-2 border rounded-md"
+//               value={
+//                 formData.submitExchangeDetails.paymentDetails.desiredPaymentForm
+//               } // Sync with FormContext
+//               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+//                 const value = event.target.value;
+
+//                 // Update FormContext
+//                 setFormData((prevData) => ({
+//                   ...prevData,
+//                   submitExchangeDetails: {
+//                     ...prevData.submitExchangeDetails,
+//                     paymentDetails: {
+//                       ...prevData.submitExchangeDetails.paymentDetails,
+//                       desiredPaymentForm: value,
+//                     },
+//                   },
+//                 }));
+
+//                 // Update Formik state
+//                 setFieldValue("paymentDetails.desiredPaymentForm", value);
+//               }}
+//             >
+//               <option value="" disabled>
+//                 {t("Select Payment Form")}
+//               </option>
+//               <option value="exchange-sum">
+//                 {t("Exchange + or - Additional Sum")}
+//               </option>
+//               <option value="exchange-service">
+//                 {t("Exchange + or - Benefit or Service")}
+//               </option>
+//             </Field>
+//             <ErrorMessage
+//               name="paymentDetails.desiredPaymentForm"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           <div className="mt-4">
+//             <label className="block text-gray-700 font-semibold mb-1">
+//               {t("DesiredPaymentType")}
+//             </label>
+//             <Field
+//               as="select"
+//               name="paymentDetails.desiredPaymentType"
+//               className="w-full p-2 border rounded-md"
+//               value={
+//                 formData.submitExchangeDetails.paymentDetails.desiredPaymentType
+//               } // Sync with FormContext
+//               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+//                 const value = event.target.value;
+
+//                 // Update FormContext
+//                 setFormData((prevData) => ({
+//                   ...prevData,
+//                   submitExchangeDetails: {
+//                     ...prevData.submitExchangeDetails,
+//                     paymentDetails: {
+//                       ...prevData.submitExchangeDetails.paymentDetails,
+//                       desiredPaymentType: value,
+//                     },
+//                   },
+//                 }));
+
+//                 // Update Formik state
+//                 setFieldValue("paymentDetails.desiredPaymentType", value);
+//               }}
+//             >
+//               <option value="" disabled>
+//                 {t("Select Payment Type")}
+//               </option>
+//               <option value="hand-to-hand">{t("handToHand")}</option>
+//               <option value="before-delivery">
+//                 {t("Exchange & Payment Before Delivery")}
+//               </option>
+//               <option value="after-delivery">
+//                 {t("Exchange & Payment After Delivery")}
+//               </option>
+//             </Field>
+//             <ErrorMessage
+//               name="paymentDetails.desiredPaymentType"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Delivery Conditions */}
+//           <div className="mt-6">
+//             <h2 className="text-xl font-bold text-center mb-4">
+//               {t("DeliveryConditions")}
+//             </h2>
+
+//             {/* Pickup */}
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t("Pickup")}
+//               </label>
+//               <div className="flex gap-4">
+//                 <label className="flex items-center">
+//                   <Field
+//                     type="radio"
+//                     name="deliveryConditions.pickup.allowed"
+//                     value="yes"
+//                     className="mr-2"
+//                     checked={
+//                       formData.submitExchangeDetails.deliveryConditions.pickup
+//                         .allowed === "yes"
+//                     } // Sync with FormContext
+//                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                       const value = event.target.value as "" | "yes" | "no";
+
+//                       // Update FormContext
+//                       setFormData((prevData) => ({
+//                         ...prevData,
+//                         submitExchangeDetails: {
+//                           ...prevData.submitExchangeDetails,
+//                           deliveryConditions: {
+//                             ...prevData.submitExchangeDetails
+//                               .deliveryConditions,
+//                             pickup: {
+//                               ...prevData.submitExchangeDetails
+//                                 .deliveryConditions.pickup,
+//                               allowed: value,
+//                             },
+//                           },
+//                         },
+//                       }));
+
+//                       // Update Formik state
+//                       setFieldValue("deliveryConditions.pickup.allowed", value);
+//                     }}
+//                   />
+//                   {t("yes")}
+//                 </label>
+
+//                 <label className="flex items-center">
+//                   <Field
+//                     type="radio"
+//                     name="deliveryConditions.pickup.allowed"
+//                     value="no"
+//                     className="mr-2"
+//                     checked={
+//                       formData.submitExchangeDetails.deliveryConditions.pickup
+//                         .allowed === "no"
+//                     } // Sync with FormContext
+//                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                       const value = event.target.value as "" | "yes" | "no";
+
+//                       // Update FormContext
+//                       setFormData((prevData) => ({
+//                         ...prevData,
+//                         submitExchangeDetails: {
+//                           ...prevData.submitExchangeDetails,
+//                           deliveryConditions: {
+//                             ...prevData.submitExchangeDetails
+//                               .deliveryConditions,
+//                             pickup: {
+//                               ...prevData.submitExchangeDetails
+//                                 .deliveryConditions.pickup,
+//                               allowed: value,
+//                             },
+//                           },
+//                         },
+//                       }));
+
+//                       // Update Formik state
+//                       setFieldValue("deliveryConditions.pickup.allowed", value);
+//                     }}
+//                   />
+//                   {t("no")}
+//                 </label>
+//               </div>
+//               <ErrorMessage
+//                 name="deliveryConditions.pickup.allowed"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+
+//               <Field name="deliveryConditions.pickup.allowed">
+//                 {({ field }: { field: FieldInputProps<string> }) =>
+//                   field.value === "yes" && (
+//                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+//                       {(["address", "country", "city", "campus"] as const).map(
+//                         (key) => (
+//                           <div key={key}>
+//                             <label className="block text-gray-700 mb-1">
+//                               {t(key.charAt(0).toUpperCase() + key.slice(1))}
+//                             </label>
+//                             <Field
+//                               name={`deliveryConditions.pickup.details.${key}`}
+//                               className="w-full p-2 border rounded-md"
+//                               value={
+//                                 formData.submitExchangeDetails
+//                                   .deliveryConditions.pickup.details[key]
+//                               } // Sync with FormContext
+//                               onChange={(
+//                                 event: React.ChangeEvent<HTMLInputElement>
+//                               ) => {
+//                                 const value = event.target.value;
+
+//                                 // Update FormContext
+//                                 setFormData((prevData) => ({
+//                                   ...prevData,
+//                                   submitExchangeDetails: {
+//                                     ...prevData.submitExchangeDetails,
+//                                     deliveryConditions: {
+//                                       ...prevData.submitExchangeDetails
+//                                         .deliveryConditions,
+//                                       pickup: {
+//                                         ...prevData.submitExchangeDetails
+//                                           .deliveryConditions.pickup,
+//                                         details: {
+//                                           ...prevData.submitExchangeDetails
+//                                             .deliveryConditions.pickup.details,
+//                                           [key]: value,
+//                                         },
+//                                       },
+//                                     },
+//                                   },
+//                                 }));
+
+//                                 // Update Formik state
+//                                 setFieldValue(
+//                                   `deliveryConditions.pickup.details.${key}`,
+//                                   value
+//                                 );
+//                               }}
+//                             />
+//                             <ErrorMessage
+//                               name={`deliveryConditions.pickup.details.${key}`}
+//                               component="div"
+//                               className="text-red-500 text-sm"
+//                             />
+//                           </div>
+//                         )
+//                       )}
+//                     </div>
+//                   )
+//                 }
+//               </Field>
+//             </div>
+
+//             {/* delivery */}
+//             {/* Delivery */}
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t("Delivery")}
+//               </label>
+//               <div className="flex gap-4">
+//                 <label className="flex items-center">
+//                   <Field
+//                     type="radio"
+//                     name="deliveryConditions.delivery.allowed"
+//                     value="yes"
+//                     className="mr-2"
+//                     checked={
+//                       formData.submitExchangeDetails.deliveryConditions.delivery
+//                         .allowed === "yes"
+//                     }
+//                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                       const value = event.target.value as "" | "yes" | "no";
+//                       // Update FormContext
+//                       setFormData((prevData) => ({
+//                         ...prevData,
+//                         submitExchangeDetails: {
+//                           ...prevData.submitExchangeDetails,
+//                           deliveryConditions: {
+//                             ...prevData.submitExchangeDetails
+//                               .deliveryConditions,
+//                             delivery: {
+//                               ...prevData.submitExchangeDetails
+//                                 .deliveryConditions.delivery,
+//                               allowed: value,
+//                             },
+//                           },
+//                         },
+//                       }));
+//                       // Update Formik
+//                       setFieldValue(
+//                         "deliveryConditions.delivery.allowed",
+//                         value
+//                       );
+//                     }}
+//                   />
+//                   {t("yes")}
+//                 </label>
+//                 <label className="flex items-center">
+//                   <Field
+//                     type="radio"
+//                     name="deliveryConditions.delivery.allowed"
+//                     value="no"
+//                     className="mr-2"
+//                     checked={
+//                       formData.submitExchangeDetails.deliveryConditions.delivery
+//                         .allowed === "no"
+//                     }
+//                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+//                       const value = event.target.value as "" | "yes" | "no";
+//                       // Update FormContext
+//                       setFormData((prevData) => ({
+//                         ...prevData,
+//                         submitExchangeDetails: {
+//                           ...prevData.submitExchangeDetails,
+//                           deliveryConditions: {
+//                             ...prevData.submitExchangeDetails
+//                               .deliveryConditions,
+//                             delivery: {
+//                               ...prevData.submitExchangeDetails
+//                                 .deliveryConditions.delivery,
+//                               allowed: value,
+//                             },
+//                           },
+//                         },
+//                       }));
+//                       // Update Formik
+//                       setFieldValue(
+//                         "deliveryConditions.delivery.allowed",
+//                         value
+//                       );
+//                     }}
+//                   />
+//                   {t("no")}
+//                 </label>
+//               </div>
+//               <ErrorMessage
+//                 name="deliveryConditions.delivery.allowed"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+
+//               <Field name="deliveryConditions.delivery.allowed">
+//                 {({ field }: { field: FieldInputProps<string> }) =>
+//                   field.value === "yes" && (
+//                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+//                       {["cost", "country", "city"].map((key) => (
+//                         <div key={key}>
+//                           <label className="block text-gray-700 mb-1">
+//                             {t(key.charAt(0).toUpperCase() + key.slice(1))}
+//                           </label>
+//                           <Field
+//                             name={`deliveryConditions.delivery.details.${key}`}
+//                             className="w-full p-2 border rounded-md"
+//                             value={
+//                               formData.submitExchangeDetails.deliveryConditions
+//                                 .delivery.details[
+//                                 key as keyof typeof formData.submitExchangeDetails.deliveryConditions.delivery.details
+//                               ]
+//                             }
+//                             onChange={(
+//                               event: React.ChangeEvent<HTMLInputElement>
+//                             ) => {
+//                               const value = event.target.value;
+
+//                               // Update FormContext
+//                               setFormData((prevData) => ({
+//                                 ...prevData,
+//                                 submitExchangeDetails: {
+//                                   ...prevData.submitExchangeDetails,
+//                                   deliveryConditions: {
+//                                     ...prevData.submitExchangeDetails
+//                                       .deliveryConditions,
+//                                     delivery: {
+//                                       ...prevData.submitExchangeDetails
+//                                         .deliveryConditions.delivery,
+//                                       details: {
+//                                         ...prevData.submitExchangeDetails
+//                                           .deliveryConditions.delivery.details,
+//                                         [key]: value,
+//                                       },
+//                                     },
+//                                   },
+//                                 },
+//                               }));
+
+//                               // Update Formik
+//                               setFieldValue(
+//                                 `deliveryConditions.delivery.details.${key}`,
+//                                 value
+//                               );
+//                             }}
+//                           />
+//                           <ErrorMessage
+//                             name={`deliveryConditions.delivery.details.${key}`}
+//                             component="div"
+//                             className="text-red-500 text-sm"
+//                           />
+//                         </div>
+//                       ))}
+//                     </div>
+//                   )
+//                 }
+//               </Field>
+//             </div>
+
+//             {/* Geolocation */}
+//             <div className="mt-4">
+//               <h2 className="text-xl font-bold text-center mb-4">
+//                 {t("Geolocation")}
+//               </h2>
+//               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//                 {(["campus", "country"] as const).map((key) => (
+//                   <div>
+//                     <label className="block text-gray-700 mb-1">
+//                       {t(key.charAt(0).toUpperCase() + key.slice(1))}
+//                     </label>
+//                     <Field
+//                       key={key}
+//                       name={`geolocation.${key}`}
+//                       id={key}
+//                       className="w-full p-2 border rounded-md"
+//                       value={formData.submitExchangeDetails.geolocation[key]} // Sync with FormContext
+//                       onChange={(
+//                         event: React.ChangeEvent<HTMLInputElement>
+//                       ) => {
+//                         const value = event.target.value;
+
+//                         // Update Formik's state
+//                         setFieldValue(`geolocation.${key}`, value);
+
+//                         // Update FormContext
+//                         setFormData((prevData) => ({
+//                           ...prevData,
+//                           submitExchangeDetails: {
+//                             ...prevData.submitExchangeDetails,
+//                             geolocation: {
+//                               ...prevData.submitExchangeDetails.geolocation,
+//                               [key]: value,
+//                             },
+//                           },
+//                         }));
+//                       }}
+//                     />
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+//           </div>
+
+//           {/* Other Special Conditions */}
+//           <div className="mt-4">
+//             <h2 className="text-xl font-bold text-center mb-4">
+//               {t("Other Special Conditions")}
+//             </h2>
+//             <div>
+//               <label
+//                 htmlFor="otherSpecialConditions.additionalDescription"
+//                 className="block text-gray-700 font-semibold mb-1"
+//               >
+//                 {t("Additional Description of the payment or Delivery Method")}
+//               </label>
+//               <Field name="otherSpecialConditions.additionalDescription">
+//                 {({
+//                   field, // Access Formik field props
+//                 }: {
+//                   field: FieldInputProps<string>;
+//                 }) => (
+//                   <textarea
+//                     {...field} // Bind Formik field props
+//                     id="otherSpecialConditions.additionalDescription"
+//                     rows={4}
+//                     className="w-full p-3 border rounded-md resize-none"
+//                     onChange={(
+//                       event: React.ChangeEvent<HTMLTextAreaElement>
+//                     ) => {
+//                       const value = event.target.value;
+
+//                       // Update FormContext
+//                       setFormData((prevData) => ({
+//                         ...prevData,
+//                         submitExchangeDetails: {
+//                           ...prevData.submitExchangeDetails,
+//                           otherSpecialConditions: {
+//                             ...prevData.submitExchangeDetails
+//                               .otherSpecialConditions,
+//                             additionalDescription: value,
+//                           },
+//                         },
+//                       }));
+
+//                       // Update Formik state
+//                       field.onChange(event);
+//                     }}
+//                     value={
+//                       formData.submitExchangeDetails.otherSpecialConditions
+//                         .additionalDescription
+//                     } // Sync with FormContext
+//                   />
+//                 )}
+//               </Field>
+//               <ErrorMessage
+//                 name="otherSpecialConditions.additionalDescription"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+//           </div>
+
+//           {/* File Upload */}
+//           <div className="mt-4">
+//             <label
+//               htmlFor="fileUpload"
+//               className="block text-gray-700 font-semibold mb-1"
+//             >
+//               {t("uploadFile")}
+//             </label>
+//             <div className="flex items-center space-x-6">
+//               <label
+//                 htmlFor="fileUpload"
+//                 className="flex items-center justify-center w-full p-6 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+//               >
+//                 <Image
+//                   src={previewFileIcon || "/documents.png"} // Dynamic preview based on selected file or default
+//                   alt={t("uploadIconAlt")}
+//                   width={50}
+//                   height={50}
+//                   className="mr-2"
+//                 />
+//                 <span className="text-gray-600 text-base">
+//                   {selectedFileName || t("chooseFile")}{" "}
+//                   {/* Dynamic file name or default */}
+//                 </span>
+//               </label>
+//               <Field name="file">
+//                 {({ field, form }: { field: any; form: FormikProps<any> }) => (
+//                   <>
+//                     <input
+//                       id="fileUpload"
+//                       name={field.name}
+//                       type="file"
+//                       className="hidden"
+//                       accept=".pdf,.doc,.docx"
+//                       onChange={(
+//                         event: React.ChangeEvent<HTMLInputElement>
+//                       ) => {
+//                         const file = event.target.files?.[0];
+//                         if (file) {
+//                           // Update FormContext
+//                           setFormData((prevData) => ({
+//                             ...prevData,
+//                             submitExchangeDetails: {
+//                               ...prevData.submitExchangeDetails,
+//                               file: file,
+//                             },
+//                           }));
+
+//                           // Update Formik field value
+//                           form.setFieldValue(field.name, file);
+
+//                           // Update preview
+//                           const reader = new FileReader();
+//                           reader.onload = () => {
+//                             setPreviewFileIcon(
+//                               file.type === "application/pdf"
+//                                 ? "/pdf.png"
+//                                 : ["doc", "docx"].includes(
+//                                     file.name.split(".").pop()!
+//                                   )
+//                                 ? "/word.png"
+//                                 : "/documents.png"
+//                             );
+//                             setSelectedFileName(file.name);
+//                           };
+//                           reader.readAsDataURL(file);
+//                         }
+//                       }}
+//                     />
+//                   </>
+//                 )}
+//               </Field>
+//             </div>
+//             <ErrorMessage
+//               name="file"
+//               component="div"
+//               className="text-red-500 text-sm"
+//             />
+//           </div>
+
+//           {/* Submit Button */}
+//           <div className="flex justify-end">
+//             <button
+//               type="submit"
+//               className="bg-blue-600 text-white px-4 py-2 rounded-md"
+//               onClick={() => console.log("Submit button clicked")}
+//             >
+//               Next
+//             </button>
+//           </div>
+//           {/* Debugging Section */}
+//           <pre>{JSON.stringify(errors, null, 2)}</pre>
+//           <p>Form is {isValid ? "valid" : "invalid"}</p>
+//         </Form>
+//       )}
+//     </Formik>
+//   );
+// };
+
+// export default SubmitexchangeForm;
+
+// import {
+//     Formik,
+//     Form,
+//     Field,
+//     ErrorMessage,
+//     FieldInputProps,
+//     FormikProps,
+//   } from "formik";
+//   import * as Yup from "yup";
+//   import Image from "next/image";
+//   import React, { useState } from "react";
+//   import { useTranslations } from "next-intl";
+//   import { useDispatch } from "react-redux";
+//   import { setCurrentStep } from "@/store/slices/productForProductFormSlice";
+//   import { useFormContext } from "./FormContext";
+
+//   const validationSchema = Yup.object({
+//     zoneOneBanner: Yup.mixed<File>()
+//       .nullable() // Allow the value to be null
+//       .required("Zone One Banner is required") // Ensure file is provided
+//       .test(
+//         "fileType",
+//         "Unsupported file format. Only images are allowed.",
+//         (value) =>
+//           !value || // Allow null or undefined
+//           (value instanceof File &&
+//             ["image/jpeg", "image/png", "image/jpg"].includes(value.type))
+//       )
+//       .test(
+//         "fileSize",
+//         "File size is too large. Maximum size is 5MB.",
+//         (value) =>
+//           !value || // Allow null or undefined
+//           (value instanceof File && value.size <= 5 * 1024 * 1024) // Limit to 5MB
+//       ),
+
+//     title: Yup.string().required("Title is required"),
+//     images: Yup.array()
+//       .of(
+//         Yup.mixed<File>()
+//           .nullable()
+//           .test(
+//             "is-valid-file",
+//             "Each item must be a valid file or null",
+//             (value) => value === null || value instanceof File
+//           )
+//       )
+//       .length(3, "Exactly 3 images are required"),
+
+//     offerType: Yup.string()
+//       .oneOf(["Good", "Service"], "Invalid Offer Type")
+//       .required("Offer Type is required"),
+//     category: Yup.string().required("Category is required"),
+//     subcategory: Yup.string().required("Subcategory is required"),
+//     featuredProductStatus: Yup.string()
+//       .oneOf(["New", "GoodCondition", "Used"], "Invalid Product Status")
+//       .required("Product Status is required"),
+//     additionalDescription: Yup.string().max(500, "Description is too long"),
+//     //   startDate: Yup.date().required("Start date is required"),
+//     //   endDate: Yup.date()
+//     //     .required("End date is required")
+//     //     .min(Yup.ref("startDate"), "End date can't be before start date"),
+//     startDate: Yup.date().required("Start date is required"),
+//     endDate: Yup.date()
+//       .required("End date is required")
+//       .min(Yup.ref("startDate"), "End date can't be before start date")
+//       .test(
+//         "is-greater",
+//         "End date must be greater than start date",
+//         function (value) {
+//           const { startDate } = this.parent;
+//           return value && startDate && new Date(value) > new Date(startDate);
+//         }
+//       ),
+//     formOfExchange: Yup.string()
+//       .oneOf(
+//         ["Exchange", "Classic Sale", "Auction", "Donation"],
+//         "Invalid Exchange Type"
+//       )
+//       .required("Form of Exchange is required"),
+//     materialConditions: Yup.object({
+//       estimatedValue: Yup.number()
+//         .required("Estimated value is required")
+//         .min(0, "Value cannot be negative"),
+//       decision: Yup.string()
+//         .oneOf(["yes", "no"], "Invalid decision")
+//         .required("Decision is required"),
+
+//       depositPayment: Yup.object({
+//         percentage: Yup.number().when("decision", (decision: unknown, schema) => {
+//           // Ensure decision is a string
+//           if (typeof decision === "string" && decision === "yes") {
+//             return schema
+//               .min(0)
+//               .max(100)
+//               .required("Deposit percentage is required");
+//           }
+//           return schema.notRequired();
+//         }),
+//       }),
+//       otherContingentCoverageRequired: Yup.string(),
+//     }),
+
+//     guarantees: Yup.object({
+//       moneyBackGuarantee: Yup.string()
+//         .oneOf(["yes", "no"], "Invalid value")
+//         .required("Money back guarantee is required"),
+//       satisfactionGuarantee: Yup.string()
+//         .oneOf(["yes", "no"], "Invalid value")
+//         .required("Satisfaction guarantee is required"),
+//     }),
+//     paymentDetails: Yup.object({
+//       desiredPaymentForm: Yup.string().required("Payment form is required"),
+//       desiredPaymentType: Yup.string().required("Payment type is required"),
+//     }),
+//     deliveryConditions: Yup.object({
+//       pickup: Yup.object({
+//         allowed: Yup.string().oneOf(["yes", "no"], "Invalid option").required(),
+
+//         details: Yup.object().when("allowed", (allowed, schema) => {
+//           if (typeof allowed === "string" && allowed === "yes") {
+//             return Yup.object({
+//               address: Yup.string().required("Address is required"),
+//               country: Yup.string().required("Country is required"),
+//               city: Yup.string().required("City is required"),
+//               campus: Yup.string().required("Campus is required"),
+//             });
+//           }
+//           return schema; // If "allowed" is not "yes", retain the existing schema
+//         }),
+//       }),
+
+//       delivery: Yup.object({
+//         allowed: Yup.string().oneOf(["yes", "no"], "Invalid option").required(),
+//         //   details: Yup.object().when("allowed", {
+//         //     is: "yes",
+//         //     then: Yup.object({
+//         //       cost: Yup.number()
+//         //         .required("Cost is required")
+//         //         .min(0, "Invalid cost"),
+//         //       country: Yup.string().required("Country is required"),
+//         //       city: Yup.string().required("City is required"),
+//         //     }),
+//         //   }),
+//         details: Yup.object().when("allowed", (allowed, schema) => {
+//           if (Array.isArray(allowed) && allowed.includes("yes")) {
+//             // If 'allowed' is an array and contains "yes"
+//             return schema.shape({
+//               cost: Yup.number()
+//                 .required("Cost is required")
+//                 .min(0, "Invalid cost"),
+//               country: Yup.string().required("Country is required"),
+//               city: Yup.string().required("City is required"),
+//             });
+//           } else if (typeof allowed === "string" && allowed === "yes") {
+//             // If 'allowed' is a string and equals "yes"
+//             return schema.shape({
+//               cost: Yup.number()
+//                 .required("Cost is required")
+//                 .min(0, "Invalid cost"),
+//               country: Yup.string().required("Country is required"),
+//               city: Yup.string().required("City is required"),
+//             });
+//           }
+//           return schema; // Keep the existing schema if condition is not met
+//         }),
+//       }),
+//     }),
+//     geolocation: Yup.object({
+//       campus: Yup.string().required("Campus location is required"),
+//       country: Yup.string().required("Country is required"),
+//     }),
+//     otherSpecialConditions: Yup.object({
+//       additionalDescription: Yup.string().required("Description is required"),
+//     }),
+
+//     file: Yup.mixed<File>() // Allow null for initial state
+//       .required("File is required") // Ensure a file is uploaded
+//       .test(
+//         "fileType",
+//         "Unsupported file format. Only PDF or Word documents are allowed.",
+//         (value) =>
+//           !value || // Allow null
+//           (value instanceof File &&
+//             [
+//               "application/pdf", // PDF
+//               "application/msword", // DOC
+//               "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
+//             ].includes(value.type)) // Validate file type
+//       )
+//       .test(
+//         "fileSize",
+//         "File size is too large. Maximum size is 5MB.",
+//         (value) =>
+//           !value || // Allow null
+//           (value instanceof File && value.size <= 5 * 1024 * 1024) // Validate file size
+//       ),
+//   });
+
+//   const SubmitexchangeForm = () => {
+//       const { formData, setFormData } = useFormContext();
+//     const dispatch = useDispatch();
+//     const t = useTranslations("form");
+
+//     const [previewFileIcon, setPreviewFileIcon] = React.useState<string | null>(
+//       null
+//     );
+
+//     const [selectedFileName, setSelectedFileName] = React.useState<string | null>(
+//       null
+//     );
+
+//     //   const [previewImage, setPreviewImage] = useState("/imagetoselect.png");
+
+//     const [previewImages, setPreviewImages] = React.useState<(string | null)[]>([
+//       null,
+//       null,
+//       null,
+//     ]);
+
+//     const [previewZoneOneBanner, setPreviewZoneOneBanner] = React.useState<
+//       string | null
+//     >(null);
+
+//     const initialValues = {
+//       title: "",
+//       offerType: "",
+//       category: "",
+//       subcategory: "",
+//       featuredProductStatus: "",
+//       additionalDescription: "",
+//       images: [null, null, null] as (File | null)[], // Define as array of File or null
+//       startDate: "",
+//       endDate: "",
+//       formOfExchange: "",
+//       materialConditions: {
+//         estimatedValue: "",
+//         decision: "no",
+//         depositPayment: {
+//           percentage: "",
+//         },
+//         otherContingentCoverageRequired: "",
+//       },
+//       guarantees: {
+//         moneyBackGuarantee: "no",
+//         satisfactionGuarantee: "no",
+//       },
+//       paymentDetails: {
+//         desiredPaymentForm: "",
+//         desiredPaymentType: "",
+//       },
+//       deliveryConditions: {
+//         pickup: {
+//           allowed: "no",
+//           details: {
+//             address: "",
+//             country: "",
+//             city: "",
+//             campus: "",
+//           },
+//         },
+//         delivery: {
+//           allowed: "no",
+//           details: {
+//             cost: "",
+//             country: "",
+//             city: "",
+//           },
+//         },
+//       },
+//       geolocation: {
+//         campus: "",
+//         country: "",
+//       },
+//       otherSpecialConditions: {
+//         additionalDescription: "",
+//       },
+//       file: null,
+//     };
+
+//     const handleZoneOneBannerChange = (
+//       event: React.ChangeEvent<HTMLInputElement>,
+//       setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+//     ) => {
+//       const file = event.target.files?.[0] || null;
+//       if (file) {
+//         const reader = new FileReader();
+//         reader.onload = () => setPreviewZoneOneBanner(reader.result as string); // Set preview
+//         reader.readAsDataURL(file);
+//       }
+//       setFieldValue("zoneOneBanner", file); // Update Formik state
+//     };
+
+//     const handleImageChange = (
+//       event: React.ChangeEvent<HTMLInputElement>,
+//       index: number,
+//       setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+//     ) => {
+//       const file = event.target.files?.[0]; // Get the selected file
+//       if (file) {
+//         const reader = new FileReader();
+//         reader.onload = () => {
+//           setPreviewImages((prev) => {
+//             const updatedPreviews = [...prev]; // Create a copy of the current state
+//             updatedPreviews[index] = reader.result as string; // Update the specific index
+//             return updatedPreviews;
+//           });
+//         };
+//         reader.readAsDataURL(file);
+
+//         // Update the images array in Formik
+//         setFieldValue(`images[${index}]`, file);
+//       }
+//     };
+
+//     const handleFileChange = (
+//       event: React.ChangeEvent<HTMLInputElement>,
+//       setFieldValue: (
+//         field: string,
+//         value: any,
+//         shouldValidate?: boolean
+//       ) => void,
+//       setPreviewFileIcon: (iconPath: string) => void,
+//       setSelectedFileName: (fileName: string) => void
+//     ) => {
+//       const file = event.target.files?.[0]; // Access the first selected file
+//       if (file) {
+//         setFieldValue("file", file, true); // Update Formik's field value
+
+//         // Update preview image and file name dynamically
+//         if (file.type === "application/pdf") {
+//           setPreviewFileIcon("/pdf.png");
+//         } else if (
+//           [
+//             "application/msword",
+//             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+//           ].includes(file.type)
+//         ) {
+//           setPreviewFileIcon("/word.png");
+//         } else {
+//           setPreviewFileIcon("/documents.png"); // Default icon
+//         }
+
+//         setSelectedFileName(file.name); // Update the selected file name
+//       }
+//     };
+
+//     //   const handleInputChange = (field: string, value: any) => {
+//     //     setFormData((prevData) => ({ ...prevData, [field]: value }));
+//     //   };
+
+//     const handleSubmit = (values: typeof initialValues) => {
+//       console.log("Submitted Values:", values);
+
+//       dispatch(setCurrentStep(2));
+//     };
+
+//     return (
+//       <Formik
+//         initialValues={initialValues}
+//         validationSchema={validationSchema}
+//         onSubmit={handleSubmit}
+//       >
+//         {({ setFieldValue, errors, isValid }) => (
+//           <Form className="space-y-6 p-4 md:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto border border-gray-200">
+//             {/* Title */}
+//             <div className="text-center">
+//               <h2 className="text-xl md:text-2xl font-bold text-blue-700 mb-4">
+//                 {t(`Submit An Exchange Offer`)}
+//               </h2>
+//               <p className="text-gray-600">
+//                 {t(
+//                   `Finance Your Projects Or Expenses With Your Unused Services Or Goods!`
+//                 )}
+//               </p>
+//             </div>
+
+//             {/* Zone 1 Insertion Banner */}
+//             <div className="text-center p-5">
+//               <h2 className="mb-5 text-lg font-bold">
+//                 {t("Zone 1 Insertion Banner Advertising")}
+//               </h2>
+//               <label
+//                 htmlFor="zoneOneBanner"
+//                 className="inline-block cursor-pointer p-4 border-2 border-dashed border-gray-400 rounded-lg bg-gray-100 hover:bg-gray-200"
+//               >
+//                 <Image
+//                   src={previewZoneOneBanner || "/imagetoselect.png"} // Use dynamic preview or default placeholder
+//                   alt="Upload Banner"
+//                   className="max-w-full h-auto mx-auto mb-2"
+//                   width={100}
+//                   height={100}
+//                 />
+//                 <p className="text-gray-600">Click to upload</p>
+//               </label>
+//               <input
+//                 id="zoneOneBanner"
+//                 type="file"
+//                 name="zoneOneBanner"
+//                 accept="image/*"
+//                 className="hidden"
+//                 onChange={(event) =>
+//                   handleZoneOneBannerChange(event, setFieldValue)
+//                 }
+//               />
+//               <ErrorMessage
+//                 name="zoneOneBanner"
+//                 component="div"
+//                 className="text-red-500 text-sm mt-2"
+//               />
+//             </div>
+
+//             {/* Title of the Offer */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Title of the Offer`)}
+//               </label>
+//               <Field
+//                 name="title"
+//                 placeholder="Enter Title"
+//                 className="w-full p-2 border rounded-md"
+//               />
+//               <ErrorMessage
+//                 name="title"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Offer Type */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`What do you Offer`)}
+//               </label>
+//               <div role="group" className="flex flex-wrap gap-4">
+//                 <label>
+//                   <Field type="radio" name="offerType" value="Good" /> Good
+//                 </label>
+//                 <label>
+//                   <Field type="radio" name="offerType" value="Service" /> Service
+//                 </label>
+//               </div>
+//               <ErrorMessage
+//                 name="offerType"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Category and Subcategory */}
+//             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`Category`)}
+//                 </label>
+//                 <Field
+//                   as="select"
+//                   name="category"
+//                   className="w-full p-2 border rounded-md"
+//                 >
+//                   <option value="" disabled>
+//                     {t(`Select Category`)}
+//                   </option>
+//                   <option value="Electronics">{t(`Electronics`)}</option>
+//                   <option value="Health">{t(`Health`)}</option>
+//                 </Field>
+//                 <ErrorMessage
+//                   name="category"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+//               </div>
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`SubCategory`)}
+//                 </label>
+//                 <Field
+//                   as="select"
+//                   name="subcategory"
+//                   className="w-full p-2 border rounded-md"
+//                 >
+//                   <option value="" disabled>
+//                     {t(`Select SubCategory`)}
+//                   </option>
+//                   <option value="Accessories">{t(`Accessories`)}</option>
+//                   <option value="Health">{t(`Health`)}</option>
+//                 </Field>
+//                 <ErrorMessage
+//                   name="subcategory"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Featured Product Status */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`FeaturedProductStatus`)}
+//               </label>
+//               <Field
+//                 as="select"
+//                 name="featuredProductStatus"
+//                 className="w-full p-2 border rounded-md"
+//               >
+//                 <option value="" disabled>
+//                   {t(`Select Status`)}
+//                 </option>
+//                 <option value="New">{t(`New`)}</option>
+//                 <option value="GoodCondition">{t(`Good Condition`)}</option>
+//                 <option value="Used">{t(`Used`)}</option>
+//               </Field>
+//               <ErrorMessage
+//                 name="featuredProductStatus"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Additional Description */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`Additional Description`)}
+//               </label>
+//               <Field
+//                 as="textarea"
+//                 name="additionalDescription"
+//                 placeholder="Enter additional details about your offer"
+//                 className="w-full p-2 border rounded-md"
+//               />
+//               <ErrorMessage
+//                 name="additionalDescription"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* images to select */}
+//             <div className="mt-4">
+//               <label
+//                 htmlFor="offer-images"
+//                 className="block text-sm font-semibold text-gray-700 mb-2"
+//               >
+//                 {t(`Upload Any Images Of The Offer`)}
+//               </label>
+//               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+//                 {Array.from({ length: 3 }).map((_, index) => (
+//                   <div
+//                     key={index}
+//                     className="flex flex-col items-center space-y-2"
+//                   >
+//                     <label
+//                       htmlFor={`offer-image-${index}`}
+//                       className="cursor-pointer flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-md hover:border-blue-400 hover:bg-gray-50"
+//                     >
+//                       <Image
+//                         src={
+//                           previewImages[index] || "/imagetoselect.png" // Show dynamic preview or default placeholder
+//                         }
+//                         alt="Select Image"
+//                         className="object-cover w-20 h-20 rounded-md"
+//                         width={100}
+//                         height={100}
+//                       />
+//                       <span className="text-sm text-gray-500">Select Image</span>
+//                     </label>
+//                     <input
+//                       type="file"
+//                       name={`images[${index}]`}
+//                       id={`offer-image-${index}`}
+//                       accept="image/*"
+//                       className="hidden"
+//                       onChange={(event) =>
+//                         handleImageChange(event, index, setFieldValue)
+//                       }
+//                     />
+//                   </div>
+//                 ))}
+//               </div>
+//               {/* Error Message for Images */}
+//               <ErrorMessage
+//                 name="images"
+//                 component="div"
+//                 className="text-red-500 text-sm mt-2"
+//               />
+//             </div>
+
+//             {/* Offer Dates */}
+//             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`OfferStartDate`)}
+//                 </label>
+//                 <Field
+//                   type="date"
+//                   name="startDate"
+//                   className="w-full p-2 border rounded-md"
+//                 />
+//                 <ErrorMessage
+//                   name="startDate"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+//               </div>
+//               <div>
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t(`OfferEndDate`)}
+//                 </label>
+//                 <Field
+//                   type="date"
+//                   name="endDate"
+//                   className="w-full p-2 border rounded-md"
+//                 />
+//                 <ErrorMessage
+//                   name="endDate"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Form of Exchange */}
+//             <div>
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t(`FormOfExchange`)}
+//               </label>
+//               <Field
+//                 as="select"
+//                 name="formOfExchange"
+//                 className="w-full p-2 border rounded-md"
+//               >
+//                 <option value="" disabled>
+//                   {t(`Select Form of Exchange`)}
+//                 </option>
+//                 <option value="Exchange">{t(`Exchange`)}</option>
+//                 <option value="Classic Sale">{t(`Classic Sale`)}</option>
+//                 <option value="Auction">{t(`Auction`)}</option>
+//                 <option value="Donation">{t(`Donation`)}</option>
+//               </Field>
+//               <ErrorMessage
+//                 name="formOfExchange"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Material Conditions */}
+//             <div className="space-y-4">
+//               <h3 className="text-lg font-bold text-center">
+//                 {t("Material conditions of the exchange")}
+//               </h3>
+//               <div>
+//                 <label className="font-semibold text-gray-700">
+//                   {t("Estimated value of the exchange")}
+//                 </label>
+//                 <Field
+//                   name="materialConditions.estimatedValue"
+//                   type="number"
+//                   className="w-full p-2 border rounded-md"
+//                 />
+//                 <ErrorMessage
+//                   name="materialConditions.estimatedValue"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+
+//                 <div>
+//                   <label className="block text-gray-700 mb-1">
+//                     {t("Deposit Payment for booking")}
+//                   </label>
+//                   <div role="group" className="flex gap-4">
+//                     <label>
+//                       <Field
+//                         type="radio"
+//                         name="materialConditions.decision"
+//                         value="yes"
+//                       />{" "}
+//                       {t("yes")}
+//                     </label>
+//                     <label>
+//                       <Field
+//                         type="radio"
+//                         name="materialConditions.decision"
+//                         value="no"
+//                       />{" "}
+//                       {t("no")}
+//                     </label>
+//                   </div>
+//                   <ErrorMessage
+//                     name="materialConditions.decision"
+//                     component="div"
+//                     className="text-red-500 text-sm"
+//                   />
+//                 </div>
+
+//                 <Field name="materialConditions.decision">
+//                   {({ field }: { field: FieldInputProps<string> }) =>
+//                     field.value === "yes" && (
+//                       <div className="mt-4">
+//                         <label
+//                           htmlFor="percentage"
+//                           className="block text-gray-700 font-semibold mb-1"
+//                         >
+//                           {t("DepositPercentage (%)")}
+//                         </label>
+//                         <Field
+//                           name="materialConditions.depositPayment.percentage"
+//                           type="number"
+//                           className="w-full p-2 border rounded-md"
+//                           min={0}
+//                           max={100}
+//                         />
+//                         <ErrorMessage
+//                           name="materialConditions.depositPayment.percentage"
+//                           component="div"
+//                           className="text-red-500 text-sm"
+//                         />
+//                       </div>
+//                     )
+//                   }
+//                 </Field>
+//               </div>
+//             </div>
+
+//             {/* Other Contingent Coverage Required */}
+//             <div className="font-semibold">
+//               <label htmlFor="materialConditions.otherContingentCoverageRequired">
+//                 {t(`Other Contingent Coverage Required`)}
+//               </label>
+//               <Field
+//                 type="text"
+//                 name="materialConditions.otherContingentCoverageRequired"
+//                 className="w-full p-2 border rounded-md"
+//               />
+//               <ErrorMessage
+//                 name="materialConditions.otherContingentCoverageRequired"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Guarantees */}
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t("MoneyBackGuarantee")}
+//               </label>
+//               <div role="group" className="flex gap-4">
+//                 <label>
+//                   <Field
+//                     type="radio"
+//                     name="guarantees.moneyBackGuarantee"
+//                     value="yes"
+//                   />{" "}
+//                   {t("yes")}
+//                 </label>
+//                 <label>
+//                   <Field
+//                     type="radio"
+//                     name="guarantees.moneyBackGuarantee"
+//                     value="no"
+//                   />{" "}
+//                   {t("no")}
+//                 </label>
+//               </div>
+//               <ErrorMessage
+//                 name="guarantees.moneyBackGuarantee"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t("SatisfactionGuarantee")}
+//               </label>
+//               <div role="group" className="flex gap-4">
+//                 <label>
+//                   <Field
+//                     type="radio"
+//                     name="guarantees.satisfactionGuarantee"
+//                     value="yes"
+//                   />{" "}
+//                   {t("yes")}
+//                 </label>
+//                 <label>
+//                   <Field
+//                     type="radio"
+//                     name="guarantees.satisfactionGuarantee"
+//                     value="no"
+//                   />{" "}
+//                   {t("no")}
+//                 </label>
+//               </div>
+//               <ErrorMessage
+//                 name="guarantees.satisfactionGuarantee"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Payment Details */}
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t("DesiredPaymentForm")}
+//               </label>
+//               <Field
+//                 as="select"
+//                 name="paymentDetails.desiredPaymentForm"
+//                 className="w-full p-2 border rounded-md"
+//               >
+//                 <option value="" disabled>
+//                   {t("Select Payment Form")}
+//                 </option>
+//                 <option value="exchange-sum">
+//                   {t("Exchange + or - Additional Sum")}
+//                 </option>
+//                 <option value="exchange-service">
+//                   {t("Exchange + or - Benefit or Service")}
+//                 </option>
+//               </Field>
+//               <ErrorMessage
+//                 name="paymentDetails.desiredPaymentForm"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+//             {/* payment type */}
+//             <div className="mt-4">
+//               <label className="block text-gray-700 font-semibold mb-1">
+//                 {t("DesiredPaymentType")}
+//               </label>
+//               <Field
+//                 as="select"
+//                 name="paymentDetails.desiredPaymentType"
+//                 className="w-full p-2 border rounded-md"
+//               >
+//                 <option value="" disabled>
+//                   {t("Select Payment Type")}
+//                 </option>
+//                 <option value="hand-to-hand">{t("handToHand")}</option>
+//                 <option value="before-delivery">
+//                   {t("Exchange & Payment Before Delivery")}
+//                 </option>
+//                 <option value="after-delivery">
+//                   {t("Exchange & Payment After Delivery")}
+//                 </option>
+//               </Field>
+//               <ErrorMessage
+//                 name="paymentDetails.desiredPaymentType"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Delivery Conditions */}
+//             <div className="mt-6">
+//               <h2 className="text-xl font-bold text-center mb-4">
+//                 {t("DeliveryConditions")}
+//               </h2>
+
+//               {/* Pickup */}
+//               <div className="mt-4">
+//                 <label className="block text-gray-700 font-semibold mb-1">
+//                   {t("Pickup")}
+//                 </label>
+//                 <div className="flex gap-4">
+//                   <label className="flex items-center">
+//                     <Field
+//                       type="radio"
+//                       name="deliveryConditions.pickup.allowed"
+//                       value="yes"
+//                       className="mr-2"
+//                     />
+//                     {t("yes")}
+//                   </label>
+//                   <label className="flex items-center">
+//                     <Field
+//                       type="radio"
+//                       name="deliveryConditions.pickup.allowed"
+//                       value="no"
+//                       className="mr-2"
+//                     />
+//                     {t("no")}
+//                   </label>
+//                 </div>
+//                 <ErrorMessage
+//                   name="deliveryConditions.pickup.allowed"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+
+//                 <Field name="deliveryConditions.pickup.allowed">
+//                   {({ field }: { field: FieldInputProps<string> }) =>
+//                     field.value === "yes" && (
+//                       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+//                         {["address", "country", "city", "campus"].map((key) => (
+//                           <div key={key}>
+//                             <label className="block text-gray-700 mb-1">
+//                               {t(key.charAt(0).toUpperCase() + key.slice(1))}
+//                             </label>
+//                             <Field
+//                               name={`deliveryConditions.pickup.details.${key}`}
+//                               className="w-full p-2 border rounded-md"
+//                             />
+//                             <ErrorMessage
+//                               name={`deliveryConditions.pickup.details.${key}`}
+//                               component="div"
+//                               className="text-red-500 text-sm"
+//                             />
+//                           </div>
+//                         ))}
+//                       </div>
+//                     )
+//                   }
+//                 </Field>
+//               </div>
+
+//   {/* Delivery */}
+//   <div className="mt-4">
+//     <label className="block text-gray-700 font-semibold mb-1">
+//       {t("Delivery")}
+//     </label>
+//     <div className="flex gap-4">
+//       <label className="flex items-center">
+//         <Field
+//           type="radio"
+//           name="deliveryConditions.delivery.allowed"
+//           value="yes"
+//           className="mr-2"
+//         />
+//         {t("yes")}
+//       </label>
+//       <label className="flex items-center">
+//         <Field
+//           type="radio"
+//           name="deliveryConditions.delivery.allowed"
+//           value="no"
+//           className="mr-2"
+//         />
+//         {t("no")}
+//       </label>
+//     </div>
+//     <ErrorMessage
+//       name="deliveryConditions.delivery.allowed"
+//       component="div"
+//       className="text-red-500 text-sm"
+//     />
+
+//     <Field name="deliveryConditions.delivery.allowed">
+//       {({ field }: { field: FieldInputProps<string> }) =>
+//         field.value === "yes" && (
+//           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+//             {["cost", "country", "city"].map((key) => (
+//               <div key={key}>
+//                 <label className="block text-gray-700 mb-1">
+//                   {t(key.charAt(0).toUpperCase() + key.slice(1))}
+//                 </label>
+//                 <Field
+//                   name={`deliveryConditions.delivery.details.${key}`}
+//                   className="w-full p-2 border rounded-md"
+//                 />
+//                 <ErrorMessage
+//                   name={`deliveryConditions.delivery.details.${key}`}
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+//               </div>
+//             ))}
+//           </div>
+//         )
+//       }
+//     </Field>
+//   </div>
+// </div>
+
+//             {/* Geolocation */}
+//             <div className="mt-4">
+//               <h2 className="text-xl font-bold text-center mb-4">
+//                 {t("Geolocation")}
+//               </h2>
+//               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//                 {["campus", "country"].map((key) => (
+//                   <div key={key}>
+//                     <label
+//                       htmlFor={key}
+//                       className="block text-gray-700 font-semibold mb-1"
+//                     >
+//                       {t(key.charAt(0).toUpperCase() + key.slice(1))}
+//                     </label>
+//                     <Field
+//                       name={`geolocation.${key}`}
+//                       id={key}
+//                       className="w-full p-2 border rounded-md"
+//                     />
+//                     <ErrorMessage
+//                       name={`geolocation.${key}`}
+//                       component="div"
+//                       className="text-red-500 text-sm"
+//                     />
+//                   </div>
+//                 ))}
+//               </div>
+//             </div>
+
+//             {/* Other Special Conditions */}
+//             <div className="mt-4">
+//               <h2 className="text-xl font-bold text-center mb-4">
+//                 {t("Other Special Conditions")}
+//               </h2>
+//               <div>
+//                 <label
+//                   htmlFor="otherSpecialConditions.additionalDescription"
+//                   className="block text-gray-700 font-semibold mb-1"
+//                 >
+//                   {t("Additional Description of the payment or Delivery Method")}
+//                 </label>
+//                 <Field
+//                   as="textarea"
+//                   name="otherSpecialConditions.additionalDescription"
+//                   id="otherSpecialConditions.additionalDescription"
+//                   rows="4"
+//                   className="w-full p-3 border rounded-md resize-none"
+//                 />
+//                 <ErrorMessage
+//                   name="otherSpecialConditions.additionalDescription"
+//                   component="div"
+//                   className="text-red-500 text-sm"
+//                 />
+//               </div>
+//             </div>
+
+//             {/* File Input */}
+//             {/* <div className="mt-4">
+//               <label
+//                 htmlFor="fileUpload"
+//                 className="block text-gray-700 font-semibold mb-1"
+//               >
+//                 {t("uploadFile")}
+//               </label>
+//               <div className="flex items-center space-x-6">
+//                 <label
+//                   htmlFor="fileUpload"
+//                   className="flex items-center justify-center w-full p-6 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+//                 >
+//                   <Image
+//                     src="/documents.png" // Replace this with your file icon path
+//                     alt={t("uploadIconAlt")}
+//                     width={50}
+//                     height={50}
+//                     className="mr-2"
+//                   />
+//                   <span className="text-gray-600 text-base">
+//                     {t("chooseFile")}
+//                   </span>
+//                 </label>
+//                 <Field
+//                   id="fileUpload"
+//                   name="file"
+//                   type="file"
+//                   className="hidden"
+//                   onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+//                     handleFileChange(event, setFieldValue)
+//                   }
+//                 />
+//               </div>
+//               <ErrorMessage
+//                 name="file"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div> */}
+//             {/* File Input */}
+//             {/* <div className="mt-4">
+//               <label
+//                 htmlFor="fileUpload"
+//                 className="block text-gray-700 font-semibold mb-1"
+//               >
+//                 {t("uploadFile")}
+//               </label>
+//               <div className="flex items-center space-x-6">
+//                 <label
+//                   htmlFor="fileUpload"
+//                   className="flex items-center justify-center w-full p-6 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+//                 >
+//                   <Image
+//                     src="/documents.png" // Replace this with your file icon path
+//                     alt={t("uploadIconAlt")}
+//                     width={50}
+//                     height={50}
+//                     className="mr-2"
+//                   />
+//                   <span className="text-gray-600 text-base">
+//                     {t("chooseFile")}
+//                   </span>
+//                 </label>
+//                 <Field name="file">
+//                   {({ form }: { form: FormikProps<any> }) => (
+//                     <input
+//                       id="fileUpload"
+//                       name="file"
+//                       type="file"
+//                       className="hidden"
+//                       accept=".pdf,.doc,.docx"
+//                       onChange={(event) =>
+//                         handleFileChange(event, form.setFieldValue)
+//                       }
+//                     />
+//                   )}
+//                 </Field>
+//               </div>
+//               <ErrorMessage
+//                 name="file"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div> */}
+//             <div className="mt-4">
+//               <label
+//                 htmlFor="fileUpload"
+//                 className="block text-gray-700 font-semibold mb-1"
+//               >
+//                 {t("uploadFile")}
+//               </label>
+//               <div className="flex items-center space-x-6">
+//                 <label
+//                   htmlFor="fileUpload"
+//                   className="flex items-center justify-center w-full p-6 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-100"
+//                 >
+//                   <Image
+//                     src={previewFileIcon || "/documents.png"} // Dynamic preview based on selected file or default
+//                     alt={t("uploadIconAlt")}
+//                     width={50}
+//                     height={50}
+//                     className="mr-2"
+//                   />
+//                   <span className="text-gray-600 text-base">
+//                     {selectedFileName || t("chooseFile")}{" "}
+//                     {/* Dynamic file name or default text */}
+//                   </span>
+//                 </label>
+//                 <Field name="file">
+//                   {({ field, form }: { field: any; form: FormikProps<any> }) => (
+//                     <>
+//                       <input
+//                         id="fileUpload"
+//                         name={field.name}
+//                         type="file"
+//                         className="hidden"
+//                         accept=".pdf,.doc,.docx"
+//                         onChange={(event) => {
+//                           handleFileChange(
+//                             event,
+//                             form.setFieldValue,
+//                             setPreviewFileIcon,
+//                             setSelectedFileName
+//                           );
+//                         }}
+//                       />
+//                       {/* Show file preview and name */}
+//                       {/* {form.values.file && (
+//                         <div className="flex items-center space-x-4 mt-4">
+//                           <Image
+//                             src={previewFileIcon || "/documents.png"} // Show preview based on selected file
+//                             alt={form.values.file.name}
+//                             width={50}
+//                             height={50}
+//                             className="mr-2"
+//                           />
+//                           <span className="text-gray-700 text-sm">
+//                             {form.values.file.name}
+//                           </span>
+//                         </div>
+//                       )} */}
+//                     </>
+//                   )}
+//                 </Field>
+//               </div>
+//               <ErrorMessage
+//                 name="file"
+//                 component="div"
+//                 className="text-red-500 text-sm"
+//               />
+//             </div>
+
+//             {/* Submit Button */}
+//             <div className="flex justify-end">
+//               <button
+//                 type="submit"
+//                 className="bg-blue-600 text-white px-4 py-2 rounded-md"
+//                 onClick={() => console.log("Submit button clicked")}
+//               >
+//                 Submit
+//               </button>
+//             </div>
+
+//             {/* Debugging Section */}
+//             <pre>{JSON.stringify(errors, null, 2)}</pre>
+//             <p>Form is {isValid ? "valid" : "invalid"}</p>
+//           </Form>
+//         )}
+//       </Formik>
+//     );
+//   };
+
+//   export default SubmitexchangeForm;

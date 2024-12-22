@@ -130,12 +130,16 @@
   "Good": "Good",
   "Service": "Service",
   "Category": "Category",
+  "Select Category":"Select Category",
   "Electronics": "Electronics",
   "Health": "Health",
   "SubCategory": "Subcategory",
+  "Select SubCategory":"Select SubCategory",
   "Accessories": "Accessories",
   "FeaturedProductStatus": "Featured Product Status",
+  "Select Status":"Select Status",
   "featuredProductStatus": "Select Status",
+  "Additional Description":"Additional Description",
   "Material conditions of the exchange": "Material conditions of the exchange",
   "Estimated value of the exchange": "Estimated value of the exchange",
   "Deposit Payment for booking": "Deposit Payment for booking",
@@ -176,6 +180,7 @@
   "OfferStartDate": "Offer Start Date",
   "OfferEndDate": "Offer End Date",
   "FormOfExchange": "Form of Exchange",
+  "Select Form of Exchange":"Select Form of Exchange",
   "formOfExchange": "Select Form",
   "Sale": "Sale",
   "Gift": "Gift",
@@ -186,7 +191,7 @@
   "Upload Any Images Of The Offer": "Upload any images of the offer",
   "Details Of The Proposed Offer": "Details of the proposed offer",
   "Detail As Precisely As Possible What You Offer": "Detail as precisely as possible what you offer",
-  "Details Of The Expected Requirements": "Details of the Expected Requirements",
+  "DetailsOfTheExpectedRequirements": "Details of the Expected Requirements",
   "clickToUpload": "Click to upload",
   "Details Of The Expected Need": "Details of the Expected need",
   "Detail Your Needs As Precisely As Possible": "Detail your needs as precisely as possible",
@@ -212,7 +217,53 @@
   "Exchange": "Exchange",
     "Classic Sale": "Classic Sale",
     "Auction": "Auction",
-    "Donation": "Donation"
+    "Donation": "Donation",
+    "Select Payment Form":"Select Payment Form",
+    "Select Payment Type":"Select Payment Type",
+    "What do you Offer":"What do you Offer",
+    "Yes":"Yes",
+    "No":"No",
+    "Details of The Expected Requirements":"Details Of The Expected Requirements",
+    "Click to upload":"Click to upload",
+    "Title of the offer":"Title of the offer",
+    "What do you offer":"What do you offer",
+    "Featured Product Status":"Featured Product Status",
+    "Offer Start Date":"Offer Start Date",
+    "Offer End Date":"Offer End Date",
+    "Deposit Payment for Booking":"Deposit Payment for Booking",
+    "Money Back Guarantee":"Money Back Guarantee",
+    "Desired Payment Form":"Desired Payment Form",
+    "Desired Payment Type":"Desired Payment Type",
+    "Hand to Hand":"Hand to Hand",
+    "Delivery Conditions":"Delivery Conditions",
+    "Is there a delivery cost?":"Is there a delivery cost?",
+    "Delivery Cost Amount":"Delivery Cost Amount",
+    "Satisfaction Guarantee":"Satisfaction Guarantee",
+    "Upload File":"Upload File",
+    "Deposit Percentage (%)":"Deposit Percentage (%)",
+    "Hourly rate":"Hourly rate",
+    "Minimum benefit":"Minimum benefit",
+    "Package Requested":"Package Requested",
+    "Travel Expenses":"Travel Expenses",
+    "Free Quote":"Free Quote",
+    "Other Possible Costs":"Other Possible Costs",
+    "Fee Amount":"Fee Amount",
+    "Amount of These Costs":"Amount of These Costs",
+    "Specify the Nature of These Costs":"Specify the Nature of These Costs",
+    "Payment deposit for booking":"Payment deposit for booking",
+    "Percentage":"Percentage",
+    "FinanceYourProjectsOrExpensesWithYourUnusedServicesOrGoods!":"Finance your projects or expenses with your unused services or goods!"
+    
+ 
+    
+    
+
+    
+
+    
+   
+    
+    
   
     },
 
@@ -263,6 +314,7 @@
       "rightsReserved": "© 2024 Your Brand. All Rights Reserved."
     }
   }
+
   
     
   }

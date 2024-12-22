@@ -8,7 +8,7 @@ interface IUser extends Document {
   provider: "email" | "google" | "facebook";
   providerId?: string; // For OAuth users
   name: string; // Full name of the user
-  role?: "admin" | "student" | "merchant" | "promoter" | "ecoCitizen"; // User role
+  role?: "admin" | "student" | "merchant" | "promoter" | "citizen"; // User role
 
   status: "active" | "inactive" | "pending"; // Account status
   deactivationReason?: string; // Reason for deactivation (if applicable)

@@ -156,7 +156,7 @@ export function AppSidebar() {
     // Normalize the current path to handle dynamic language prefix
     const normalizedCurrentPath = currentPath.replace(/^\/(en|fr)/, "");
 
-    console.debug("Normalized Current Path:", normalizedCurrentPath);
+    // console.debug("Normalized Current Path:", normalizedCurrentPath);
 
     return (
       <ul className="space-y-2">
@@ -167,17 +167,17 @@ export function AppSidebar() {
           const isActive = normalizedCurrentPath === normalizedItemPath;
 
           const isExpanded = expandedItems.includes(item.label);
-          console.log("Rendering Item:", {
-            label: item.label,
-            itemPath: item.path,
-            normalizedItemPath,
-            isActive,
-            appliedClassName: isActive
-              ? "font-bold text-blue-600"
-              : isExpanded
-              ? "font-bold text-blue-500"
-              : "text-gray-700",
-          });
+          // console.log("Rendering Item:", {
+          //   label: item.label,
+          //   itemPath: item.path,
+          //   normalizedItemPath,
+          //   isActive,
+          //   appliedClassName: isActive
+          //     ? "font-bold text-blue-600"
+          //     : isExpanded
+          //     ? "font-bold text-blue-500"
+          //     : "text-gray-700",
+          // });
 
           return (
             <li key={item.label} className="flex flex-col">

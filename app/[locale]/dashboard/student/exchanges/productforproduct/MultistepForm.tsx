@@ -3,12 +3,15 @@
 import React from "react";
 import { Steps } from "antd";
 // import { useFormContext } from "./component/FormContext";
-import SubmitExchangeForm from "./component/SubmitExchangeForm";
+// import SubmitExchangeForm from "./component/SubmitExchangeForm";
+
 import ExpectedRequirement from "./component/ExpectedRequirements";
 import Success from "./component/Success";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setCurrentStep } from "@/store/slices/productForProductFormSlice";
+import SubmitexchangeForm from "./component/SubmitexchnageForm";
+import ExpectedrequiremtnsForm from "./component/ExpectedrequirementsForm";
 // import { useTranslations } from "next-intl";
 
 // const { Step } = Steps;
@@ -52,7 +55,7 @@ const MultiStepForm = () => {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       {/* Steps Progress Bar */}
-      {/* <Steps current={currentStep - 1} items={steps} className="mb-6" /> */}
+
       <Steps
         current={currentStep - 1}
         items={steps}
@@ -60,8 +63,10 @@ const MultiStepForm = () => {
       />
 
       {/* Step Content */}
-      {currentStep === 1 && <SubmitExchangeForm />}
-      {currentStep === 2 && <ExpectedRequirement />}
+
+      {currentStep === 1 && <SubmitexchangeForm />}
+
+      {currentStep === 2 && <ExpectedrequiremtnsForm />}
       {currentStep === 3 && <Success />}
       {/* Back Button */}
       <div className="flex justify-start mt-6">

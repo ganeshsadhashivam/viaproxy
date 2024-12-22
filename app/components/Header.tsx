@@ -85,14 +85,17 @@ export default function Header() {
               <Link href="/authentication/login">Login</Link>
             </NavbarItem>
             <NavbarItem>
-              <Button
+              {/* <Button
                 as={Link}
                 color="primary"
-                href="/authentication/register"
+                // href="/authentication/register"
+                href="/authentication/newregistration"
                 variant="flat"
               >
                 Register
-              </Button>
+              </Button> */}
+              {/* <Link href="/authentication/newregistration">Register</Link> */}
+              <Link href="/authentication/register">Register</Link>
             </NavbarItem>
           </>
         )}

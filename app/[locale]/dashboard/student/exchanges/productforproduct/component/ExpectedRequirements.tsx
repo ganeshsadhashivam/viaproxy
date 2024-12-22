@@ -24,43 +24,43 @@ const ExchangeDetailsForm = () => {
   );
 
   //for Zone1 insertion banner
-  const handleZoneOneBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.result) {
-          dispatch(
-            setExpectedRequirements({
-              zoneOneBanner: reader.result.toString(), // Store base64 encoded string
-            })
-          );
-        }
-      };
-      reader.readAsDataURL(file); // Convert file to base64 string
-    }
-  };
+  // const handleZoneOneBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       if (reader.result) {
+  //         dispatch(
+  //           setExpectedRequirements({
+  //             zoneOneBanner: reader.result.toString(), // Store base64 encoded string
+  //           })
+  //         );
+  //       }
+  //     };
+  //     reader.readAsDataURL(file); // Convert file to base64 string
+  //   }
+  // };
 
   //for selecting multiple images
-  const handleImageChange = (index: number, file: File | null) => {
-    if (!file) return;
+  // const handleImageChange = (index: number, file: File | null) => {
+  //   if (!file) return;
 
-    const reader = new FileReader();
+  //   const reader = new FileReader();
 
-    reader.onload = () => {
-      if (reader.result) {
-        const updatedImages = [...formData.expectedRequirements.images];
-        updatedImages[index] = reader.result.toString(); // Add/replace the image at the given index
+  //   reader.onload = () => {
+  //     if (reader.result) {
+  //       const updatedImages = [...formData.expectedRequirements.images];
+  //       updatedImages[index] = reader.result.toString(); // Add/replace the image at the given index
 
-        // Ensure only 3 images are stored
-        const limitedImages = updatedImages.filter((img) => img).slice(0, 3);
+  //       // Ensure only 3 images are stored
+  //       const limitedImages = updatedImages.filter((img) => img).slice(0, 3);
 
-        dispatch(setExpectedRequirements({ images: limitedImages }));
-      }
-    };
+  //       dispatch(setExpectedRequirements({ images: limitedImages }));
+  //     }
+  //   };
 
-    reader.readAsDataURL(file);
-  };
+  //   reader.readAsDataURL(file);
+  // };
 
   // for Material Conditions
   const handleDecisionChange = (e: RadioChangeEvent) => {
@@ -100,28 +100,28 @@ const ExchangeDetailsForm = () => {
   };
 
   //handle File Change
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
+  // const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files && e.target.files.length > 0) {
+  //     const file = e.target.files[0];
 
-      // Convert the file to a URL for preview
-      const fileUrl = URL.createObjectURL(file);
+  //     // Convert the file to a URL for preview
+  //     const fileUrl = URL.createObjectURL(file);
 
-      // Dispatch the file URL to Redux
-      dispatch(
-        setExpectedRequirements({
-          otherSpecialConditions: {
-            ...formData.expectedRequirements.otherSpecialConditions, // Preserve existing data
-            uploadedFiles: [
-              ...(formData.expectedRequirements.otherSpecialConditions
-                ?.uploadedFiles || []),
-              fileUrl, // Add the new file URL to the array
-            ],
-          },
-        })
-      );
-    }
-  };
+  //     // Dispatch the file URL to Redux
+  //     dispatch(
+  //       setExpectedRequirements({
+  //         otherSpecialConditions: {
+  //           ...formData.expectedRequirements.otherSpecialConditions, // Preserve existing data
+  //           uploadedFiles: [
+  //             ...(formData.expectedRequirements.otherSpecialConditions
+  //               ?.uploadedFiles || []),
+  //             fileUrl, // Add the new file URL to the array
+  //           ],
+  //         },
+  //       })
+  //     );
+  //   }
+  // };
 
   const handleEstimatedValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value ? parseFloat(e.target.value) : undefined;
@@ -301,18 +301,136 @@ const ExchangeDetailsForm = () => {
     );
   };
 
-  const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
+  // const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
   // const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
 
   return (
     <Formik
       initialValues={{
+        ...formData.exchangeOffer,
         ...formData.expectedRequirements,
       }}
-      onSubmit={(values) => {
-        dispatch(setExpectedRequirements(values));
-        console.log(formData.expectedRequirements);
-        dispatch(setCurrentStep(3)); // Move to the next step
+      // onSubmit={(values) => {
+      //   dispatch(setExpectedRequirements(values));
+      //   // console.log(formData.expectedRequirements);
+      //   console.log(formData);
+      //   dispatch(setCurrentStep(3)); // Move to the next step
+      // }}
+
+      onSubmit={async (values, { setSubmitting }) => {
+        try {
+          dispatch(setExpectedRequirements(values));
+
+          //     const allFormData = {
+          //       ...formData,
+          //       expectedRequirements: values,
+          //     };
+
+          //     // Create a FormData object
+          //     const formDataToSend = new FormData();
+
+          //     for (const key in allFormData) {
+          //       if (allFormData.hasOwnProperty(key)) {
+          //         const typedKey = key as keyof typeof allFormData;
+          //         const value = allFormData[typedKey];
+
+          //         if (value instanceof File) {
+          //           formDataToSend.append(key, value); // Add files directly
+          //         } else if (Array.isArray(value)) {
+          //           value.forEach((item, index) => {
+          //             formDataToSend.append(`${key}[${index}]`, item); // Add arrays
+          //           });
+          //         } else if (typeof value === "object" && value !== null) {
+          //           formDataToSend.append(key, JSON.stringify(value)); // Serialize objects
+          //         } else {
+          //           formDataToSend.append(key, value as string); // Add strings
+          //         }
+          //       }
+          //     }
+
+          //     // Debugging FormData
+          //     for (const [key, value] of formDataToSend.entries()) {
+          //       console.log(key, value);
+          //     }
+
+          const formDataToSend = new FormData();
+
+          formDataToSend.append(
+            "submitExchangeDetails",
+            JSON.stringify({
+              title: formData.exchangeOffer.title,
+              offerType: formData.exchangeOffer.offerType,
+              category: formData.exchangeOffer.category,
+              subcategory: formData.exchangeOffer.subcategory,
+              featuredProductStatus:
+                formData.exchangeOffer.featuredProductStatus,
+              additionalDescription:
+                formData.exchangeOffer.additionalDescription,
+              offerDates: {
+                startDate: formData.exchangeOffer.startDate,
+                endDate: formData.exchangeOffer.endDate,
+              },
+              formOfExchange: formData.exchangeOffer.formOfExchange,
+              materialConditions: formData.exchangeOffer.materialConditions,
+              guarantees: formData.exchangeOffer.guarantees,
+              paymentDetails: formData.exchangeOffer.paymentDetails,
+              deliveryConditions: formData.exchangeOffer.deliveryConditions,
+              geolocation: formData.exchangeOffer.geolocation,
+              otherSpecialConditions:
+                formData.exchangeOffer.otherSpecialConditions,
+            })
+          );
+
+          formDataToSend.append(
+            "expectedRequirements",
+            JSON.stringify({
+              title: formData.expectedRequirements.title,
+              offerType: formData.expectedRequirements.offerType,
+              category: formData.expectedRequirements.category,
+              subcategory: formData.expectedRequirements.subcategory,
+              featuredProductStatus:
+                formData.expectedRequirements.featuredProductStatus,
+              additionalDescription:
+                formData.expectedRequirements.additionalDescription,
+              startDate: formData.expectedRequirements.startDate,
+              endDate: formData.expectedRequirements.endDate,
+              formOfExchange: formData.expectedRequirements.formOfExchange,
+              materialConditions:
+                formData.expectedRequirements.materialConditions,
+              guarantees: formData.expectedRequirements.guarantees,
+              paymentDetails: formData.expectedRequirements.paymentDetails,
+              deliveryConditions:
+                formData.expectedRequirements.deliveryConditions,
+              geolocation: formData.expectedRequirements.geolocation,
+              otherSpecialConditions:
+                formData.expectedRequirements.otherSpecialConditions,
+            })
+          );
+
+          // Send FormData to backend API
+          const response = await fetch(
+            "/api/student/exchanges/productforproductexchange",
+            {
+              method: "POST",
+              body: formDataToSend,
+              // 'Content-Type' header is set automatically for FormData
+            }
+          );
+
+          console.log("in api");
+
+          if (response.ok) {
+            console.log("Data successfully submitted to backend");
+            dispatch(setCurrentStep(3));
+          } else {
+            const errorData = await response.json();
+            console.error("Failed to submit data:", errorData);
+          }
+        } catch (error) {
+          console.error("An error occurred:", error);
+        } finally {
+          setSubmitting(false);
+        }
       }}
     >
       {() => (
@@ -330,7 +448,7 @@ const ExchangeDetailsForm = () => {
             </div>
 
             {/* zone 1 insertion banner Advertising */}
-            <div className="text-center p-5">
+            {/* <div className="text-center p-5">
               <h2 className="mb-5 text-lg font-bold">
                 {t("Zone 1 Insertion Banner Advertising")}
               </h2>
@@ -357,7 +475,7 @@ const ExchangeDetailsForm = () => {
                 className="hidden"
                 onChange={handleZoneOneBannerChange}
               />
-            </div>
+            </div> */}
 
             {/* Details of the expected need */}
             <div className="text-center bg-gray-50">
@@ -489,7 +607,7 @@ const ExchangeDetailsForm = () => {
               />
 
               {/* images to select */}
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <label
                   htmlFor="offer-images"
                   className="block text-sm font-semibold text-gray-700 mb-2"
@@ -534,7 +652,7 @@ const ExchangeDetailsForm = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Offer Dates */}
@@ -1087,7 +1205,7 @@ const ExchangeDetailsForm = () => {
                 </div>
 
                 {/* File Input */}
-                <div>
+                {/* <div>
                   <label
                     htmlFor="fileUpload"
                     className="block text-gray-700 font-semibold mb-1"
@@ -1118,7 +1236,7 @@ const ExchangeDetailsForm = () => {
                       onChange={handleFileChange} // Attach the handler
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 
