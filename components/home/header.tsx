@@ -89,12 +89,20 @@ export function Header() {
               },
               { label: "ClubPromos", id: "clubpromos", hasDropdown: true },
               { label: "Local Houses", id: "local-houses", hasDropdown: true },
-              { label: "Registration", id: "registration", hasDropdown: false },
-              { label: "Login", id: "login", hasDropdown: false },
+              {
+                label: "Registration",
+                id: "/authentication/signup",
+                hasDropdown: false,
+              },
+              {
+                label: "Login",
+                id: "/authentication/signin",
+                hasDropdown: false,
+              },
             ].map(({ label, id, hasDropdown }, index) => (
               <div key={index} className="relative group">
                 <a
-                  href={`#${id}`}
+                  href={`${id}`}
                   className="text-blue-950 hover:text-green-600 font-medium flex items-center"
                 >
                   {label}
@@ -106,7 +114,7 @@ export function Header() {
                     {["Option 1", "Option 2", "Option 3"].map((item, idx) => (
                       <a
                         key={idx}
-                        href={`#${item.toLowerCase().replace(" ", "-")}`}
+                        href={`${item.toLowerCase().replace(" ", "-")}`}
                         className="block px-4 py-2 text-blue-950 hover:bg-green-100 hover:text-green-600"
                       >
                         {item}
