@@ -5,29 +5,29 @@ import dbConnect from "@/utils/dbConnect";
 await dbConnect();
 
 // Fetch a specific exchange (GET)
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
-  try {
-    const { id } = params;
-    const exchange = await ProductForProductExchange.findById(id).populate(
-      "createdBy"
-    );
-    if (!exchange) {
-      return NextResponse.json(
-        { message: "Exchange not found" },
-        { status: 404 }
-      );
-    }
-    return NextResponse.json(exchange, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
-      { message: "Error fetching exchange", error },
-      { status: 500 }
-    );
-  }
-}
+// export async function GET(
+//   req: Request,
+//   { params }: { params: { id: string } }
+// ) {
+//   try {
+//     const { id } = params;
+//     const exchange = await ProductForProductExchange.findById(id).populate(
+//       "createdBy"
+//     );
+//     if (!exchange) {
+//       return NextResponse.json(
+//         { message: "Exchange not found" },
+//         { status: 404 }
+//       );
+//     }
+//     return NextResponse.json(exchange, { status: 200 });
+//   } catch (error) {
+//     return NextResponse.json(
+//       { message: "Error fetching exchange", error },
+//       { status: 500 }
+//     );
+//   }
+// }
 
 // Update a specific exchange (PATCH)
 export async function PATCH(
