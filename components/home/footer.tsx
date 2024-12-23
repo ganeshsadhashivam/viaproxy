@@ -1,95 +1,69 @@
-import { Facebook, Twitter, Instagram, Youtube } from "lucide-react";
-import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function Footer() {
-  const categories = ["Electronics", "Fashion", "Home & Living", "Beauty"];
-  const about = ["About Us", "Careers", "Press", "Blog"];
-  const help = ["FAQs", "Contact Us", "Shipping", "Returns"];
-  const legal = ["Terms", "Privacy", "Cookies"];
-
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Categories */}
+    <footer className="py-12 gap-10 bg-slate-800">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div>
-            <h3 className="text-lg font-semibold text-white">Categories</h3>
-            <ul className="mt-4 space-y-2">
-              {categories.map((item) => (
-                <li key={item}>
-                  <Link href="#" className="hover:text-white">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* About */}
-          <div>
-            <h3 className="text-lg font-semibold text-white">About</h3>
-            <ul className="mt-4 space-y-2">
-              {about.map((item) => (
-                <li key={item}>
-                  <Link href="#" className="hover:text-white">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Help */}
-          <div>
-            <h3 className="text-lg font-semibold text-white">Help</h3>
-            <ul className="mt-4 space-y-2">
-              {help.map((item) => (
-                <li key={item}>
-                  <Link href="#" className="hover:text-white">
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Newsletter */}
-          <div>
-            <h3 className="text-lg font-semibold text-white">Stay Updated</h3>
-            <p className="mt-4 text-sm">
-              Subscribe to our newsletter for the latest updates and offers.
+            <h3 className="font-bold mb-4 text-white">Receive promos</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Get promos, special offers delivered to your inbox
             </p>
-            <form className="mt-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="w-full rounded-lg bg-gray-800 px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            <div className="flex gap-1 bg-[#ffffff] p-0 rounded-lg w-25">
+              <Input
+                placeholder="Email address"
+                className="bg-transparent border-none w-full text-black placeholder-white"
               />
-              <button className="mt-2 w-full rounded-lg bg-purple-600 px-4 py-2 font-semibold text-white hover:bg-purple-700">
-                Subscribe
-              </button>
-            </form>
+              <Button className="bg-[#19bb39c7] text-white px-6 py-2">
+                Register
+              </Button>
+            </div>
+          </div>
+          <div>
+            <h3 className="font-bold mb-4 text-white">LEGAL NOTICES</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:text-white">Who are we?</li>
+              <li className="hover:text-white">What is ViaProxy?</li>
+              <li className="hover:text-white">Our social values</li>
+              <li className="hover:text-white">Data protection</li>
+              <li className="hover:text-white">General conditions</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-bold mb-4 text-white">PARTNER SPACES</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:text-white">Become a service provider</li>
+              <li className="hover:text-white">Become a local merchant</li>
+              <li className="hover:text-white">Become a local contributor</li>
+              <li className="hover:text-white">Create your local agency</li>
+              <li className="hover:text-white">Become a promoter</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-bold mb-4 text-white">SPECIAL SERVICES</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:text-white">Assistance to people</li>
+              <li className="hover:text-white">Services & Houses</li>
+              <li className="hover:text-white">Services & Gardens</li>
+              <li className="hover:text-white">Shop promotions</li>
+              <li className="hover:text-white">Horeca promotions</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="font-bold mb-4 text-white">BUSINESS SERVICES</h3>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="hover:text-white">Concierge services</li>
+              <li className="hover:text-white">Works & Repairs</li>
+              <li className="hover:text-white">Finding talent</li>
+              <li className="hover:text-white">Find jobbers</li>
+              <li className="hover:text-white">Promote your products</li>
+            </ul>
           </div>
         </div>
-
-        <div className="mt-12 border-t border-gray-800 pt-8">
-          <div className="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0">
-            <div className="flex space-x-6">
-              <Link href="#" className="hover:text-white">
-                <Facebook className="h-6 w-6" />
-              </Link>
-              <Link href="#" className="hover:text-white">
-                <Twitter className="h-6 w-6" />
-              </Link>
-              <Link href="#" className="hover:text-white">
-                <Instagram className="h-6 w-6" />
-              </Link>
-              <Link href="#" className="hover:text-white">
-                <Youtube className="h-6 w-6" />
-              </Link>
-            </div>
-            <p className="text-sm">© 2024 ViaProxy. All rights reserved.</p>
-          </div>
+        <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
+          <p>© 2024 VIAPROXY. Designed By Faseya</p>
         </div>
       </div>
     </footer>
