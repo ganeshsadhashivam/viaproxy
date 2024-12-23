@@ -1,5 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
+// Define the interface for the schema
+interface FreeQuote extends Document {
+  freeQuote: "yes" | "no" | "";
+  feeAmount: number | null | undefined;
+}
+
 // Define the schema
 const PFSExpectedRequirementsSchema = new Schema({
   title: { type: String, required: true },
@@ -37,41 +43,51 @@ const PFSExpectedRequirementsSchema = new Schema({
     //     },
     //   },
     // },
-    freeQuote: {
-      freeQuote: {
-        type: String,
-        enum: ["yes", "no", ""],
-        required: true,
-      },
-      feeAmount: {
-        type: Number,
-        set: function (value: any) {
-          // Convert "undefined" string to actual undefined or parse the number
-          if (value === "undefined") return undefined;
-          return Number(value);
-        },
-        required: function (this: any) {
-          // Ensure feeAmount is required only if freeQuote is "no"
-          return this.freeQuote === "no";
-        },
-        default: function (this: any) {
-          // Default to null if freeQuote is "yes" or ""
-          return this.freeQuote === "yes" || this.freeQuote === ""
-            ? null
-            : undefined;
-        },
-        validate: {
-          validator: function (value: number | null | undefined) {
-            const freeQuoteValue = (this as any).freeQuote; // Access freeQuote safely
-            if (freeQuoteValue === "no") {
-              return typeof value === "number" && !isNaN(value);
-            }
-            return value === null || value === undefined;
-          },
-          message: "feeAmount must be a number when freeQuote is 'no'.",
-        },
-      },
-    },
+    // freeQuote: {
+    //   freeQuote: {
+    //     type: String,
+    //     enum: ["yes", "no", ""],
+    //   },
+    //   feeAmount: {
+    //     type: Number,
+    //     set: function (value: any) {
+    //       // Convert "undefined" string to actual undefined or parse the number
+    //       if (value === "undefined") return undefined;
+    //       return Number(value);
+    //     },
+    //     required: function (this: any) {
+    //       // Ensure feeAmount is required only if freeQuote is "no"
+    //       return this.freeQuote === "no";
+    //     },
+    //     default: function (this: any) {
+    //       // Default to null if freeQuote is "yes" or ""
+    //       return this.freeQuote === "yes" || this.freeQuote === ""
+    //         ? null
+    //         : undefined;
+    //     },
+    //     validate: {
+    //       validator: function (value: number | null | undefined) {
+    //         const freeQuoteValue = (this as any).freeQuote; // Access freeQuote safely
+    //         if (freeQuoteValue === "no") {
+    //           return typeof value === "number" && !isNaN(value);
+    //         }
+    //         return value === null || value === undefined;
+    //       },
+    //       message: "feeAmount must be a number when freeQuote is 'no'.",
+    //     },
+    //   },
+    // },
+    // freeQuote: {
+    //   type: String,
+    //   enum: ["yes", "no", ""],
+    // },
+    // feeAmount: {
+    //   type: Number,
+    //   set: function (value: any) {
+    //     if (value === "" || value === "undefined") return undefined;
+    //     return Number(value);
+    //   },
+    // },
 
     otherPossibleCost: {
       otherPossibleCost: {

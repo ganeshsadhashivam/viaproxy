@@ -109,57 +109,57 @@ const SFSExpectedRequirementsSchema = new Schema<SFSExpectedRequirements>({
         },
       },
     },
-    freeQuote: {
-      freeQuote: {
-        type: String,
-        enum: ["yes", "no", ""],
-        required: true,
-      },
-      feeAmount: {
-        type: Number,
-        required: function (this: SFSExpectedRequirements) {
-          console.log(
-            "Checking if feeAmount is required for freeQuote:",
-            this.materialConditions.freeQuote.freeQuote
-          ); // Debugging: log freeQuote
-          return this.materialConditions.freeQuote.freeQuote === "no"; // Only required if freeQuote is "no"
-        },
-        set: function (this: SFSExpectedRequirements, value: any) {
-          console.log(
-            "Setting feeAmount. Current freeQuote value:",
-            this.materialConditions.freeQuote.freeQuote
-          ); // Debugging: log the current freeQuote value
-          console.log("Received value for feeAmount:", value); // Debugging: log received value for feeAmount
-          if (this.materialConditions.freeQuote.freeQuote === "yes") {
-            return undefined; // Set feeAmount to undefined if freeQuote is "yes"
-          }
-          const numericValue = isNaN(value) ? undefined : value;
-          console.log("Returning feeAmount value:", numericValue); // Debugging: log the final value of feeAmount
-          return numericValue;
-        },
-        validate: {
-          validator: function (value: number | undefined) {
-            const freeQuoteValue = this.materialConditions.freeQuote.freeQuote;
-            console.log(
-              "Validating feeAmount. Current freeQuote value:",
-              freeQuoteValue
-            ); // Debugging: log freeQuote during validation
-            if (freeQuoteValue === "no") {
-              const isValid = typeof value === "number" && !isNaN(value);
-              console.log("Is feeAmount a valid number for 'no'?", isValid); // Debugging: log validation result
-              return isValid; // Validate feeAmount as a number if freeQuote is "no"
-            }
-            const isValidForYes = value === null || value === undefined;
-            console.log(
-              "Is feeAmount valid for 'yes' or empty?",
-              isValidForYes
-            ); // Debugging: log validation result for 'yes' or empty
-            return isValidForYes; // Validate feeAmount as null or undefined if freeQuote is "yes"
-          },
-          message: "feeAmount must be a valid number when freeQuote is 'no'.",
-        },
-      },
-    },
+    // freeQuote: {
+    //   freeQuote: {
+    //     type: String,
+    //     enum: ["yes", "no", ""],
+    //     required: true,
+    //   },
+    //   feeAmount: {
+    //     type: Number,
+    //     required: function (this: SFSExpectedRequirements) {
+    //       console.log(
+    //         "Checking if feeAmount is required for freeQuote:",
+    //         this.materialConditions.freeQuote.freeQuote
+    //       ); // Debugging: log freeQuote
+    //       return this.materialConditions.freeQuote.freeQuote === "no"; // Only required if freeQuote is "no"
+    //     },
+    //     set: function (this: SFSExpectedRequirements, value: any) {
+    //       console.log(
+    //         "Setting feeAmount. Current freeQuote value:",
+    //         this.materialConditions.freeQuote.freeQuote
+    //       ); // Debugging: log the current freeQuote value
+    //       console.log("Received value for feeAmount:", value); // Debugging: log received value for feeAmount
+    //       if (this.materialConditions.freeQuote.freeQuote === "yes") {
+    //         return undefined; // Set feeAmount to undefined if freeQuote is "yes"
+    //       }
+    //       const numericValue = isNaN(value) ? undefined : value;
+    //       console.log("Returning feeAmount value:", numericValue); // Debugging: log the final value of feeAmount
+    //       return numericValue;
+    //     },
+    //     validate: {
+    //       validator: function (value: number | undefined) {
+    //         const freeQuoteValue = this.materialConditions.freeQuote.freeQuote;
+    //         console.log(
+    //           "Validating feeAmount. Current freeQuote value:",
+    //           freeQuoteValue
+    //         ); // Debugging: log freeQuote during validation
+    //         if (freeQuoteValue === "no") {
+    //           const isValid = typeof value === "number" && !isNaN(value);
+    //           console.log("Is feeAmount a valid number for 'no'?", isValid); // Debugging: log validation result
+    //           return isValid; // Validate feeAmount as a number if freeQuote is "no"
+    //         }
+    //         const isValidForYes = value === null || value === undefined;
+    //         console.log(
+    //           "Is feeAmount valid for 'yes' or empty?",
+    //           isValidForYes
+    //         ); // Debugging: log validation result for 'yes' or empty
+    //         return isValidForYes; // Validate feeAmount as null or undefined if freeQuote is "yes"
+    //       },
+    //       message: "feeAmount must be a valid number when freeQuote is 'no'.",
+    //     },
+    //   },
+    // },
 
     otherPossibleCost: {
       otherPossibleCost: {
