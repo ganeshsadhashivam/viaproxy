@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image"; // Import Next.js Image component
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 export function Header() {
@@ -102,16 +101,12 @@ export function Header() {
               },
             ].map(({ label, id, hasDropdown }, index) => (
               <div key={index} className="relative group">
-<<<<<<< HEAD
-                <Link
-=======
                 <a
->>>>>>> 3dadb336f4344815fce7b5e34390e77629febfb3
                   href={`${id}`}
                   className="text-blue-950 hover:text-green-600 font-medium flex items-center"
                 >
                   {label}
-                </Link>
+                </a>
 
                 {/* Dropdown */}
                 {hasDropdown && (
