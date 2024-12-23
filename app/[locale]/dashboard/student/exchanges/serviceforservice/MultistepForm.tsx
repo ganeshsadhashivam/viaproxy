@@ -36,14 +36,14 @@ type SubmitExchangeDetails = {
       minimumBenefit: number;
       packageRequested: number;
       travelExpenses: TravelExpenses;
-      // freeQuote: FreeQuote;
-      // otherPossibleCost: OtherPossibleCost;
+      freeQuote: FreeQuote;
+      otherPossibleCost: OtherPossibleCost;
       contingentWarranty: string;
       guarantees: {
         moneyBackGuarantee: "no" | "yes" | "";
         satisfactionGuarantee: "no" | "yes" | "";
       };
-      estimatedValue: string;
+      estimatedValue: number;
 
       depositPayment: DepositPayment;
       otherContingentCoverageRequired: string;
@@ -71,7 +71,7 @@ type SubmitExchangeDetails = {
         allowed: "yes" | "no" | null;
         costOption?: "yes" | "no" | null;
         details: {
-          amount?: string;
+          amount?: number;
           country: string;
           city: string;
         };
@@ -108,27 +108,27 @@ const initialValues: SubmitExchangeDetails = {
       packageRequested: 0,
       travelExpenses: {
         isRequired: null, // Default value
-        feeAmount: undefined, // Not required if isRequired is "no"
+        feeAmount: 0, // Not required if isRequired is "no"
       },
-      // freeQuote: {
-      //   freeQuote: "", // Default value
-      //   feeAmount: undefined, // Not required if freeQuote is "yes"
-      // },
-      // otherPossibleCost: {
-      //   otherPossibleCost: "", // Default value
-      //   amountOfCost: null,
-      //   natureOfTheseCost: "",
-      // },
+      freeQuote: {
+        freeQuote: "", // Default value
+        feeAmount: 0, // Not required if freeQuote is "yes"
+      },
+      otherPossibleCost: {
+        otherPossibleCost: "", // Default value
+        amountOfCost: 0,
+        natureOfTheseCost: "",
+      },
       contingentWarranty: "",
       guarantees: {
         moneyBackGuarantee: "", // Default value
         satisfactionGuarantee: "", // Default value
       },
-      estimatedValue: "",
+      estimatedValue: 0,
 
       depositPayment: {
         decision: "",
-        percentage: undefined,
+        percentage: 0,
       },
       otherContingentCoverageRequired: "",
 
@@ -151,7 +151,7 @@ const initialValues: SubmitExchangeDetails = {
         allowed: null,
         costOption: null,
         details: {
-          amount: "",
+          amount: 0,
           country: "",
           city: "",
         },
@@ -454,7 +454,7 @@ type OtherPossibleCost = {
 
 type DepositPayment = {
   decision: "yes" | "no" | "";
-  percentage?: string; // Optional field when decision is "no"
+  percentage?: number; // Optional field when decision is "no"
 };
 
 type ERFormOfExchange =
@@ -489,7 +489,7 @@ type ExpectedRequirementDetails = {
         moneyBackGuarantee: "no" | "yes" | "";
         satisfactionGuarantee: "no" | "yes" | "";
       };
-      estimatedValue: string;
+      estimatedValue: number;
 
       depositPayment: DepositPayment;
       otherContingentCoverageRequired: string;
@@ -517,7 +517,7 @@ type ExpectedRequirementDetails = {
         allowed: "yes" | "no" | null;
         costOption?: "yes" | "no" | null;
         details: {
-          amount?: string;
+          amount?: number;
           country: string;
           city: string;
         };
@@ -554,15 +554,15 @@ const expectedRequiremtnsinitialValues: ExpectedRequirementDetails = {
       packageRequested: 0,
       travelExpenses: {
         isRequired: null, // Default value
-        feeAmount: undefined, // Not required if isRequired is "no"
+        feeAmount: 0, // Not required if isRequired is "no"
       },
       freeQuote: {
         freeQuote: "", // Default value
-        feeAmount: undefined, // Not required if freeQuote is "yes"
+        feeAmount: 0, // Not required if freeQuote is "yes"
       },
       otherPossibleCost: {
         otherPossibleCost: "", // Default value
-        amountOfCost: null,
+        amountOfCost: 0,
         natureOfTheseCost: "",
       },
       contingentWarranty: "",
@@ -570,7 +570,7 @@ const expectedRequiremtnsinitialValues: ExpectedRequirementDetails = {
         moneyBackGuarantee: "", // Default value
         satisfactionGuarantee: "", // Default value
       },
-      estimatedValue: "",
+      estimatedValue: 0,
 
       depositPayment: {
         decision: "",
@@ -597,7 +597,7 @@ const expectedRequiremtnsinitialValues: ExpectedRequirementDetails = {
         allowed: null,
         costOption: null,
         details: {
-          amount: "",
+          amount: 0,
           country: "",
           city: "",
         },
@@ -1043,83 +1043,3 @@ const MultiStepForm = () => {
 };
 
 export default MultiStepForm;
-
-// "use client";
-
-// import React from "react";
-// import { ConfigProvider, Steps } from "antd";
-// // import { useFormContext } from "./component/FormContext";
-// import SubmitExchangeForm from "./component/SubmitExchangeForm";
-// import ExpectedRequirement from "./component/ExpectedRequirements";
-// import Success from "./component/Success";
-// import { useDispatch, useSelector } from "react-redux";
-// import { RootState } from "@/store/store";
-// import { setCurrentStep } from "@/store/slices/serviceForServiceFormSlice";
-// import { useTranslations } from "next-intl";
-
-// const { Step } = Steps;
-
-// const MultiStepForm = () => {
-//   const dispatch = useDispatch();
-//   // const { currentStep, handleBack } = useFormContext();
-
-//   const { currentStep } = useSelector(
-//     (state: RootState) => state.serviceForServiceExchangeForm
-//   );
-
-//   const handleNext = () => dispatch(setCurrentStep(currentStep + 1));
-//   const handleBack = () => dispatch(setCurrentStep(currentStep - 1));
-
-//   //steps array
-
-//   const steps = [
-//     {
-//       title: (
-//         <span className="text-xs sm:text-sm">Submit an Exchange Offer</span>
-//       ),
-//       description: (
-//         <span className="text-xs sm:text-sm">Submit Your Exchange</span>
-//       ),
-//     },
-//     {
-//       title: <span className="text-xs sm:text-sm">Expected Requirements</span>,
-//       description: (
-//         <span className="text-xs sm:text-sm">What do you need?</span>
-//       ),
-//     },
-//     {
-//       title: <span className="text-xs sm:text-sm">Success</span>,
-//       description: (
-//         <span className="text-xs sm:text-sm">Review and confirm</span>
-//       ),
-//     },
-//   ];
-
-//   return (
-//     <div className="p-6 max-w-5xl mx-auto">
-//       {/* Steps Progress Bar */}
-//       {/* <Steps current={currentStep - 1} items={steps} className="mb-6" /> */}
-//       <Steps
-//         current={currentStep - 1}
-//         items={steps}
-//         className="mb-6 flex flex-row gap-4 overflow-x-auto whitespace-nowrap"
-//       />
-
-//       {/* Step Content */}
-//       {currentStep === 1 && <SubmitExchangeForm />}
-//       {currentStep === 2 && <ExpectedRequirement />}
-//       {currentStep === 3 && <Success />}
-//       {/* Back Button */}
-//       <div className="flex justify-start mt-6">
-//         <button
-//           onClick={handleBack} // Navigate back to step 0
-//           className="bg-blue-600 text-white px-4 py-2 rounded-md"
-//         >
-//           Back
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MultiStepForm;

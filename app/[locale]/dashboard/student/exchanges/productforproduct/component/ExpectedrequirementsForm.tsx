@@ -1987,8 +1987,8 @@ const ExpectedrequirementsForm = () => {
                       field.onChange(event);
                     }}
                     value={
-                      formData.submitExchangeDetails.otherSpecialConditions
-                        .additionalDescription
+                      formData.expectedRequirementsDetails
+                        .otherSpecialConditions.additionalDescription
                     } // Sync with FormContext
                   />
                 )}

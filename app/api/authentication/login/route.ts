@@ -14,6 +14,7 @@ export async function POST(req: Request) {
     console.log(email, password);
 
     const user = await User.findOne({ email });
+
     if (!user) {
       return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
       message: "Login successful!",
       user: {
         id: user._id,
-        name: user.name,
+        name: user.firstName,
         email: user.email,
         role: user.role,
       },

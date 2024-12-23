@@ -15,6 +15,14 @@ const nextConfig: NextConfig = {
   webpack(config) {
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
 };
 
 export default withNextIntl(nextConfig);

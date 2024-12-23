@@ -8,6 +8,7 @@ import ReduxProvider from "@/store/ReduxProvider";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 // import { FormProvider } from "./dashboard/student/exchanges/productforproduct/component/FormContext";
 import ClientWrapper from "./dashboard/ClientWrapper";
+import { Toaster } from "react-hot-toast";
 
 // Load custom fonts
 const geistSans = localFont({
@@ -97,7 +98,7 @@ export default async function LocaleLayout({
               {/* <FormProvider> */}
               <ClientWrapper>
                 <LanguageSwitcher />
-
+                <Toaster position="top-right" reverseOrder={false} />
                 {children}
               </ClientWrapper>
               {/* </FormProvider> */}

@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { parseCookies, destroyCookie } from "nookies";
 import { jwtDecode } from "jwt-decode"; // Correct import for jwt-decode
+import SearchBar from "./Searchbar";
 
 export default function Header() {
   const [user, setUser] = useState<{ name: string | null }>({ name: null });
@@ -43,26 +44,35 @@ export default function Header() {
     router.push("/authentication/login"); // Redirect to login
   };
 
+  const handleSearch = (query: string) => {
+    console.log("Searching for:", query);
+    // Add your search logic here (e.g., API call)
+  };
+
   return (
-    <Navbar className="bg-green-300">
+    <Navbar className="bg-green-200">
       <NavbarBrand>
         <AcmeLogo />
         <p>ViaProxy</p>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <SearchBar
+          placeholder="Search For Products ?"
+          onSearch={handleSearch}
+        />
         <NavbarItem>
           <Link color="foreground" href="#">
-            Features
+            {/* Features */}
           </Link>
         </NavbarItem>
         <NavbarItem isActive>
           <Link href="#" aria-current="page">
-            Customers
+            {/* Customers */}
           </Link>
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href="#">
-            Integrations
+            {/* Integrations */}
           </Link>
         </NavbarItem>
       </NavbarContent>
@@ -82,7 +92,8 @@ export default function Header() {
           <>
             {/* Removed 'hidden' for Login button */}
             <NavbarItem>
-              <Link href="/authentication/login">Login</Link>
+              {/* <Link href="/authentication/login">Login</Link> */}
+              <Link href="/authentication/signin">Login</Link>
             </NavbarItem>
             <NavbarItem>
               {/* <Button
@@ -95,7 +106,8 @@ export default function Header() {
                 Register
               </Button> */}
               {/* <Link href="/authentication/newregistration">Register</Link> */}
-              <Link href="/authentication/register">Register</Link>
+              {/* <Link href="/authentication/register">Register</Link> */}
+              <Link href="/authentication/signup">signup</Link>
             </NavbarItem>
           </>
         )}

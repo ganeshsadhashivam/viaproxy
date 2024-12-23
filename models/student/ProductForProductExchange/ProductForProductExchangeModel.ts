@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
-import SubmitExchangeSchema from "@/models/student/SubmitExchangeModel";
-import ExpectedRequirementsSchema from "@/models/student/ExpectedRequirementsModel";
+import SubmitExchangeSchema from "@/models/student/ProductForProductExchange/SubmitExchangeModel";
+import ExpectedRequirementsSchema from "@/models/student/ProductForProductExchange/ExpectedRequirementsModel";
 
 // Interface for ProductForProductExchange
 export interface ProductForProductExchange extends Document {

@@ -7,6 +7,14 @@ const defaultLocale = "en";
 
 // Define public routes
 const publicRoutes = [
+  "/authentication/restpassword",
+  "/authentication/forgetpassword",
+  "/viaproxy/components/auth/forget-password",
+  "/components/auth/forget-password",
+  "/en/authentication/signin",
+  "/en/authentication/forgotpassword",
+  "/authentication/signin",
+  "/authentication/signup",
   "/",
   "/authentication/login",
   "/authentication/register",
@@ -192,7 +200,7 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     // Match all routes except those explicitly excluded
-    "/((?!_next/static|_next/image|favicon.ico|api/|en/authetication/login|en/dashboard/student/message|en/dashboard/student/exchanges/productforproduct|en/dashboard/student/exchanges/productforservice|en/dashboard/student/howitworks|en/dashboard/student/exchanges/serviceforproduct|en/dashboard/student/blog|dashboard/:path*).*)",
+    "/((?!_next/static|_next/image|favicon.ico|api/|/en/authetication/login|/en/dashboard/student/message|/en/dashboard/student/exchanges/productforproduct|/en/dashboard/student/exchanges/productforservice|/en/dashboard/student/exchanges/productforservice|/en/dashboard/student/howitworks|/en/dashboard/student/exchanges/serviceforproduct|/en/dashboard/student/blog|/en/authentication/signup|/en/authentication/signin|/en/authentication/signin|/en/authentication/forgetpassword|/en/authentication/signup|/en/dashboard/student/exchanges/myexchanges|dashboard/:path*).*)",
     // Explicitly include the dashboard base routes for authentication handling
     "/dashboard",
   ],

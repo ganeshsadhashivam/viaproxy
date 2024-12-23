@@ -13,7 +13,7 @@ import Image from "next/image";
 import React, { Dispatch, SetStateAction, useState } from "react";
 
 type SEDepositPayment =
-  | { decision: "yes"; depositPayment: { percentage: string } } // When decision is "yes", percentage is required
+  | { decision: "yes"; depositPayment: { percentage: number } } // When decision is "yes", percentage is required
   | { decision: "no" | ""; depositPayment: { percentage?: undefined } }; // When decision is "no" or "", percentage is not required
 
 type FormOfExchange = "Exchange" | "Classic Sale" | "Auction" | "Donation" | "";
@@ -64,7 +64,7 @@ type SubmitExchangeDetails = {
         allowed: "yes" | "no" | "";
         costOption?: "yes" | "no" | "";
         details: {
-          amount?: string;
+          amount?: number;
           country: string;
           city: string;
         };
@@ -131,7 +131,7 @@ const SubmitExchangeForm: React.FC<SubmitExchangeFormProps> = ({
       }}
       enableReinitialize
     >
-      {({ setFieldValue, isValid, dirty, values, touched, errors }) => (
+      {({ setFieldValue, values }) => (
         <Form className="m-5 space-y-6 p-4 md:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto border border-gray-200">
           {/* Title of the Submit Exchange*/}
           <div className="text-center">

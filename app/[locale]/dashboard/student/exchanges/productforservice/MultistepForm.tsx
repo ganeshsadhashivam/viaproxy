@@ -15,7 +15,7 @@ import Success from "./component/Success";
 type FormOfExchange = "Exchange" | "Classic Sale" | "Auction" | "Donation" | "";
 
 type SEDepositPayment =
-  | { decision: "yes"; depositPayment: { percentage: string } } // When decision is "yes", percentage is required
+  | { decision: "yes"; depositPayment: { percentage: number } } // When decision is "yes", percentage is required
   | { decision: "no" | ""; depositPayment: { percentage?: undefined } }; // When decision is "no" or "", percentage is not required
 
 type SubmitExchangeDetails = {
@@ -63,7 +63,7 @@ type SubmitExchangeDetails = {
         allowed: "yes" | "no" | "";
         costOption?: "yes" | "no" | "";
         details: {
-          amount?: string;
+          amount?: number;
           country: string;
           city: string;
         };
@@ -121,7 +121,7 @@ const initialValues: SubmitExchangeDetails = {
         allowed: "",
         costOption: "",
         details: {
-          amount: "",
+          amount: 0,
           country: "",
           city: "",
         },
@@ -371,13 +371,13 @@ type FreeQuote = {
 
 type OtherPossibleCost = {
   otherPossibleCost: "yes" | "no" | "";
-  amountOfCost?: number | null;
+  amountOfCost?: number;
   natureOfTheseCost: string;
 };
 
 type DepositPayment = {
   decision: "yes" | "no" | "";
-  percentage?: string; // Optional field when decision is "no"
+  percentage?: number; // Optional field when decision is "no"
 };
 
 type ERFormOfExchange =
@@ -412,7 +412,7 @@ type ExpectedRequirementDetails = {
         moneyBackGuarantee: "no" | "yes" | "";
         satisfactionGuarantee: "no" | "yes" | "";
       };
-      estimatedValue: string;
+      estimatedValue: number;
 
       depositPayment: DepositPayment;
       otherContingentCoverageRequired: string;
@@ -440,7 +440,7 @@ type ExpectedRequirementDetails = {
         allowed: "yes" | "no" | null;
         costOption?: "yes" | "no" | null;
         details: {
-          amount?: string;
+          amount?: number;
           country: string;
           city: string;
         };
@@ -477,15 +477,15 @@ const expectedRequiremtnsinitialValues: ExpectedRequirementDetails = {
       packageRequested: 0,
       travelExpenses: {
         isRequired: null, // Default value
-        feeAmount: undefined, // Not required if isRequired is "no"
+        feeAmount: 0, // Not required if isRequired is "no"
       },
       freeQuote: {
         freeQuote: "", // Default value
-        feeAmount: undefined, // Not required if freeQuote is "yes"
+        feeAmount: 0, // Not required if freeQuote is "yes"
       },
       otherPossibleCost: {
         otherPossibleCost: "", // Default value
-        amountOfCost: null,
+        amountOfCost: 0,
         natureOfTheseCost: "",
       },
       contingentWarranty: "",
@@ -493,11 +493,11 @@ const expectedRequiremtnsinitialValues: ExpectedRequirementDetails = {
         moneyBackGuarantee: "", // Default value
         satisfactionGuarantee: "", // Default value
       },
-      estimatedValue: "",
+      estimatedValue: 0,
 
       depositPayment: {
         decision: "",
-        percentage: undefined,
+        percentage: 0,
       },
       otherContingentCoverageRequired: "",
 
@@ -520,7 +520,7 @@ const expectedRequiremtnsinitialValues: ExpectedRequirementDetails = {
         allowed: null,
         costOption: null,
         details: {
-          amount: "",
+          amount: 0,
           country: "",
           city: "",
         },
@@ -804,6 +804,11 @@ const ExpectedRequirementValidationSchema = Yup.object({
   }),
 });
 
+interface MergedData {
+  submitExchangeDetails: SubmitExchangeDetails;
+  expectedRequirementDetails: ExpectedRequirementDetails;
+}
+
 const MultiStepForm = () => {
   const dispatch = useDispatch();
 
@@ -817,62 +822,135 @@ const MultiStepForm = () => {
   );
 
   // Function to submit merged data to API
-  const submitExchangeFormDetails = async (mergedData: any) => {
-    const formData = new FormData();
+  // const submitExchangeFormDetails = async (mergedData: MergedData) => {
+  //   const formData = new FormData();
 
-    // Function to append data to FormData recursively
-    const appendToFormData = (data: any, parentKey = "") => {
-      Object.keys(data).forEach((key) => {
-        const value = data[key];
-        const formKey = parentKey ? `${parentKey}.${key}` : key;
+  //   // Function to append data to FormData recursively
+  //   const appendToFormData = (data: Record<string, any>, parentKey = "") => {
+  //     Object.keys(data).forEach((key) => {
+  //       const value = data[key];
+  //       const formKey = parentKey ? `${parentKey}.${key}` : key;
 
-        if (value instanceof File) {
-          formData.append(formKey, value); // Append file directly
-        } else if (Array.isArray(value)) {
-          // Handle arrays
-          value.forEach((item, index) => {
-            if (item instanceof File) {
-              formData.append(`${formKey}[${index}]`, item);
-            } else {
-              formData.append(`${formKey}[${index}]`, JSON.stringify(item));
-            }
-          });
-        } else if (typeof value === "object" && value !== null) {
-          // Recursively handle nested objects
-          appendToFormData(value, formKey);
-        } else {
-          // Append primitive values
-          formData.append(formKey, value);
+  //       if (value instanceof File) {
+  //         formData.append(formKey, value); // Append file directly
+  //       } else if (Array.isArray(value)) {
+  //         // Handle arrays
+  //         value.forEach((item, index) => {
+  //           if (item instanceof File) {
+  //             formData.append(`${formKey}[${index}]`, item);
+  //           } else {
+  //             formData.append(`${formKey}[${index}]`, JSON.stringify(item));
+  //           }
+  //         });
+  //       } else if (typeof value === "object" && value !== null) {
+  //         // Recursively handle nested objects
+  //         appendToFormData(value, formKey);
+  //       } else {
+  //         // Append primitive values
+  //         formData.append(formKey, value);
+  //       }
+  //     });
+  //   };
+
+  //   // Add submitExchangeDetails and expectedRequirementDetails to FormData
+  //   appendToFormData(mergedData.submitExchangeDetails, "submitExchangeDetails");
+  //   appendToFormData(
+  //     mergedData.expectedRequirementDetails,
+  //     "expectedRequirementDetails"
+  //   );
+
+  //   // Fetch request with multipart formData
+  //   const response = await fetch(
+  //     "/api/student/exchanges/productforserviceexchange",
+  //     {
+  //       method: "POST",
+  //       body: formData, // Use FormData as the body
+  //     }
+  //   );
+
+  //   // Handle response
+  //   if (response.ok) {
+  //     const result = await response.json();
+  //     dispatch(setCurrentStep(currentStep + 1)); // Navigate to the success step
+  //     setTimeout(() => {
+  //       dispatch(setCurrentStep(0)); // Navigate to the success step
+  //     }, 6000);
+  //     console.log("Form submitted successfully:", result);
+  //   } else {
+  //     console.error("Error submitting form:", await response.text());
+  //   }
+  // };
+
+  // Function to submit merged data to API
+  const submitExchangeFormDetails = async (mergedData: MergedData) => {
+    try {
+      const formData = new FormData();
+
+      // Function to append data to FormData recursively
+      const appendToFormData = (data: Record<string, any>, parentKey = "") => {
+        Object.keys(data).forEach((key) => {
+          const value = data[key];
+          const formKey = parentKey ? `${parentKey}.${key}` : key;
+
+          if (value instanceof File) {
+            // Append file directly
+            formData.append(formKey, value);
+          } else if (Array.isArray(value)) {
+            // Handle arrays
+            value.forEach((item, index) => {
+              if (item instanceof File) {
+                formData.append(`${formKey}[${index}]`, item);
+              } else if (typeof item === "object" && item !== null) {
+                appendToFormData(item, `${formKey}[${index}]`);
+              } else {
+                formData.append(`${formKey}[${index}]`, String(item));
+              }
+            });
+          } else if (typeof value === "object" && value !== null) {
+            // Recursively handle nested objects
+            appendToFormData(value, formKey);
+          } else {
+            // Append primitive values
+            formData.append(formKey, String(value));
+          }
+        });
+      };
+
+      // Add submitExchangeDetails and expectedRequirementDetails to FormData
+      appendToFormData(
+        mergedData.submitExchangeDetails,
+        "submitExchangeDetails"
+      );
+      appendToFormData(
+        mergedData.expectedRequirementDetails,
+        "expectedRequirementDetails"
+      );
+
+      // Fetch request with multipart FormData
+      const response = await fetch(
+        "/api/student/exchanges/productforserviceexchange",
+        {
+          method: "POST",
+          body: formData, // Use FormData as the body
         }
-      });
-    };
+      );
 
-    // Add submitExchangeDetails and expectedRequirementDetails to FormData
-    appendToFormData(mergedData.submitExchangeDetails, "submitExchangeDetails");
-    appendToFormData(
-      mergedData.expectedRequirementDetails,
-      "expectedRequirementDetails"
-    );
+      // Handle response
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Form submitted successfully:", result);
 
-    // Fetch request with multipart formData
-    const response = await fetch(
-      "/api/student/exchanges/productforserviceexchange",
-      {
-        method: "POST",
-        body: formData, // Use FormData as the body
+        // Dispatch actions for navigating steps
+        dispatch(setCurrentStep(currentStep + 1));
+        setTimeout(() => {
+          dispatch(setCurrentStep(0));
+        }, 6000);
+      } else {
+        const errorText = await response.text();
+        console.error("Error submitting form:", errorText);
       }
-    );
-
-    // Handle response
-    if (response.ok) {
-      const result = await response.json();
-      dispatch(setCurrentStep(currentStep + 1)); // Navigate to the success step
-      setTimeout(() => {
-        dispatch(setCurrentStep(0)); // Navigate to the success step
-      }, 6000);
-      console.log("Form submitted successfully:", result);
-    } else {
-      console.error("Error submitting form:", await response.text());
+    } catch (error) {
+      console.error("Unexpected error during form submission:", error);
     }
   };
 

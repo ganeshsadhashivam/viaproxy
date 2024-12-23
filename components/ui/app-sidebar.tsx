@@ -460,7 +460,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <span className="flex flex-row justify-evenly">
-          <div>
+          {/* <div>
             <Image
               src="/christian.jpg"
               width={60}
@@ -468,8 +468,8 @@ export function AppSidebar() {
               alt="User Avatar"
               className="rounded-full border-2 border-gray-300 hover:border-blue-500"
             />
-          </div>
-          <div>{name}</div>
+          </div> */}
+          <div>welcome {name}</div>
         </span>
         <SidebarGroup>
           <SidebarGroupContent>

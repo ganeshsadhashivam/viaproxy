@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import ProductForProductExchange from "@/models/student/ProductForProductExchangeModel";
+import ProductForProductExchange from "@/models/student/ProductForProductExchange/ProductForProductExchangeModel";
 import dbConnect from "@/utils/dbConnect";
 
 await dbConnect();

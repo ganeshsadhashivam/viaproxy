@@ -44,6 +44,7 @@
 
 },
 "admin": {
+      "welcome":"Bienvenue",
       "dashboard": "Tableau de bord",
       "userManagement": "Gestion des utilisateurs",
       "tradeManagement": "Gestion des échanges",
@@ -52,6 +53,7 @@
       "alerts": "Alertes"
     },
     "student": {
+      "welcome":"Bienvenue",
       "myCampusClub": "Mon CampusClub",
       "messaging": "Messagerie",
       "campusBlog": "Blog du campus",

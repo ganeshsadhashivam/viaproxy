@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import {
   Formik,
   Form,
@@ -12,16 +12,16 @@ import {
   FieldInputProps,
 } from "formik";
 
-import { Input, Radio, Select } from "formik-antd";
+import { Radio, Select } from "formik-antd";
 import Image from "next/image";
 
-import { setCurrentStep } from "@/store/slices/productForServiceFormSlice";
-import { useDispatch, useSelector } from "react-redux";
+// import { setCurrentStep } from "@/store/slices/productForServiceFormSlice";
+// import { useDispatch, useSelector } from "react-redux";
 
 import { useTranslations } from "next-intl";
 
 type SEDepositPayment =
-  | { decision: "yes"; depositPayment: { percentage: string } } // When decision is "yes", percentage is required
+  | { decision: "yes"; depositPayment: { percentage: number } } // When decision is "yes", percentage is required
   | { decision: "no" | ""; depositPayment: { percentage?: undefined } }; // When decision is "no" or "", percentage is not required
 
 type FormOfExchange = "Exchange" | "Classic Sale" | "Auction" | "Donation" | "";
@@ -71,7 +71,7 @@ type SubmitExchangeDetails = {
         allowed: "yes" | "no" | "";
         costOption?: "yes" | "no" | "";
         details: {
-          amount?: string;
+          amount?: number;
           country: string;
           city: string;
         };
@@ -100,13 +100,13 @@ type FreeQuote = {
 
 type OtherPossibleCost = {
   otherPossibleCost: "yes" | "no" | "";
-  amountOfCost?: number | null;
+  amountOfCost?: number;
   natureOfTheseCost: string;
 };
 
 type DepositPayment = {
   decision: "yes" | "no" | "";
-  percentage?: string; // Optional field when decision is "no"
+  percentage?: number; // Optional field when decision is "no"
 };
 
 type ERFormOfExchange =
@@ -141,7 +141,7 @@ type ExpectedRequirementsDetails = {
         moneyBackGuarantee: "no" | "yes" | "";
         satisfactionGuarantee: "no" | "yes" | "";
       };
-      estimatedValue: string;
+      estimatedValue: number;
 
       depositPayment: DepositPayment;
       otherContingentCoverageRequired: string;
@@ -169,7 +169,7 @@ type ExpectedRequirementsDetails = {
         allowed: "yes" | "no" | null;
         costOption?: "yes" | "no" | null;
         details: {
-          amount?: string;
+          amount?: number;
           country: string;
           city: string;
         };
@@ -220,7 +220,7 @@ const ExchangeDetailsForm: React.FC<ExpectedRequiremtnsFormProps> = ({
     e: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: (
       field: string,
-      value: any,
+      value: unknown,
       shouldValidate?: boolean
     ) => void,
     values: any // Pass values from Formik
@@ -252,35 +252,39 @@ const ExchangeDetailsForm: React.FC<ExpectedRequiremtnsFormProps> = ({
     }
   };
 
-  const handleFreeQuoteChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
-  ) => {
-    const freeQuote = e.target.value as "yes" | "no";
+  // const handleFreeQuoteChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  // ) => {
+  //   const freeQuote = e.target.value as "yes" | "no";
 
-    // Update Formik state directly
-    setFieldValue(
-      "expectedRequirementDetails.materialConditions.freeQuote.freeQuote",
-      freeQuote
-    );
+  //   // Update Formik state directly
+  //   setFieldValue(
+  //     "expectedRequirementDetails.materialConditions.freeQuote.freeQuote",
+  //     freeQuote
+  //   );
 
-    // Conditionally update feeAmount
-    if (freeQuote === "no") {
-      setFieldValue(
-        "expectedRequirementDetails.materialConditions.freeQuote.feeAmount",
-        ""
-      );
-    } else {
-      setFieldValue(
-        "expectedRequirementDetails.materialConditions.freeQuote.feeAmount",
-        null
-      );
-    }
-  };
+  //   // Conditionally update feeAmount
+  //   if (freeQuote === "no") {
+  //     setFieldValue(
+  //       "expectedRequirementDetails.materialConditions.freeQuote.feeAmount",
+  //       ""
+  //     );
+  //   } else {
+  //     setFieldValue(
+  //       "expectedRequirementDetails.materialConditions.freeQuote.feeAmount",
+  //       null
+  //     );
+  //   }
+  // };
 
   const handleOtherPossibleCosts = (
     e: React.ChangeEvent<HTMLInputElement>,
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+    setFieldValue: (
+      field: string,
+      value: unknown,
+      shouldValidate?: boolean
+    ) => void
   ) => {
     const otherPossibleCost = e.target.value as "yes" | "no";
 
@@ -325,7 +329,7 @@ const ExchangeDetailsForm: React.FC<ExpectedRequiremtnsFormProps> = ({
       }}
       enableReinitialize
     >
-      {({ setFieldValue, isValid, dirty, values, touched, errors }) => (
+      {({ setFieldValue, values }) => (
         <Form className="m-5 space-y-6 p-4 md:p-8 bg-white shadow-xl rounded-lg max-w-4xl mx-auto border border-gray-200">
           {/* Title of the Submit Exchange*/}
           <div className="text-center">
@@ -964,7 +968,7 @@ const ExchangeDetailsForm: React.FC<ExpectedRequiremtnsFormProps> = ({
                     name="expectedRequirementDetails.materialConditions.otherPossibleCost.otherPossibleCost"
                     value="yes"
                     className="form-radio"
-                    onChange={(e: any) =>
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       handleOtherPossibleCosts(e, setFieldValue)
                     }
                   />
@@ -976,7 +980,7 @@ const ExchangeDetailsForm: React.FC<ExpectedRequiremtnsFormProps> = ({
                     name="expectedRequirementDetails.materialConditions.otherPossibleCost.otherPossibleCost"
                     value="no"
                     className="form-radio"
-                    onChange={(e: any) =>
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       handleOtherPossibleCosts(e, setFieldValue)
                     }
                   />

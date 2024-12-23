@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dotenv from "dotenv";
 dotenv.config();
 
-import ProductForProductExchange from "@/models/student/ProductForProductExchangeModel";
+import ProductForProductExchange from "@/models/student/ProductForProductExchange/ProductForProductExchangeModel";
 import dbConnect from "@/utils/dbConnect";
 import { NextRequest } from "next/server";
 import { getUserIdFromToken } from "@/utils/auth";

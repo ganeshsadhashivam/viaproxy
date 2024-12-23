@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 export async function POST(req: Request) {
   const { token, password } = await req.json();
+  console.log(password);
 
   const user = await User.findOne({
     resetPasswordToken: token,
