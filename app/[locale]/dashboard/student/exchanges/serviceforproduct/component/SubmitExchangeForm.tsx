@@ -1565,13 +1565,13 @@ const SubmitExchangeForm: React.FC<SubmitExchangeFormProps> = ({
           </div>
 
           {/* Debugging Info */}
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <p>Form Valid: {isValid ? "Yes" : "No"}</p>
             <p>Form Dirty: {dirty ? "Yes" : "No"}</p>
-          </div>
+          </div> */}
 
           {/* Debugging Info */}
-          <div className="mt-4 p-4 border rounded bg-gray-100">
+          {/* <div className="mt-4 p-4 border rounded bg-gray-100">
             <h3 className="text-lg font-semibold mb-2">
               Debugging Information
             </h3>
@@ -1598,7 +1598,7 @@ const SubmitExchangeForm: React.FC<SubmitExchangeFormProps> = ({
                 {JSON.stringify(values, null, 2)}
               </pre>
             </div>
-          </div>
+          </div> */}
 
           {/* Submit Button */}
           <div className="flex justify-end mt-4">
