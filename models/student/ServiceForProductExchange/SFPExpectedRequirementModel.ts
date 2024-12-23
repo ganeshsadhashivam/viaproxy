@@ -16,8 +16,8 @@ export interface SFPExpectedRequirementsModel extends Document {
   materialConditions?: {
     estimatedValue?: number;
     depositPayment?: {
-      required: boolean;
-      percentage?: number;
+      decision?: "yes" | "no"; // Add decision to the interface
+      percentage?: number | null; // Allow percentage to be optional
     };
     otherContingentCoverageRequired?: string;
   };
@@ -84,11 +84,43 @@ const SFPExpectedRequirementsSchema: Schema<SFPExpectedRequirementsModel> =
       materialConditions: {
         estimatedValue: { type: Number },
         depositPayment: {
-          required: { type: Boolean },
-          percentage: { type: Number },
+          decision: {
+            type: String,
+            enum: ["yes", "no"],
+          },
+          percentage: {
+            type: Number,
+            set: function (value: any) {
+              // Convert "undefined" or empty string to null
+              if (value === "undefined" || value === "") return null;
+              return Number(value); // Convert valid strings to numbers
+            },
+            required: function (this: { decision: string }) {
+              // percentage is required only if decision is "yes"
+              return this.decision === "yes";
+            },
+            validate: {
+              validator: function (value: number | null) {
+                const decision = (this as any).decision; // Access decision from context
+                if (decision === "yes") {
+                  // If decision is "yes", percentage must be a valid number
+                  return typeof value === "number" && !isNaN(value);
+                }
+                if (decision === "no") {
+                  // If decision is "no", percentage must be null or undefined
+                  return value === null || value === undefined;
+                }
+                return true; // Allow other cases
+              },
+              message:
+                "percentage must be a valid number when decision is 'yes' or null when 'no'.",
+            },
+          },
         },
+
         otherContingentCoverageRequired: { type: String },
       },
+
       guarantees: {
         moneyBack: { type: Boolean },
         satisfaction: { type: Boolean },

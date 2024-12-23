@@ -13,7 +13,7 @@ interface MaterialConditions {
   packageRequested: number;
   travelExpenses: {
     isRequired: "yes" | "no" | null;
-    feeAmount: number;
+    feeAmount: number | null;
   };
   freeQuote: {
     freeQuote: "yes" | "no" | ""; // Valid values for freeQuote
@@ -105,68 +105,91 @@ const SFSSubmitExchangeSchema = new Schema<SFSSubmitExchangeSchemaInterface>({
       isRequired: { type: String, enum: ["yes", "no", null], required: true },
       feeAmount: {
         type: Number,
+        set: function (value: any) {
+          // Convert the string "null" to an actual null value
+          if (value === "null" || value === "") return null;
+          return Number(value); // Convert other values to numbers
+        },
         required: function (this: { isRequired: string }) {
+          // feeAmount is required only if isRequired is "yes"
           return this.isRequired === "yes";
+        },
+        validate: {
+          validator: function (value: number | null) {
+            const isRequired = this.isRequired;
+            if (isRequired === "yes") {
+              // If isRequired is "yes", feeAmount must be a valid number
+              return typeof value === "number" && !isNaN(value);
+            }
+            if (isRequired === "no") {
+              // If isRequired is "no", feeAmount must be null
+              return value === null;
+            }
+            return true; // Allow other cases
+          },
+          message:
+            "feeAmount must be null when isRequired is 'no', or a number when 'yes'.",
         },
       },
     },
-    // freeQuote: {
-    //   freeQuote: {
-    //     type: String,
-    //     enum: ["yes", "no", ""], // Valid values for freeQuote
-    //     required: true, // Make freeQuote required
-    //   },
-    //   feeAmount: {
-    //     type: Number,
-    //     // feeAmount is required only if freeQuote is "no"
-    //     required: function (this: SFSSubmitExchangeSchemaInterface) {
-    //       return this.materialConditions.freeQuote.freeQuote === "no";
-    //     },
-    //     set: function (this: SFSSubmitExchangeSchemaInterface, value: any) {
-    //       // Handle "undefined" and non-number inputs for feeAmount
-    //       if (this.materialConditions.freeQuote.freeQuote === "yes") {
-    //         return undefined; // If freeQuote is 'yes', set feeAmount to undefined
-    //       }
-    //       if (this.materialConditions.freeQuote.freeQuote === "no") {
-    //         return isNaN(value) ? undefined : value; // Ensure feeAmount is a valid number
-    //       }
-    //       return value; // For other cases, return the value as is
-    //     },
-    //     validate: {
-    //       validator: function (
-    //         this: SFSSubmitExchangeSchemaInterface,
-    //         value: number | null | undefined
-    //       ): boolean {
-    //         const freeQuoteValue = this.materialConditions.freeQuote.freeQuote;
-    //         // If freeQuote is 'no', feeAmount should be a valid number
-    //         if (freeQuoteValue === "no") {
-    //           return typeof value === "number" && !isNaN(value);
-    //         }
-    //         // If freeQuote is 'yes', feeAmount must be null or undefined
-    //         return value === null || value === undefined;
-    //       },
-    //       message: "feeAmount must be a number when freeQuote is 'no'.",
-    //     },
-    //   },
-    // },
-    // otherPossibleCost: {
-    //   otherPossibleCost: {
-    //     type: String,
-    //     enum: ["yes", "no", ""],
-    //     // required: true,
-    //   },
-    //   amountOfCost: {
-    //     type: Number,
-    //     set: function (value: any): number | null {
-    //       // Convert string 'null' to actual null value
-    //       if (value === "null" || value === null) {
-    //         return null;
-    //       }
-    //       return value; // Return the value as is if it's valid
-    //     },
-    //   },
-    //   natureOfTheseCost: { type: String, required: true },
-    // },
+
+    freeQuote: {
+      freeQuote: {
+        type: String,
+        enum: ["yes", "no", ""], // Valid values for freeQuote
+        required: true, // Make freeQuote required
+      },
+      feeAmount: {
+        type: Number,
+        // feeAmount is required only if freeQuote is "no"
+        required: function (this: SFSSubmitExchangeSchemaInterface) {
+          return this.materialConditions.freeQuote.freeQuote === "no";
+        },
+        set: function (this: SFSSubmitExchangeSchemaInterface, value: any) {
+          // Handle "undefined" and non-number inputs for feeAmount
+          if (this.materialConditions.freeQuote.freeQuote === "yes") {
+            return undefined; // If freeQuote is 'yes', set feeAmount to undefined
+          }
+          if (this.materialConditions.freeQuote.freeQuote === "no") {
+            return isNaN(value) ? undefined : value; // Ensure feeAmount is a valid number
+          }
+          return value; // For other cases, return the value as is
+        },
+        validate: {
+          validator: function (
+            this: SFSSubmitExchangeSchemaInterface,
+            value: number | null | undefined
+          ): boolean {
+            const freeQuoteValue = this.materialConditions.freeQuote.freeQuote;
+            // If freeQuote is 'no', feeAmount should be a valid number
+            if (freeQuoteValue === "no") {
+              return typeof value === "number" && !isNaN(value);
+            }
+            // If freeQuote is 'yes', feeAmount must be null or undefined
+            return value === null || value === undefined;
+          },
+          message: "feeAmount must be a number when freeQuote is 'no'.",
+        },
+      },
+    },
+    otherPossibleCost: {
+      otherPossibleCost: {
+        type: String,
+        enum: ["yes", "no", ""],
+        // required: true,
+      },
+      amountOfCost: {
+        type: Number,
+        set: function (value: any): number | null {
+          // Convert string 'null' to actual null value
+          if (value === "null" || value === null) {
+            return null;
+          }
+          return value; // Return the value as is if it's valid
+        },
+      },
+      natureOfTheseCost: { type: String, required: true },
+    },
     contingentWarranty: { type: String, required: true },
     guarantees: {
       moneyBackGuarantee: {
