@@ -116,7 +116,7 @@ const SFSSubmitExchangeSchema = new Schema<SFSSubmitExchangeSchemaInterface>({
         },
         validate: {
           validator: function (value: number | null) {
-            const isRequired = this.isRequired;
+            const isRequired = (this as any).isRequired; // Explicitly cast 'this' to 'any'
             if (isRequired === "yes") {
               // If isRequired is "yes", feeAmount must be a valid number
               return typeof value === "number" && !isNaN(value);
