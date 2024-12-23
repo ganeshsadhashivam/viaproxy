@@ -4,7 +4,6 @@ import { SocialButtons } from "@/components/auth/social-buttons";
 import { LoginForm } from "@/components/auth/login-form";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
-import Link from "next/link";
 
 export default function Home() {
   return (
@@ -51,9 +50,9 @@ export default function Home() {
           </div>
 
           <div className="mt-8">
-            <SocialButtons />
+            {/* <SocialButtons /> */}
 
-            <div className="relative mt-6">
+            {/* <div className="relative mt-6">
               <div className="absolute inset-0 flex items-center">
                 <Separator className="w-full" />
               </div>
@@ -62,7 +61,7 @@ export default function Home() {
                   Or continue with
                 </span>
               </div>
-            </div>
+            </div> */}
 
             <LoginForm />
           </div>
