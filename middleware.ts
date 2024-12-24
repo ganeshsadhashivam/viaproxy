@@ -149,7 +149,7 @@ export async function middleware(req: NextRequest) {
       "No token found. Redirecting to login:",
       `/${locale}/authentication/login`
     );
-    nextUrl.pathname = `/${locale}/authentication/login`;
+    nextUrl.pathname = `/${locale}/authentication/signin`;
     return NextResponse.redirect(nextUrl);
   }
 

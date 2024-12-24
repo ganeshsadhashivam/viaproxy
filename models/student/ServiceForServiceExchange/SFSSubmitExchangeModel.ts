@@ -172,24 +172,75 @@ const SFSSubmitExchangeSchema = new Schema<SFSSubmitExchangeSchemaInterface>({
         },
       },
     },
+    // otherPossibleCost: {
+    //   otherPossibleCost: {
+    //     type: String,
+    //     enum: ["yes", "no", ""],
+    //     // required: true,
+    //   },
+    //   amountOfCost: {
+    //     type: Number,
+    //     set: function (value: any): number | null {
+    //       // Convert string 'null' to actual null value
+    //       if (value === "null" || value === null) {
+    //         return null;
+    //       }
+    //       return value; // Return the value as is if it's valid
+    //     },
+    //   },
+    //   natureOfTheseCost: { type: String, required: true },
+    // },
     otherPossibleCost: {
       otherPossibleCost: {
         type: String,
         enum: ["yes", "no", ""],
-        // required: true,
+        required: true,
       },
       amountOfCost: {
         type: Number,
-        set: function (value: any): number | null {
-          // Convert string 'null' to actual null value
-          if (value === "null" || value === null) {
-            return null;
-          }
-          return value; // Return the value as is if it's valid
+        set: function (value: any) {
+          // Convert "null" string to actual null
+          if (value === "null" || value === "") return null;
+          return Number(value); // Convert valid strings to numbers
+        },
+        required: function (this: any) {
+          // Ensure 'amountOfCost' is required only if 'otherPossibleCost' is "yes"
+          return this.otherPossibleCost === "yes";
+        },
+        validate: {
+          validator: function (value: number | null) {
+            const otherPossibleCost = (this as any).otherPossibleCost; // Explicitly cast 'this'
+            if (otherPossibleCost === "yes") {
+              // If otherPossibleCost is "yes", amountOfCost must be a valid number
+              return typeof value === "number" && !isNaN(value);
+            }
+            return true; // No validation for other cases
+          },
+          message:
+            "amountOfCost must be a valid number when otherPossibleCost is 'yes'.",
         },
       },
-      natureOfTheseCost: { type: String, required: true },
+      natureOfTheseCost: {
+        type: String,
+        required: function (this: any) {
+          // Ensure 'natureOfTheseCost' is required only if 'otherPossibleCost' is "yes"
+          return this.otherPossibleCost === "yes";
+        },
+        validate: {
+          validator: function (value: string) {
+            const otherPossibleCost = (this as any).otherPossibleCost; // Explicitly cast 'this'
+            if (otherPossibleCost === "yes") {
+              // If otherPossibleCost is "yes", natureOfTheseCost must not be empty
+              return value.trim().length > 0;
+            }
+            return true; // No validation for other cases
+          },
+          message:
+            "natureOfTheseCost must be a non-empty string when otherPossibleCost is 'yes'.",
+        },
+      },
     },
+
     contingentWarranty: { type: String, required: true },
     guarantees: {
       moneyBackGuarantee: {
@@ -237,13 +288,58 @@ const SFSSubmitExchangeSchema = new Schema<SFSSubmitExchangeSchemaInterface>({
         campus: { type: String },
       },
     },
+    // delivery: {
+    //   allowed: { type: String, enum: ["yes", "no", null], required: true },
+    //   costOption: { type: String, enum: ["yes", "no", null] },
+    //   details: {
+    //     amount: { type: String },
+    //     country: { type: String },
+    //     city: { type: String },
+    //   },
+    // },
     delivery: {
-      allowed: { type: String, enum: ["yes", "no", null], required: true },
-      costOption: { type: String, enum: ["yes", "no", null] },
+      allowed: {
+        type: String,
+        enum: ["yes", "no", null],
+        required: true,
+      },
+      costOption: {
+        type: String,
+        enum: ["yes", "no", null],
+        set: function (value: any) {
+          // Convert "null" string to actual null
+          if (value === "null" || value === "") return null;
+          return value;
+        },
+      },
       details: {
-        amount: { type: String },
-        country: { type: String },
-        city: { type: String },
+        type: new Schema(
+          {
+            amount: {
+              type: String,
+              required: function (this: { allowed: string }) {
+                // 'amount' is required only if 'allowed' is "yes"
+                return this.allowed === "yes";
+              },
+            },
+            country: {
+              type: String,
+              required: function (this: { allowed: string }) {
+                // 'country' is required only if 'allowed' is "yes"
+                return this.allowed === "yes";
+              },
+            },
+            city: {
+              type: String,
+              required: function (this: { allowed: string }) {
+                // 'city' is required only if 'allowed' is "yes"
+                return this.allowed === "yes";
+              },
+            },
+          },
+          { _id: false } // Prevent Mongoose from creating an _id field for nested schema
+        ),
+        required: true, // 'details' object is always required
       },
     },
   },
