@@ -279,11 +279,39 @@ export async function POST(request: NextRequest) {
       { status: 201, headers: { "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error processing POST request:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to process the request" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    // catch (error) {
+    //   console.error("Error processing POST request:", error);
+    //   return new Response(
+    //     JSON.stringify({ error: "Failed to process the request" }),
+    //     { status: 500, headers: { "Content-Type": "application/json" } }
+    //   );
+    // }
+
+    // Check if the error is an instance of Error
+    if (error instanceof Error) {
+      console.error("Error processing POST request:", {
+        message: error.message,
+        stack: error.stack,
+        context: "POST /api/your-endpoint",
+      });
+      return new Response(
+        JSON.stringify({
+          error: "Failed to process the request",
+          details: error.message, // Optional: Include error details in the response
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    } else {
+      // Handle non-standard errors
+      console.error("Unexpected error type:", error);
+      return new Response(
+        JSON.stringify({
+          error: "Failed to process the request",
+          details: "An unknown error occurred", // Avoid leaking sensitive data
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
   }
 }
 // // Create a new ProductForProductExchange document
